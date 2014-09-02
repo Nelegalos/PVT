@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy 3 elements to &apos;WebContent&apos;&#x0D;&#x0A;- Original project: &apos;XMLParsingZemliakov&apos;&#x0D;&#x0A;- Destination element: &apos;WebContent&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     garden.xml&#x0D;&#x0A;     log4j.xml&#x0D;&#x0A;     plants.xsd" description="Copy files" element1="garden.xml" element2="log4j.xml" element3="plants.xsd" files="3" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1409666239477" target="/Zemliakov/WebContent" units="0" version="1.0"/>
+</session>

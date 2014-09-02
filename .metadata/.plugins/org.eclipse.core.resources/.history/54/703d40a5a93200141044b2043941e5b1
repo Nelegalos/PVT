@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/garden"
+	xmlns:tns="http://www.example.org/garden" elementFormDefault="qualified">
+	<element name="garden">
+		<complexType>
+			<sequence>
+				<element ref="tns:plant" minOccurs="0" maxOccurs="unbounded"></element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="plant" type="tns:Plant" abstract="true"></element>
+	<element name="tree" type="tns:Tree" substitutionGroup="tns:plant"></element>
+	<element name="bush" type="tns:Bush" substitutionGroup="tns:plant"></element>
+	<complexType name="Plant">
+		<sequence>
+			<element name="name" type="tns:Name"></element>
+			<element name="height" type="double"></element>
+			<element name="group" type="tns:Group"></element>
+		</sequence>
+	</complexType>
+	<simpleType name="Name">
+		<restriction base="ID">
+			<pattern value="[a-zA-Z]{1,100}" />
+		</restriction>
+	</simpleType>
+	<simpleType name="Group">
+		<restriction base="string">
+			<enumeration value="FRUIT" />
+			<enumeration value="BERRY" />
+		</restriction>
+	</simpleType>
+	<complexType name="Tree">
+		<complexContent>
+			<extension base="tns:Plant">
+				<sequence>
+					<element name="diameter" type="positiveInteger"></element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="Bush">
+		<complexContent>
+			<extension base="tns:Plant">
+				<sequence>
+					<element name="stem" type="positiveInteger"></element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+</schema>
