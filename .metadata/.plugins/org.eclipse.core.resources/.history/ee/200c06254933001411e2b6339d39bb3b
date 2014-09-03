@@ -1,0 +1,26 @@
+package by.pvt.epam.main;
+
+//import java.io.IOException;
+
+/*import static by.pvt.epam.logging.CompositeLogger.*;
+ import by.pvt.epam.composite.Client;
+ import by.pvt.epam.composite.Component;*/
+import by.pvt.epam.parsing.TextParser;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class Test {
+
+	public static void main(String[] args) {
+		String initialFile = "initial.txt";
+		String initialText = TextParser.readFile(initialFile);
+
+		System.out.println(initialText);
+
+		ArrayList<String> sentencesList = TextParser
+				.splitTextToSentences(initialText);
+
+	}
+
+}

@@ -2,7 +2,15 @@ package by.pvt.epam.parsing;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.BreakIterator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import by.pvt.epam.composite.Component;
 import by.pvt.epam.composite.CompositeBlock;
 import by.pvt.epam.composite.LeafCodeBlock;
@@ -26,22 +34,22 @@ public class TextParser {
 
 	public static Component parseText(String str) {
 		Component textComposite = new CompositeBlock();
-		String[] sentencesArray = splitTextToSentences(str);
-		for (int i = 0; i < sentencesArray.length; i++) {
-			if (defineCodeBlock(sentencesArray[i])) {
-				Component leafCodeBlock = new LeafCodeBlock(sentencesArray[i]);
+		List<String> blocks = splitTextToParagraphs(str);
+		for (int i = 0; i < blocks.size(); i++) {
+			if (defineCodeBlock(blocks.get(i))) {
+				Component leafCodeBlock = new LeafCodeBlock(blocks.get(i));
 				textComposite.add(leafCodeBlock);
 			} else {
 				Component sentenceComposite = new CompositeBlock();
-				String[] wordsAndPunctuationMarksArray = splitSentenceToWordsAndPunctuationMarks(sentencesArray[i]);
-				for (int j = 0; j < wordsAndPunctuationMarksArray.length; j++) {
-					if (defineWord(wordsAndPunctuationMarksArray[j])) {
+				List<String> wordsAndPunctMarks = splitSentence(blocks.get(i));
+				for (int j = 0; j < wordsAndPunctMarks.size(); j++) {
+					if (defineWord(wordsAndPunctMarks.get(j))) {
 						Component leafWord = new LeafWord(
-								wordsAndPunctuationMarksArray[j]);
+								wordsAndPunctMarks.get(j));
 						sentenceComposite.add(leafWord);
 					} else {
 						Component leafPunctuationMark = new LeafPunctuationMark(
-								wordsAndPunctuationMarksArray[j]);
+								wordsAndPunctMarks.get(j));
 						sentenceComposite.add(leafPunctuationMark);
 					}
 				}
@@ -51,19 +59,37 @@ public class TextParser {
 		return textComposite;
 	}
 
-	public static String[] splitTextToSentences(String str) {
-		String[] sentencesArray = null;
-		return sentencesArray;
+	public static List<String> splitTextToParagraphs(String str) {
+		String regex= "\\r+\\n*";
+		Pattern pattern = Pattern.compile(regex);
+		String[ ] blocksArray = pattern.split(str);
+		List<String> blocks = Arrays.asList(blocksArray);
+		return blocks;		
 	}
 
 	static boolean defineCodeBlock(String sentence) {
 		return true;
 	}
 
-	public static String[] splitSentenceToWordsAndPunctuationMarks(String str) {
-		String[] wordsArray = null;
-		return wordsArray;
+	public static List<String> splitSentence(String str) {				
+		String splitter= " +";
+		Pattern pattern = Pattern.compile(splitter);
+		String[] blocksArray = pattern.split(str);		
+		List<String> wordsAndPunctMarks = new ArrayList<String>();		
+		for (String element:blocksArray) {			
+				if(element.contains(",")||element.contains(".")||element.contains(":")||element.contains(";")) {
+					String word= element.substring(0, (element.length()-1));
+					wordsAndPunctMarks.add(word);
+					String punctuation = String.valueOf(element.charAt((element.length()-1)));
+					wordsAndPunctMarks.add(punctuation);
+				} else {
+					wordsAndPunctMarks.add(element);
+				}	
+			}		
+		return wordsAndPunctMarks;		
 	}
+		
+	
 
 	static boolean defineWord(String sentenceElement) {
 		return true;
