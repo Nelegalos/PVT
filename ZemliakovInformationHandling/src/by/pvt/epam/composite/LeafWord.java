@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import by.pvt.epam.exceptions.LeafTechnicalException;
+import by.pvt.epam.exception.LeafTechnicalException;
 
 public class LeafWord implements Component {
 

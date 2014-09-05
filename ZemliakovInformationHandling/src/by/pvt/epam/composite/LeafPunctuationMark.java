@@ -1,6 +1,6 @@
 package by.pvt.epam.composite;
 
-import by.pvt.epam.exceptions.LeafTechnicalException;
+import by.pvt.epam.exception.LeafTechnicalException;
 
 public class LeafPunctuationMark implements Component {
 

@@ -50,7 +50,7 @@ public class TextParser {
 
 	private Component parse(String initialText) {
 		Component textComposite = new CompositeBlock();
-		List<String> paragraphs = splitTextToParagraphs(initialText);
+		List<String> paragraphs = splitText(initialText);
 		for (int i = 0; i < paragraphs.size(); i++) {
 			String codeBlock = rb.getString("codeBlock");
 			Pattern pattern = Pattern.compile(codeBlock);
@@ -61,19 +61,19 @@ public class TextParser {
 				textComposite.add(leafCodeBlock);
 			} else {
 				Component sentenceComposite = new CompositeBlock();
-				List<String> wordsAndPunctMarks = splitParagraph(paragraphs
+				List<String> wordsAndPunct = splitParagraph(paragraphs
 						.get(i));
-				for (int j = 0; j < wordsAndPunctMarks.size(); j++) {
+				for (int j = 0; j < wordsAndPunct.size(); j++) {
 					String punct = rb.getString("punct");
 					Pattern p = Pattern.compile(punct);
-					Matcher m = p.matcher(wordsAndPunctMarks.get(j));
+					Matcher m = p.matcher(wordsAndPunct.get(j));
 					if (m.matches()) {
 						Component leafWord = new LeafWord(
-								wordsAndPunctMarks.get(j), locale);
+								wordsAndPunct.get(j), locale);
 						sentenceComposite.add(leafWord);
 					} else {
 						Component leafPunctuationMark = new LeafPunctuationMark(
-								wordsAndPunctMarks.get(j));
+								wordsAndPunct.get(j));
 						sentenceComposite.add(leafPunctuationMark);
 					}
 				}
@@ -83,7 +83,7 @@ public class TextParser {
 		return textComposite;
 	}
 
-	private List<String> splitTextToParagraphs(String str) {
+	private List<String> splitText(String str) {
 		String newLine = rb.getString("newLine");
 		Pattern pattern = Pattern.compile(newLine);
 		String[] blocksArray = pattern.split(str);
