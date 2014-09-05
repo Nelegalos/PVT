@@ -52,7 +52,11 @@ public class TextParser {
 		Component textComposite = new CompositeBlock();
 		List<String> paragraphs = splitTextToParagraphs(initialText);
 		for (int i = 0; i < paragraphs.size(); i++) {
-			if (defineCodeBlock(paragraphs.get(i))) {
+			String codeBlock = rb.getString("codeBlock");
+			Pattern pattern = Pattern.compile(codeBlock);
+			String paragraph = paragraphs.get(i);
+			Matcher matcher = pattern.matcher(paragraph);
+			if (matcher.matches()) {
 				Component leafCodeBlock = new LeafCodeBlock(paragraphs.get(i));
 				textComposite.add(leafCodeBlock);
 			} else {
@@ -60,7 +64,10 @@ public class TextParser {
 				List<String> wordsAndPunctMarks = splitParagraph(paragraphs
 						.get(i));
 				for (int j = 0; j < wordsAndPunctMarks.size(); j++) {
-					if (defineLetters(wordsAndPunctMarks.get(j))) {
+					String punct = rb.getString("punct");
+					Pattern p = Pattern.compile(punct);
+					Matcher m = p.matcher(wordsAndPunctMarks.get(j));
+					if (m.matches()) {
 						Component leafWord = new LeafWord(
 								wordsAndPunctMarks.get(j), locale);
 						sentenceComposite.add(leafWord);
@@ -84,24 +91,16 @@ public class TextParser {
 		return blocks;
 	}
 
-	private boolean defineCodeBlock(String paragraph) {
-		String codeBlock = rb.getString("codeBlock");
-		Pattern pattern = Pattern.compile(codeBlock);
-		Matcher matcher = pattern.matcher(paragraph);
-		if (matcher.matches()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	private List<String> splitParagraph(String paragraph) {
 		String splitter = rb.getString("splitter");
 		Pattern pattern = Pattern.compile(splitter);
 		String[] blocksArray = pattern.split(paragraph);
 		List<String> wordsAndPunctMarks = new ArrayList<String>();
 		for (String element : blocksArray) {
-			if (defineLetters(element)) {
+			String punct = rb.getString("punct");
+			Pattern pat = Pattern.compile(punct);
+			Matcher mat = pat.matcher(element);
+			if (mat.matches()) {
 				wordsAndPunctMarks.add(element);
 			} else {
 				String punctSplit = rb.getString("punctSplit");
@@ -114,14 +113,4 @@ public class TextParser {
 		return wordsAndPunctMarks;
 	}
 
-	private boolean defineLetters(String sentencePart) {
-		String punct = rb.getString("punct");
-		Pattern pattern = Pattern.compile(punct);
-		Matcher matcher = pattern.matcher(sentencePart);
-		if (matcher.matches()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 }
