@@ -1,0 +1,40 @@
+package by.pvt.epam.composite;
+
+import java.util.Collections;
+import java.util.List;
+
+public class Client {
+
+	private Component component;
+	private List<String> words;
+
+	public List<String> getWords() {
+		return words;
+	}
+
+	public void setWords(List<String> words) {
+		this.words = words;
+	}
+
+	public Client(Component component) {
+		this.component = component;
+	}
+
+	public void printAsComposite() {
+		component.printToFile();
+	}
+
+	public void delFirstLast() {
+		component.delChars();
+	}
+
+	public void del4lettersWord() {
+		component.delWords();
+	}
+
+	public void orderWords() {
+		List<String> words = component.getWords();
+		Collections.sort(words);
+	}
+
+}

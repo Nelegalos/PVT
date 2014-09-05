@@ -1,0 +1,6 @@
+newLine = \\r+\\n*
+codeBlock = .*[{}/\\t].*
+consonant = [b-df-hj-np-tv-z].*
+delimeter = \\Z
+punct = [^.*\\p{Punct}+.]*
+punctSplit = (?<=[\\p{Punct}-])|(?=[\\p{Punct}-])

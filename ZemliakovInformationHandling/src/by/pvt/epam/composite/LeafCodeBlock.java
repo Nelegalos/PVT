@@ -1,6 +1,5 @@
 package by.pvt.epam.composite;
 
-import static by.pvt.epam.logging.CompositeLogger.*;
 import by.pvt.epam.exceptions.LeafTechnicalException;
 
 public class LeafCodeBlock implements Component {
@@ -13,7 +12,7 @@ public class LeafCodeBlock implements Component {
 
 	@Override
 	public void printToFile() {
-		logger.info(codeBlock);
+		System.out.println(codeBlock);
 	}
 
 	public void setCodeBlock(String block) {
@@ -22,12 +21,12 @@ public class LeafCodeBlock implements Component {
 
 	@Override
 	public void add(Component c) {
-		logger.warn("Leaf -> add. Doing nothing");
+		System.out.println("Leaf (CodeBlock)-> add. Doing nothing");
 	}
 
 	@Override
 	public void remove(Component c) {
-		logger.warn("Leaf -> remove. Doing nothing");
+		System.out.println("Leaf (CodeBlock)-> remove. Doing nothing");
 	}
 
 	@Override
@@ -38,6 +37,15 @@ public class LeafCodeBlock implements Component {
 	@Override
 	public String toString() {
 		return codeBlock;
+	}
+
+	public void delChars() {
+		printToFile();
+	}
+
+	@Override
+	public void delWords() {
+		printToFile();
 	}
 
 }

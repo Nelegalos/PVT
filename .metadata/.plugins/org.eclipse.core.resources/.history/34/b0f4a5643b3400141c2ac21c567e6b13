@@ -1,0 +1,22 @@
+package by.pvt.epam.composite;
+
+public class Client {
+	private Component component;
+
+	public Client(Component component) {
+		this.component = component;
+	}
+
+	public void printLeafs() {
+		component.printToFile();
+	}
+
+	public void delFirstLast() {
+		component.delChars();
+	}
+
+	public void del4lettersWord() {
+		component.delWords();
+	}
+
+}

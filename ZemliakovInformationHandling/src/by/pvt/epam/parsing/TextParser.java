@@ -2,50 +2,67 @@ package by.pvt.epam.parsing;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 import by.pvt.epam.composite.Component;
 import by.pvt.epam.composite.CompositeBlock;
 import by.pvt.epam.composite.LeafCodeBlock;
 import by.pvt.epam.composite.LeafPunctuationMark;
 import by.pvt.epam.composite.LeafWord;
-import static by.pvt.epam.logging.CompositeLogger.*;
 
 public class TextParser {
 
-	public static String readFile(String file) {
-		String str = null;
+	private String initialFile;
+	private ResourceBundle rb;
+	private Logger logger;
+	private Locale locale;
+
+	public TextParser(String file, Locale loc) {
+		this.initialFile = file;
+		this.locale = loc;
+		this.rb = ResourceBundle.getBundle("regexp", loc);
+		new DOMConfigurator().doConfigure("log4j.xml",
+				LogManager.getLoggerRepository());
+		this.logger = Logger.getLogger(TextParser.class);
+	}
+
+	public Component parseTextFile() {
+		String initialText = null;
 		try {
-			Scanner scanner = new Scanner(new File(file));
-			str = scanner.useDelimiter("\\Z").next();
+			Scanner scanner = new Scanner(new File(initialFile));
+			String delimeter = rb.getString("delimeter");
+			initialText = scanner.useDelimiter(delimeter).next();
 			scanner.close();
 		} catch (FileNotFoundException e) {
 			logger.error("No file to scan", e);
 		}
-		return str;
+		return parse(initialText);
 	}
 
-	public static Component parseText(String str) {
+	private Component parse(String initialText) {
 		Component textComposite = new CompositeBlock();
-		List<String> blocks = splitTextToParagraphs(str);
-		for (int i = 0; i < blocks.size(); i++) {
-			if (defineCodeBlock(blocks.get(i))) {
-				Component leafCodeBlock = new LeafCodeBlock(blocks.get(i));
+		List<String> paragraphs = splitTextToParagraphs(initialText);
+		for (int i = 0; i < paragraphs.size(); i++) {
+			if (defineCodeBlock(paragraphs.get(i))) {
+				Component leafCodeBlock = new LeafCodeBlock(paragraphs.get(i));
 				textComposite.add(leafCodeBlock);
 			} else {
 				Component sentenceComposite = new CompositeBlock();
-				List<String> wordsAndPunctMarks = splitSentence(blocks.get(i));
+				List<String> wordsAndPunctMarks = splitParagraph(paragraphs
+						.get(i));
 				for (int j = 0; j < wordsAndPunctMarks.size(); j++) {
-					if (defineWord(wordsAndPunctMarks.get(j))) {
+					if (defineLetters(wordsAndPunctMarks.get(j))) {
 						Component leafWord = new LeafWord(
-								wordsAndPunctMarks.get(j));
+								wordsAndPunctMarks.get(j), locale);
 						sentenceComposite.add(leafWord);
 					} else {
 						Component leafPunctuationMark = new LeafPunctuationMark(
@@ -59,40 +76,52 @@ public class TextParser {
 		return textComposite;
 	}
 
-	public static List<String> splitTextToParagraphs(String str) {
-		String regex= "\\r+\\n*";
-		Pattern pattern = Pattern.compile(regex);
-		String[ ] blocksArray = pattern.split(str);
+	private List<String> splitTextToParagraphs(String str) {
+		String newLine = rb.getString("newLine");
+		Pattern pattern = Pattern.compile(newLine);
+		String[] blocksArray = pattern.split(str);
 		List<String> blocks = Arrays.asList(blocksArray);
-		return blocks;		
+		return blocks;
 	}
 
-	static boolean defineCodeBlock(String sentence) {
-		return true;
+	private boolean defineCodeBlock(String paragraph) {
+		String codeBlock = rb.getString("codeBlock");
+		Pattern pattern = Pattern.compile(codeBlock);
+		Matcher matcher = pattern.matcher(paragraph);
+		if (matcher.matches()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public static List<String> splitSentence(String str) {				
-		String splitter= " +";
+	private List<String> splitParagraph(String paragraph) {
+		String splitter = rb.getString("splitter");
 		Pattern pattern = Pattern.compile(splitter);
-		String[] blocksArray = pattern.split(str);		
-		List<String> wordsAndPunctMarks = new ArrayList<String>();		
-		for (String element:blocksArray) {			
-				if(element.contains(",")||element.contains(".")||element.contains(":")||element.contains(";")) {
-					String word= element.substring(0, (element.length()-1));
-					wordsAndPunctMarks.add(word);
-					String punctuation = String.valueOf(element.charAt((element.length()-1)));
-					wordsAndPunctMarks.add(punctuation);
-				} else {
-					wordsAndPunctMarks.add(element);
-				}	
-			}		
-		return wordsAndPunctMarks;		
-	}
-		
-	
-
-	static boolean defineWord(String sentenceElement) {
-		return true;
+		String[] blocksArray = pattern.split(paragraph);
+		List<String> wordsAndPunctMarks = new ArrayList<String>();
+		for (String element : blocksArray) {
+			if (defineLetters(element)) {
+				wordsAndPunctMarks.add(element);
+			} else {
+				String punctSplit = rb.getString("punctSplit");
+				String[] elementArray = element.split(punctSplit);
+				for (String part : elementArray) {
+					wordsAndPunctMarks.add(part);
+				}
+			}
+		}
+		return wordsAndPunctMarks;
 	}
 
+	private boolean defineLetters(String sentencePart) {
+		String punct = rb.getString("punct");
+		Pattern pattern = Pattern.compile(punct);
+		Matcher matcher = pattern.matcher(sentencePart);
+		if (matcher.matches()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

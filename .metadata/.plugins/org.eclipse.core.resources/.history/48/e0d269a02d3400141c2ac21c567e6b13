@@ -1,0 +1,27 @@
+package by.pvt.epam.composite;
+
+import by.pvt.epam.exceptions.LeafTechnicalException;
+
+public class Client {
+	private Component component;
+
+	public Client(Component component) {
+		this.component = component;
+	}
+
+	public void execute() {
+		component.printToFile();
+	}
+
+	public void delFirstLast() {
+		if (component instanceof CompositeBlock) {
+			for (int i = 0; i < (CompositeBlock)component.childQuantity(); i++)
+				try {
+					component.getChild(i);
+				} catch (LeafTechnicalException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+
+}

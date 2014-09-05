@@ -1,6 +1,5 @@
 package by.pvt.epam.composite;
 
-import static by.pvt.epam.logging.CompositeLogger.*;
 import java.util.ArrayList;
 
 public class CompositeBlock implements Component {
@@ -25,7 +24,7 @@ public class CompositeBlock implements Component {
 			if (block instanceof CompositeBlock) {
 				block.printToFile();
 			} else {
-				logger.info(block);
+				System.out.println(block);
 			}
 		}
 	}
@@ -38,6 +37,20 @@ public class CompositeBlock implements Component {
 	@Override
 	public String toString() {
 		return blocks.toString();
+	}
+
+	@Override
+	public void delChars() {
+		for (Component block : blocks) {
+			block.delChars();
+		}
+	}
+
+	@Override
+	public void delWords() {
+		for (Component block : blocks) {
+			block.delWords();
+		}
 	}
 
 }

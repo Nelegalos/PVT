@@ -11,4 +11,9 @@ public interface Component {
 	void remove(Component c);
 
 	Component getChild(int index) throws LeafTechnicalException;
+
+	void delChars();
+
+	void delWords();
+
 }

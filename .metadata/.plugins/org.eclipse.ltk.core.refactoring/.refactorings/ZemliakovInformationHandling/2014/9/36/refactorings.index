@@ -17,3 +17,40 @@
 1409750196646	Rename local variable 'regex'
 1409752681414	Rename local variable 'zzz'
 1409752845656	Rename local variable 'elementPunkt'
+1409815053409	Rename local variable 'blocks'
+1409815842491	Rename local variable 'sentencesList'
+1409815871065	Rename local variable 'sentence'
+1409819505050	Rename local variable 'str'
+1409819585927	Rename local variable 'str'
+1409823743935	Rename local variable 'sentence'
+1409824069888	Rename method 'splitSentence'
+1409825109943	Rename method 'defineWord'
+1409831122182	Delete element
+1409831139013	Rename resource 'in.txt'
+1409831961726	Delete element
+1409832137174	Rename method 'defineOnlyLetters'
+1409832164636	Rename method 'splitParToParts'
+1409832259655	Delete element
+1409839019338	Rename method 'execute'
+1409839042445	Rename method 'printLeafs'
+1409912506434	Rename method 'del4lettersWord'
+1409914056931	Rename local variable 'regex'
+1409914103874	Rename local variable 'regexp'
+1409914134995	Rename local variable 'splitter'
+1409914339010	Rename local variable 'regex'
+1409914649964	Copy files
+1409914669721	Delete elements
+1409914867141	Copy compilation unit
+1409915186666	Rename method 'parseText'
+1409915202615	Rename method 'readFile'
+1409915232118	Copy compilation unit
+1409915466644	Rename local variable 'initialFile'
+1409915488382	Rename local variable 'ile'
+1409916117624	Rename local variable 'regex'
+1409916356002	Rename local variable 'regexp'
+1409916390077	Rename local variable 'regexp'
+1409918622258	Copy compilation unit
+1409918627907	Delete element
+1409918894224	Delete element
+1409922013064	Rename local variable 'str'
+1409923202881	Rename method 'delFirstLast'

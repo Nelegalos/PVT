@@ -1,0 +1,20 @@
+package by.pvt.epam.composite;
+
+import by.pvt.epam.exceptions.LeafTechnicalException;
+
+public class Client {
+	private Component component;
+
+	public Client(Component component) {
+		this.component = component;
+	}
+
+	public void execute() {
+		component.printToFile();
+	}
+	
+	public void delFirstLast() {
+		component.delChars();
+	}
+
+}

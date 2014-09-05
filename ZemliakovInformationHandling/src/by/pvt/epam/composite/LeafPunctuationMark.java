@@ -1,6 +1,5 @@
 package by.pvt.epam.composite;
 
-import static by.pvt.epam.logging.CompositeLogger.*;
 import by.pvt.epam.exceptions.LeafTechnicalException;
 
 public class LeafPunctuationMark implements Component {
@@ -13,7 +12,7 @@ public class LeafPunctuationMark implements Component {
 
 	@Override
 	public void printToFile() {
-		logger.info(punctuationMark);
+		System.out.println(punctuationMark);
 	}
 
 	public void setPunctuationMark(String block) {
@@ -22,22 +21,32 @@ public class LeafPunctuationMark implements Component {
 
 	@Override
 	public void add(Component c) {
-		logger.warn("Leaf -> add. Doing nothing");
+		System.out.println("Leaf (PunctuationMark)-> add. Doing nothing");
 	}
 
 	@Override
 	public void remove(Component c) {
-		logger.warn("Leaf -> remove. Doing nothing");
+		System.out.println("Leaf (PunctuationMark)-> remove. Doing nothing");
 	}
 
 	@Override
 	public Component getChild(int index) throws LeafTechnicalException {
-		throw new LeafTechnicalException("Leaf doesn't contain any children");
+		throw new LeafTechnicalException(
+				"Leaf (PunctuationMark) doesn't contain any children");
 	}
 
 	@Override
 	public String toString() {
 		return punctuationMark;
+	}
+
+	public void delChars() {
+		printToFile();
+	}
+
+	@Override
+	public void delWords() {
+		printToFile();
 	}
 
 }
