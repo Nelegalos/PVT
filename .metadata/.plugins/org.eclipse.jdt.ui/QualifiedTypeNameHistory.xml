@@ -14,7 +14,10 @@
 <fullyQualifiedTypeName name="java.util.Locale"/>
 <fullyQualifiedTypeName name="java.util.ResourceBundle"/>
 <fullyQualifiedTypeName name="by.pvt.epam.parsing.TextParser"/>
-<fullyQualifiedTypeName name="org.apache.log4j.xml.DOMConfigurator"/>
-<fullyQualifiedTypeName name="org.apache.log4j.LogManager"/>
+<fullyQualifiedTypeName name="java.util.logging.Logger"/>
 <fullyQualifiedTypeName name="org.apache.log4j.Logger"/>
+<fullyQualifiedTypeName name="org.apache.log4j.LogManager"/>
+<fullyQualifiedTypeName name="org.apache.log4j.xml.DOMConfigurator"/>
+<fullyQualifiedTypeName name="java.util.LinkedList"/>
+<fullyQualifiedTypeName name="by.pvt.resource.exception.OperatorTechnicalException"/>
 </qualifiedTypeNameHistroy>

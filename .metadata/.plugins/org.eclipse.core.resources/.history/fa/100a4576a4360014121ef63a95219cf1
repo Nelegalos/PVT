@@ -1,0 +1,27 @@
+package by.pvt.resource.pool;
+
+public class Operator {
+	private int operatorId;
+
+	public Operator(int id) {
+		super();
+		this.operatorId = id;
+	}
+
+	public int getÑhannellId() {
+		return operatorId;
+	}
+
+	public void setÑhannellId(int id) {
+		this.operatorId = id;
+	}
+
+	public void using() {
+		try {
+			// èñïîëüçîâàíèå êàíàëà
+			Thread.sleep(new java.util.Random().nextInt(500));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+}
