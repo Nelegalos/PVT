@@ -16,16 +16,18 @@ public class Client extends Thread {
 		Operator operator = null;
 		try {
 			operator = callCenter.getOperator(200);
-			if (operator == null) {
+			
+			while (operator == null) {
 				System.out.println("Client #" + this.getId()
 						+ " had no more time to wait and hung up");
-				Thread.sleep(500);
+				Thread.sleep(90);
 				operator = callCenter.getOperator(200);
 			}
 			talking = true;
 			System.out.println("Client #" + this.getId()
 					+ " called operator #" + operator.getOperatorId());
 			operator.talking();
+			
 		} catch (OperatorTechnicalException e1) {
 			logger.error("OperatorTechnicalException", e1);
 		} catch (InterruptedException e) {

@@ -19,25 +19,31 @@ public class Runner {
 	public static Logger logger = Logger.getLogger(Runner.class);
 
 	public static void main(String[] args) {
+		System.gc();
 		@SuppressWarnings("serial")
+		
 		LinkedList<Operator> operatorsList = new LinkedList<Operator>() {
 			{
-				this.add(new Operator(1));
-				this.add(new Operator(2));
-				this.add(new Operator(3));
-				this.add(new Operator(4));
-				this.add(new Operator(5));
+				this.add(new Operator(11));
+				this.add(new Operator(12));
+				this.add(new Operator(13));
+				this.add(new Operator(14));
+				
 			}
 		};
-
-		CallCenter<Operator> callCenter = new CallCenter<Operator>(operatorsList);
+		
+		operatorsList.add(new Operator(15));
+		CallCenter<Operator> callCenter = new CallCenter<Operator>(
+				operatorsList);
 		for (int i = 1; i <= 20; i++) {
-			try {
+			/*try {
 				Thread.sleep(20);
-			} catch (InterruptedException e) {				
+			} catch (InterruptedException e) {
 				logger.error(e);
-			}
+			}*/
 			new Client(callCenter).start();
+		
 		}
+		
 	}
 }
