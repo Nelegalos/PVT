@@ -1,0 +1,43 @@
+package by.pvt.epam.dao;
+
+import by.pvt.epam.pool.ConnectionPool;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import by.pvt.epam.entity.Flight;
+
+public class FlightDAO {
+
+	public List<Flight> getAllFlights() {
+		ConnectionPool cn = null;
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+		List<Flight> flights = new ArrayList<Flight>();
+		;
+		try {
+			cn = ConnectionPool.getInstance();
+			connection = cn.getConnection();
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT * FROM flight");
+			while (resultSet.next()) {
+				Flight flight = new Flight();
+				flight.setId(resultSet.getInt(1));
+				flight.setFrom(resultSet.getString(2));
+				flight.setTo(resultSet.getString(3));
+				flights.add(flight);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return flights;
+	}
+}

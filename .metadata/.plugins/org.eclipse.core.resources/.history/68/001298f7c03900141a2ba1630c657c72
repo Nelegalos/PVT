@@ -1,0 +1,10 @@
+package by.pvt.epam.entity;
+
+public class Plane {
+	private int id;
+	private int pilot;
+	private int navigator;
+	private int radioman;
+	private int steward;
+
+}

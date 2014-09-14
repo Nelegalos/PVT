@@ -1,0 +1,20 @@
+package by.pvt.epam.entity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Crew {
+
+	private int flightId;
+	private List<Employee> crew;
+
+	public Crew() {
+		this.crew = new ArrayList<Employee>();
+	}
+
+	public Crew(int flightId, List<Employee> crew) {
+		this.flightId = flightId;
+		this.crew = crew;
+	}
+
+}

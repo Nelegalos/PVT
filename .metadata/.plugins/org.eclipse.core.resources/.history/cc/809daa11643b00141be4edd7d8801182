@@ -1,0 +1,10 @@
+package by.pvt.epam.pool;
+
+import javax.naming.*;
+import javax.sql.DataSource;
+
+public class ConnectionPool {
+	Context envCtx = (Context) (new InitialContext().lookup("java:comp/env"));
+	DataSource ds = (DataSource) envCtx.lookup("jdbc/testphones");
+
+}

@@ -1,0 +1,4 @@
+127.0.0.1 - - [13/Sep/2014:20:07:35 +0300] "GET / HTTP/1.1" 404 951
+0:0:0:0:0:0:0:1 - - [13/Sep/2014:20:07:36 +0300] "GET /AirlineZemliakov/WEB-INF/classes/by/pvt/epam/test/Test.java HTTP/1.1" 404 -
+0:0:0:0:0:0:0:1 - - [13/Sep/2014:20:07:36 +0300] "GET /favicon.ico HTTP/1.1" 404 973
+0:0:0:0:0:0:0:1 - - [13/Sep/2014:20:07:36 +0300] "GET /favicon.ico HTTP/1.1" 404 973

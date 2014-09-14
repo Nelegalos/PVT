@@ -1,0 +1,5 @@
+package by.pvt.epam.command;
+
+public class EmptyCommand {
+
+}

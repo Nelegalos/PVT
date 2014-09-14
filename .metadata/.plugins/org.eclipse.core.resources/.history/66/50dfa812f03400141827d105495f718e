@@ -1,3 +1,0 @@
-newLine = "\\r+\\n*"
-codeBlock = .*[{}/\\t].*
-consonant = [b-df-hj-np-tv-z].*

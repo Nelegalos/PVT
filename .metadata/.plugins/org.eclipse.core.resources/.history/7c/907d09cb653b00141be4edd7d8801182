@@ -1,0 +1,7 @@
+package by.pvt.epam.dao;
+
+import static by.pvt.epam.pool.ConnectionPool.ds;
+
+public class FlightDAO {
+
+}

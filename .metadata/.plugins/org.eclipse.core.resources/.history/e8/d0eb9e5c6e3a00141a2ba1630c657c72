@@ -1,0 +1,5 @@
+package by.pvt.epam.connection;
+
+public class ConnectionPool {
+
+}

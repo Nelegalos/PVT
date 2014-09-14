@@ -1,0 +1,5 @@
+package by.pvt.epam.command.client;
+
+public enum CommandEnum {
+
+}

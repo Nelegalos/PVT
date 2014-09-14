@@ -1,0 +1,11 @@
+package by.pvt.epam.entity;
+
+import java.util.Date;
+
+public class Flight {
+	private int id;
+	private Date date;
+	private String from;
+	private String to;
+	private Plane plane;
+}

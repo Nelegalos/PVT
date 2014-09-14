@@ -1,0 +1,24 @@
+package by.pvt.epam.dao;
+
+import static by.pvt.epam.pool.ConnectionPool.ds;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import by.pvt.epam.entity.Flight;
+
+public class FlightDAO {
+
+	public Flight getFlightById() {
+		Flight flight = null;
+		try {
+			Connection cn = ds.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return flight;
+
+	}
+
+}
