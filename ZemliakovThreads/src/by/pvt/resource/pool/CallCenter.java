@@ -9,12 +9,14 @@ import by.pvt.resource.exception.OperatorTechnicalException;
 
 public class CallCenter<T> {
 	private final static int NUMBER_OF_OPERATORS = 5;
-	private final Semaphore semaphore = new Semaphore(NUMBER_OF_OPERATORS, true);
+	private final Semaphore semaphore = new Semaphore(NUMBER_OF_OPERATORS);
 
-	private final Queue<T> operators = new LinkedList<T>();
+	private final Queue<T> operators;// = new LinkedList<T>();
 
 	public CallCenter(Queue<T> source) {
-		operators.addAll(source);
+		operators = source;
+		//operators.addAll(source);
+		//System.out.println(operators);
 	}
 
 	public T getOperator(long maxWaitMilSec) throws OperatorTechnicalException {
