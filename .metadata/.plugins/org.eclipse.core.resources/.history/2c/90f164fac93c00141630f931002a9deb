@@ -1,0 +1,14 @@
+package by.pvt.epam.dao;
+
+import by.pvt.epam.entity.User;
+
+public class UserDAOImpl extends UserDAO {
+	private static final String SQL_QUERY_GET_USER = "SELECT id,first_name, last_name, role_id, other FROM people WHERE id = ( SELECT people_id FROM user WHERE (login = ?) AND (password = ?))";
+
+	@Override
+	public User getUser(int id) {
+
+		return null;
+	}
+
+}

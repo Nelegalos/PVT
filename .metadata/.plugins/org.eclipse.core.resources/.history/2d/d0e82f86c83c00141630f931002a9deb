@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+package by.pvt.epam.dao;
+
+/**
+ * @author Nelegalos
+ *
+ */
+public abstract class UserDAO {
+
+}

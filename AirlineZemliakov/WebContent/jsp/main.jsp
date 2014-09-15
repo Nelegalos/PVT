@@ -8,7 +8,10 @@
 	<h3>Welcome</h3>
 	<hr />
 	${user}, hello!
-	<hr />
-	<a href="controller?command=logout">Logout</a>
+	<hr />	
+	<form name="logoutForm" method="POST" action="controller">
+		<input type="hidden" name="command" value="logout" /> 
+		<input type="submit" value="Log out" />
+	</form>
 </body>
 </html>

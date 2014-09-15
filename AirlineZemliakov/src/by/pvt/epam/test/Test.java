@@ -10,8 +10,11 @@ import by.pvt.epam.dao.CrewDAO;
 import by.pvt.epam.dao.CrewDAOimpl;
 import by.pvt.epam.dao.FlightDAO;
 import by.pvt.epam.dao.FlightDAOImpl;
+import by.pvt.epam.dao.UserDAO;
+import by.pvt.epam.dao.UserDAOImpl;
 import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Flight;
+import by.pvt.epam.entity.User;
 
 public class Test {
 	static {
@@ -27,9 +30,13 @@ public class Test {
 		System.out.println(flights);
 
 		CrewDAO cd = new CrewDAOimpl();
-		//cd.addEmployee("Olga", "Myrzova", 4);
+		cd.addEmployee("Olga", "Myrzova", 4);
 		Employee em =cd.getEmployeeById(3);
 		System.out.println(em);
+		
+		UserDAO ud = new UserDAOImpl();
+		User user = ud.getUser("admin", "admin");
+		System.out.println(user);
 
 	}
 

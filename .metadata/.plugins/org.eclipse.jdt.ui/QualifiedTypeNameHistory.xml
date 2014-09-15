@@ -18,7 +18,6 @@
 <fullyQualifiedTypeName name="java.util.LinkedList"/>
 <fullyQualifiedTypeName name="by.pvt.resource.exception.OperatorTechnicalException"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="org.apache.log4j.Logger"/>
 <fullyQualifiedTypeName name="java.util.Queue"/>
 <fullyQualifiedTypeName name="java.util.concurrent.ArrayBlockingQueue"/>
 <fullyQualifiedTypeName name="java.util.Iterator"/>
@@ -47,4 +46,9 @@
 <fullyQualifiedTypeName name="by.pvt.epam.dao.CrewDAO"/>
 <fullyQualifiedTypeName name="by.pvt.epam.dao.FlightDAO"/>
 <fullyQualifiedTypeName name="by.pvt.epam.entity.Employee"/>
+<fullyQualifiedTypeName name="org.apache.log4j.Logger"/>
+<fullyQualifiedTypeName name="by.pvt.epam.entity.Role"/>
+<fullyQualifiedTypeName name="by.pvt.epam.dao.UserDAO"/>
+<fullyQualifiedTypeName name="by.pvt.epam.dao.UserDAOImpl"/>
+<fullyQualifiedTypeName name="by.pvt.epam.entity.User"/>
 </qualifiedTypeNameHistroy>

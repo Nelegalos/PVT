@@ -1,0 +1,5 @@
+package by.pvt.epam.entity;
+
+public class User {
+
+}

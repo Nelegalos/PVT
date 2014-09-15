@@ -1,0 +1,13 @@
+eclipse.preferences.version=1
+encoding//WebContent/index.jsp=UTF-8
+encoding//WebContent/jsp/general/admin/addUser.jsp=UTF-8
+encoding//WebContent/jsp/general/admin/selectRole.jsp=UTF-8
+encoding//WebContent/jsp/general/functional.jsp=UTF-8
+encoding//WebContent/jsp/general/login.jsp=UTF-8
+encoding//WebContent/jsp/general/student/allTests.jsp=UTF-8
+encoding//WebContent/jsp/general/student/passTest.jsp=UTF-8
+encoding//WebContent/jsp/general/student/studentResults.jsp=UTF-8
+encoding//WebContent/jsp/general/tutor/addQuestion.jsp=UTF-8
+encoding//WebContent/jsp/general/tutor/addTest.jsp=UTF-8
+encoding//WebContent/jsp/general/tutor/allResults.jsp=UTF-8
+encoding//WebContent/jsp/general/tutor/allStudents.jsp=UTF-8

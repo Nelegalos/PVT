@@ -1,0 +1,5 @@
+package by.pvt.epam.dao;
+
+public abstract class UserDAO {
+
+}
