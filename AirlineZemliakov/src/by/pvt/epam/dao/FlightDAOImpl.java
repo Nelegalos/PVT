@@ -40,9 +40,9 @@ public class FlightDAOImpl extends FlightDAO {
 				flights.add(flight);
 			}
 		} catch (SQLException e) {
-			logger.error("SQLException", e);
+			logger.error("TechnicalException", e);
 		} catch (ClassNotFoundException e1) {
-			logger.error("ClassNotFoundException", e1);
+			logger.error("TechnicalException", e1);
 		} finally {
 			pool.backConnection(connection);
 			FlightDAO.close(statement);
@@ -72,9 +72,9 @@ public class FlightDAOImpl extends FlightDAO {
 				plane.setSteward(resultSet.getInt(5));
 			}
 		} catch (SQLException e) {
-			logger.error("SQLException", e);
+			logger.error("TechnicalException", e);
 		} catch (ClassNotFoundException e1) {
-			logger.error("ClassNotFoundException", e1);
+			logger.error("TechnicalException", e1);
 		} finally {
 			pool.backConnection(connection);
 			FlightDAO.close(preparedStatement);

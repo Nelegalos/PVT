@@ -29,10 +29,10 @@ public class CrewDAOimpl extends CrewDAO {
 			preparedStatement.setInt(3, position);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			logger.error("SQLException", e);
+			logger.error("TechnicalException", e);
 			return false;
 		} catch (ClassNotFoundException e1) {
-			logger.error("ClassNotFoundException", e1);
+			logger.error("TechnicalException", e1);
 			return false;
 		} finally {
 			pool.backConnection(connection);
@@ -64,11 +64,9 @@ public class CrewDAOimpl extends CrewDAO {
 						.toUpperCase()));
 			}
 		} catch (SQLException e) {
-			logger.error("SQLException", e);
-			System.out.println("dddd");
+			logger.error("TechnicalException", e);
 		} catch (ClassNotFoundException e1) {
-			logger.error("ClassNotFoundException", e1);
-			System.out.println("zzzz");
+			logger.error("TechnicalException", e1);
 		} finally {
 			pool.backConnection(connection);
 			FlightDAO.close(preparedStatement);

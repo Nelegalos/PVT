@@ -19,6 +19,7 @@ public class DBConnector {
 		}
 
 		try {
+			//System.out.println(configBundle.getString("url"));
 			connection = DriverManager.getConnection(
 					configBundle.getString("url"),
 					configBundle.getString("user"),

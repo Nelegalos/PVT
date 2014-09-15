@@ -34,9 +34,9 @@ public class UserDAOImpl extends UserDAO {
 			Role userRole = Role.valueOf(role.toUpperCase());
 			user = new User(name, surname, userRole, log);
 		} catch (SQLException e) {
-			logger.error("SQLException", e);
+			logger.error("TechnicalException", e);
 		} catch (ClassNotFoundException e1) {
-			logger.error("ClassNotFoundException", e1);
+			logger.error("TechnicalException", e1);
 		} finally {
 			pool.backConnection(connection);
 			UserDAO.close(preparedStatement);
