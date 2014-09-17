@@ -44,11 +44,13 @@
 <fullyQualifiedTypeName name="by.pvt.epam.entity.Position"/>
 <fullyQualifiedTypeName name="by.pvt.epam.dao.CrewDAOimpl"/>
 <fullyQualifiedTypeName name="by.pvt.epam.dao.CrewDAO"/>
-<fullyQualifiedTypeName name="by.pvt.epam.dao.FlightDAO"/>
 <fullyQualifiedTypeName name="by.pvt.epam.entity.Employee"/>
 <fullyQualifiedTypeName name="org.apache.log4j.Logger"/>
-<fullyQualifiedTypeName name="by.pvt.epam.entity.Role"/>
-<fullyQualifiedTypeName name="by.pvt.epam.dao.UserDAO"/>
+<fullyQualifiedTypeName name="by.pvt.epam.controller.Controller"/>
 <fullyQualifiedTypeName name="by.pvt.epam.dao.UserDAOImpl"/>
+<fullyQualifiedTypeName name="by.pvt.epam.dao.UserDAO"/>
 <fullyQualifiedTypeName name="by.pvt.epam.entity.User"/>
+<fullyQualifiedTypeName name="by.pvt.epam.entity.Role"/>
+<fullyQualifiedTypeName name="by.pvt.epam.dao.FlightDAO"/>
+<fullyQualifiedTypeName name="by.pvt.epam.dao.FlightDAOImpl"/>
 </qualifiedTypeNameHistroy>

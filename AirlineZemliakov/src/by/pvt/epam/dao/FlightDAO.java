@@ -6,5 +6,5 @@ import by.pvt.epam.entity.Flight;
 
 public abstract class FlightDAO extends AbstractDAO {
 
-	public abstract List<Flight> getAllFlights();
+	public abstract List<Flight> findAllFlights();
 }

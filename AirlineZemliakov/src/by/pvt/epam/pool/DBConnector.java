@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 
 public class DBConnector {
 	private static final ResourceBundle configBundle = ResourceBundle
-			.getBundle("database");
+			.getBundle("resources.database");
 
 	public Connection getConnection() {
 		Connection connection = null;

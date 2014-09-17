@@ -4,6 +4,14 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="WebApp_ID" version="3.0">
 	<display-name>AirlineZemliakov</display-name>
+	<servlet>
+		<servlet-name>Controller</servlet-name>
+		<servlet-class>by.pvt.epam.controller.Controller</servlet-class>
+		<init-param>
+			<param-name>log4j-location</param-name>
+			<param-value>WEB-INF/log4j.properties</param-value>
+		</init-param>
+	</servlet>
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>

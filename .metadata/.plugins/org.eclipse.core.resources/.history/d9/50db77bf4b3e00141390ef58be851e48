@@ -1,0 +1,49 @@
+package by.pvt.epam.command;
+
+import static com.epam.project.constant.SessionConstants.SESSION_ATTRIBUTE_USER;
+
+import javax.servlet.http.HttpServletRequest;
+
+import by.pvt.epam.dao.UserDAO;
+import by.pvt.epam.dao.UserDAOImpl;
+import by.pvt.epam.entity.Role;
+import by.pvt.epam.entity.User;
+import by.pvt.epam.logic.LoginLogic;
+import by.pvt.epam.resource.ConfigurationManager;
+import by.pvt.epam.resource.MessageManager;
+
+public class LoginCommand implements ActionCommand {
+	private static final String PARAM_NAME_LOGIN = "login";
+	private static final String PARAM_NAME_PASSWORD = "password";
+
+	@Override
+	public String execute(HttpServletRequest request) {
+		String login = request.getParameter(PARAM_NAME_LOGIN);
+		String pass = request.getParameter(PARAM_NAME_PASSWORD);
+		UserDAO userDAO = new UserDAOImpl();
+		User user = userDAO.findUser(login, pass);
+		String page = null;
+		if (user != null) {
+			Role role = user.getRole();
+			String welcomeUser = role + ": " + user.getName() + " "
+					+ user.getSurname();
+			request.getSession().setAttribute("role", role);
+			request.setAttribute("user", welcomeUser);
+			switch (role) {
+			case ADMIN:
+				page = ConfigurationManager.getProperty("path.page.admin");
+				break;
+			case DISPATCHER:
+				page = ConfigurationManager.getProperty("path.page.dispatcher");
+				break;
+			default:
+				page = ConfigurationManager.getProperty("path.page.login");
+			}
+		} else {
+			request.setAttribute("errorLoginPassMessage",
+					MessageManager.getProperty("message.loginerror"));
+			page = ConfigurationManager.getProperty("path.page.login");
+		}
+		return page;
+	}
+}

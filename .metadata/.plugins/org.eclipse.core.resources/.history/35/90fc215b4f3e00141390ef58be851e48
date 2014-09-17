@@ -1,0 +1,24 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<html>
+<head>
+<title>Administrator</title>
+</head>
+<body>	
+	${user}
+	<hr />	
+	<form name="logoutForm" method="POST" action="controller">
+		<input type="hidden" name="command" value="logout" /> 
+		<input type="submit" value="Log out" />
+	</form>
+	<br>
+	<br>
+	<table>
+	<tr>
+	<td>Flight#</td><td>To</td><td>From</td><td>Date</td>	
+	</tr>
+	<tr></tr>
+	</table>
+	
+</body>
+</html>

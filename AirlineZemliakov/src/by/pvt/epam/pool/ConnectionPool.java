@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 public class ConnectionPool {
 
-	private static Logger LOGGER = Logger.getLogger(ConnectionPool.class);
+	private static Logger logger = Logger.getLogger(ConnectionPool.class);
 	/**
      *
      */
@@ -80,7 +80,7 @@ public class ConnectionPool {
 				c.close();
 				iterator.remove();
 			} catch (SQLException e) {
-				LOGGER.error(e.getMessage());
+				logger.error(e.getMessage());
 				throw new SQLException(e.getMessage());
 			}
 		}
@@ -92,7 +92,7 @@ public class ConnectionPool {
 				c.close();
 				iterator.remove();
 			} catch (SQLException e) {
-				LOGGER.error(e.getMessage());
+				logger.error(e.getMessage());
 				throw new SQLException(e.getMessage());
 			}
 		}

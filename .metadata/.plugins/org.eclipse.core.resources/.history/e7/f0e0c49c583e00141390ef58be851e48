@@ -1,0 +1,15 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<html>
+<head>
+<title>Dispatcher</title>
+</head>
+<body>	
+	${user}	
+	<form name="logoutForm" method="POST" action="controller">
+		<input type="hidden" name="command" value="logout" /> 
+		<input type="submit" value="Log out" />
+	</form>
+	<hr />	
+</body>
+</html>

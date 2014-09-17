@@ -6,6 +6,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
+//import by.pvt.epam.controller.Controller;
 import by.pvt.epam.dao.CrewDAO;
 import by.pvt.epam.dao.CrewDAOimpl;
 import by.pvt.epam.dao.FlightDAO;
@@ -23,20 +24,24 @@ public class Test {
 				LogManager.getLoggerRepository());
 	}
 	public static Logger logger = Logger.getLogger(Test.class);
+	
+//	public static Logger logger = Logger.getLogger(Controller.class);
 
 	public static void main(String[] args) {
 		FlightDAO fd = new FlightDAOImpl();
-		List<Flight> flights = fd.getAllFlights();
+		List<Flight> flights = fd.findAllFlights();
 		System.out.println(flights);
 
 		CrewDAO cd = new CrewDAOimpl();
 		cd.addEmployee("Olga", "Myrzova", 4);
-		Employee em =cd.getEmployeeById(3);
+		Employee em = cd.getEmployeeById(3);
 		System.out.println(em);
-		
+
 		UserDAO ud = new UserDAOImpl();
-		User user = ud.getUser("admin", "admin");
+		User user = ud.findUser("adminn", "admin");
 		System.out.println(user);
+
+		logger.error("hi!!!!!");
 
 	}
 

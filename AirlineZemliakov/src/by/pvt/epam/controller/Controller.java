@@ -3,11 +3,14 @@ package by.pvt.epam.controller;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
+//import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+//import org.apache.log4j.PropertyConfigurator;
 
 import by.pvt.epam.command.ActionCommand;
 import by.pvt.epam.command.factory.ActionFactory;
@@ -17,6 +20,15 @@ import by.pvt.epam.resource.MessageManager;
 @SuppressWarnings("serial")
 @WebServlet("/controller")
 public class Controller extends HttpServlet {
+
+	@Override
+//	public void init(ServletConfig config) throws ServletException {
+//		super.init(config);
+//		String log4jLocation = config.getInitParameter("log4j-location");
+//		String path = getServletContext().getRealPath(log4jLocation);
+//		PropertyConfigurator.configure(path);
+//	}
+
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		processRequest(request, response);
@@ -30,8 +42,8 @@ public class Controller extends HttpServlet {
 	private void processRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String page = null;
-		ActionFactory client = new ActionFactory();
-		ActionCommand command = client.defineCommand(request);
+		ActionFactory actionFactory = new ActionFactory();
+		ActionCommand command = actionFactory.defineCommand(request);
 		page = command.execute(request);
 		if (page != null) {
 			RequestDispatcher dispatcher = getServletContext()
@@ -44,4 +56,5 @@ public class Controller extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + page);
 		}
 	}
+
 }

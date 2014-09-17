@@ -8,3 +8,14 @@
 1410780836411	Rename field 'id'
 1410781980041	Delete element
 1410783547454	Copy file
+1410810857632	Delete element
+1410812637113	Rename field 'LOGGER'
+1410813614743	Copy file
+1410815422531	Copy file
+1410942087369	Rename local variable 'client'
+1410942721195	Copy file
+1410942859915	Rename method 'getUser'
+1410944021842	Rename field 'SQL_QUERY_GET_USER'
+1410945700836	Copy file
+1410948029252	Delete element
+1410948308243	Rename method 'getAllFlights'

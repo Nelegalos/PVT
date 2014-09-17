@@ -2,8 +2,6 @@ package by.pvt.epam.entity;
 
 import java.sql.Date;
 
-
-
 public class Flight {
 	private int id;
 	private Date date;

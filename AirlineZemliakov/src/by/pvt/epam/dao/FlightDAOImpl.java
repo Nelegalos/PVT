@@ -17,7 +17,7 @@ public class FlightDAOImpl extends FlightDAO {
 	private static final String SQL_QUERY_GET_ALL_FLIGHTS = "SELECT * FROM flight";
 	private static final String SQL_QUERY_GET_PLANE_BY_ID = "SELECT * FROM plane_staff WHERE plane=? ";
 
-	public List<Flight> getAllFlights() {
+	public List<Flight> findAllFlights() {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		Statement statement = null;
