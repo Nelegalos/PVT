@@ -4,17 +4,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import static by.pvt.epam.test.Test.logger;
 import by.pvt.epam.entity.Role;
 import by.pvt.epam.entity.User;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.pool.ConnectionPool;
 
 public class UserDAOImpl extends UserDAO {
 
 	private static final String SQL_QUERY_FIND_USER = "SELECT user.login, user.name, user.surname, role.role FROM user LEFT JOIN role on user.role_id=role.id WHERE user.login = ( SELECT login FROM user WHERE login = ? AND pass = ?)";
 
-	public User findUser(String login, String password) {
+	public User findUser(String login, String password)
+			throws TechnicalException {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -34,12 +34,8 @@ public class UserDAOImpl extends UserDAO {
 			String role = rs.getString(4);
 			Role userRole = Role.valueOf(role.toUpperCase());
 			user = new User(name, surname, userRole, log);
-		} catch (SQLException e) {
-			// logger.error("TechnicalException", e);
-			return null;
-		} catch (ClassNotFoundException e1) {
-			logger.error("TechnicalException", e1);
-			return null;
+		} catch (SQLException | ClassNotFoundException e) {
+			throw new TechnicalException(e);
 		} finally {
 			pool.backConnection(connection);
 			UserDAO.close(preparedStatement);

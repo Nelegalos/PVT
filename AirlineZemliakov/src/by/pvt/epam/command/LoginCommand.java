@@ -1,7 +1,9 @@
 package by.pvt.epam.command;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
 import by.pvt.epam.dao.FlightDAO;
 import by.pvt.epam.dao.FlightDAOImpl;
 import by.pvt.epam.dao.UserDAO;
@@ -9,6 +11,7 @@ import by.pvt.epam.dao.UserDAOImpl;
 import by.pvt.epam.entity.Flight;
 import by.pvt.epam.entity.Role;
 import by.pvt.epam.entity.User;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.resource.ConfigurationManager;
 import by.pvt.epam.resource.MessageManager;
 
@@ -21,11 +24,12 @@ public class LoginCommand implements ActionCommand {
 		String login = request.getParameter(PARAM_NAME_LOGIN);
 		String pass = request.getParameter(PARAM_NAME_PASSWORD);
 		UserDAO userDAO = new UserDAOImpl();
-		User user = userDAO.findUser(login, pass);
 		FlightDAO flightDAO = new FlightDAOImpl();
 		List<Flight> flights = flightDAO.findAllFlights();
 		String page = null;
-		if (user != null) {
+		User user = null;
+		try {
+			user = userDAO.findUser(login, pass);
 			Role role = user.getRole();
 			String welcomeUser = role + ": " + user.getName() + " "
 					+ user.getSurname();
@@ -40,7 +44,7 @@ public class LoginCommand implements ActionCommand {
 				page = ConfigurationManager.getProperty("path.page.dispatcher");
 				break;
 			}
-		} else {
+		} catch (TechnicalException e) {
 			request.setAttribute("errorLoginPassMessage",
 					MessageManager.getProperty("message.loginerror"));
 			page = ConfigurationManager.getProperty("path.page.login");
