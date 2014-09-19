@@ -1,17 +1,24 @@
 package by.pvt.epam.dao;
 
-import static by.pvt.epam.test.Test.logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import by.pvt.epam.controller.Controller;
 import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Position;
 import by.pvt.epam.pool.ConnectionPool;
 
-public class CrewDAOimpl extends CrewDAO {
-
-	private static final String SQL_QUERY_GET_EMPLOYEE_BY_ID = "SELECT employee.id, employee.name, employee.surname, position.position FROM employee LEFT JOIN position on employee.position_id = position.id  WHERE employee.id=?";
+public class CrewDAOImpl extends CrewDAO {
+	private static Logger logger = Logger.getLogger(Controller.class);
+	private static final String SQL_QUERY_FIND_EMPLOYEE_BY_ID = "SELECT employee.id, employee.name, employee.surname, position.position FROM employee LEFT JOIN position on employee.position_id = position.id  WHERE employee.id=?";
+	private static final String SQL_QUERY_FIND_AVAILABLE_EMPLOYEES = "SELECT employee.id, employee.name, employee.surname, position.position FROM employee LEFT JOIN position on employee.position_id = position.id WHERE employee.status=1";
 	private static final String SQL_QUERY_ADD_EMPLOYEE = "INSERT INTO employee (name, surname, position_id) VALUES (?,?,?)";
 
 	@Override
@@ -19,6 +26,7 @@ public class CrewDAOimpl extends CrewDAO {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
+		boolean flag = false;
 		try {
 			pool = ConnectionPool.getInstance();
 			connection = pool.getConnection();
@@ -28,21 +36,18 @@ public class CrewDAOimpl extends CrewDAO {
 			preparedStatement.setString(2, surname);
 			preparedStatement.setInt(3, position);
 			preparedStatement.executeUpdate();
-		} catch (SQLException e) {
-			logger.error("TechnicalException", e);
-			return false;
-		} catch (ClassNotFoundException e1) {
-			logger.error("TechnicalException", e1);
-			return false;
+			flag = true;
+		} catch (SQLException | ClassNotFoundException e) {
+			logger.error("TechnicalException addEmployee", e);
 		} finally {
-			pool.backConnection(connection);
 			CrewDAO.close(preparedStatement);
+			pool.backConnection(connection);
 		}
-		return true;
+		return flag;
 	}
 
 	@Override
-	public Employee getEmployeeById(int id) {
+	public Employee findEmployeeById(int id) {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -52,7 +57,7 @@ public class CrewDAOimpl extends CrewDAO {
 			pool = ConnectionPool.getInstance();
 			connection = pool.getConnection();
 			preparedStatement = connection
-					.prepareStatement(SQL_QUERY_GET_EMPLOYEE_BY_ID);
+					.prepareStatement(SQL_QUERY_FIND_EMPLOYEE_BY_ID);
 			preparedStatement.setInt(1, id);
 			resultSet = preparedStatement.executeQuery();
 			employee = new Employee();
@@ -63,15 +68,44 @@ public class CrewDAOimpl extends CrewDAO {
 				employee.setPosition(Position.valueOf((resultSet.getString(4))
 						.toUpperCase()));
 			}
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			logger.error("TechnicalException", e);
-		} catch (ClassNotFoundException e1) {
-			logger.error("TechnicalException", e1);
 		} finally {
-			pool.backConnection(connection);
 			FlightDAO.close(preparedStatement);
+			pool.backConnection(connection);
 		}
 		return employee;
+	}
+
+	@Override
+	public List<Employee> findAvailableEmployees() {
+		ConnectionPool pool = null;
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+		List<Employee> employees = new ArrayList<Employee>();
+		try {
+			pool = ConnectionPool.getInstance();
+			connection = pool.getConnection();
+			statement = connection.createStatement();
+			resultSet = statement
+					.executeQuery(SQL_QUERY_FIND_AVAILABLE_EMPLOYEES);
+			while (resultSet.next()) {
+				Employee employee = new Employee();
+				employee.setId(resultSet.getInt(1));
+				employee.setName(resultSet.getString(2));
+				employee.setSurname(resultSet.getString(3));
+				employee.setPosition(Position.valueOf((resultSet.getString(4))
+						.toUpperCase()));
+				employees.add(employee);
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			logger.error("TechnicalException", e);
+		} finally {
+			FlightDAO.close(statement);
+			pool.backConnection(connection);
+		}
+		return employees;
 	}
 
 }

@@ -5,6 +5,6 @@
 </head>
 
 <body>
-	<jsp:forward page="/jsp/login.jsp" />
+	<jsp:forward page="/jsp/language/language.jsp" />
 </body>
 </html>

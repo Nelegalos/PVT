@@ -1,0 +1,29 @@
+package by.pvt.epam.command;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import by.pvt.epam.dao.FlightDAOImpl;
+import by.pvt.epam.entity.Employee;
+import by.pvt.epam.entity.Flight;
+import by.pvt.epam.entity.Plane;
+import by.pvt.epam.resource.ConfigurationManager;
+
+public class TeamCommand implements ActionCommand {
+	private static final String PARAM_NAME_FLIGHT = "flight";
+
+	@Override
+	public String execute(HttpServletRequest request) {
+		String page = ConfigurationManager.getProperty("path.page.team");
+		int flightId = Integer.valueOf(request.getParameter(PARAM_NAME_FLIGHT));
+		FlightDAOImpl fdi = new FlightDAOImpl();
+		Flight flight = fdi.findFlightById(flightId);
+		Plane plane = flight.getPlane();
+		List<Employee> list = new ArrayList<>();
+
+		return page;
+	}
+
+}

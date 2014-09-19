@@ -1,0 +1,9 @@
+###############################
+## Application configuration ##
+###############################
+path.page.index=/index.jsp
+path.page.login=/jsp/login/login.jsp
+path.page.error=/jsp/error/error.jsp
+path.page.dispatcher=/jsp/dispatcher/dispatcher.jsp
+path.page.admin=/jsp/admin/admin.jsp
+##############################

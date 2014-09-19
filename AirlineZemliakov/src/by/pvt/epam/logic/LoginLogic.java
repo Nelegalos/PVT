@@ -1,10 +1,16 @@
 package by.pvt.epam.logic;
 
-public class LoginLogic {
-	private final static String ADMIN_LOGIN = "admin";
-	private final static String ADMIN_PASS = "Qwe123";
+import by.pvt.epam.dao.UserDAO;
+import by.pvt.epam.dao.UserDAOImpl;
+import by.pvt.epam.entity.User;
+import by.pvt.epam.exception.TechnicalException;
 
-	public static boolean checkLogin(String enterLogin, String enterPass) {
-		return ADMIN_LOGIN.equals(enterLogin) && ADMIN_PASS.equals(enterPass);
+public class LoginLogic {
+
+	public static User checkLogin(String login, String pass)
+			throws TechnicalException {
+		UserDAO userDAO = new UserDAOImpl();
+		User user = userDAO.findUser(login, pass);
+		return user;
 	}
 }

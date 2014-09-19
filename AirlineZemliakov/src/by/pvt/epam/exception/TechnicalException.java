@@ -1,7 +1,8 @@
 package by.pvt.epam.exception;
 
-@SuppressWarnings("serial")
 public class TechnicalException extends Exception {
+
+	private static final long serialVersionUID = -8176188285892073422L;
 
 	public TechnicalException() {
 		super();
@@ -9,18 +10,14 @@ public class TechnicalException extends Exception {
 
 	public TechnicalException(String arg0, Throwable arg1) {
 		super(arg0, arg1);
-		// TODO Auto-generated constructor stub
 	}
 
 	public TechnicalException(String arg0) {
 		super(arg0);
-		// TODO Auto-generated constructor stub
 	}
 
 	public TechnicalException(Throwable arg0) {
 		super(arg0);
-		// TODO Auto-generated constructor stub
 	}
-	
 
 }

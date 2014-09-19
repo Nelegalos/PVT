@@ -5,11 +5,14 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
+
 import org.apache.log4j.Logger;
+
+import by.pvt.epam.controller.Controller;
 
 public class ConnectionPool {
 
-	private static Logger logger = Logger.getLogger(ConnectionPool.class);
+	private static Logger logger = Logger.getLogger(Controller.class);
 	/**
      *
      */

@@ -1,17 +1,13 @@
 package by.pvt.epam.command;
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
-import by.pvt.epam.dao.FlightDAO;
-import by.pvt.epam.dao.FlightDAOImpl;
-import by.pvt.epam.dao.UserDAO;
-import by.pvt.epam.dao.UserDAOImpl;
 import by.pvt.epam.entity.Flight;
 import by.pvt.epam.entity.Role;
 import by.pvt.epam.entity.User;
 import by.pvt.epam.exception.TechnicalException;
+import by.pvt.epam.logic.FlightLogic;
+import by.pvt.epam.logic.LoginLogic;
 import by.pvt.epam.resource.ConfigurationManager;
 import by.pvt.epam.resource.MessageManager;
 
@@ -23,19 +19,14 @@ public class LoginCommand implements ActionCommand {
 	public String execute(HttpServletRequest request) {
 		String login = request.getParameter(PARAM_NAME_LOGIN);
 		String pass = request.getParameter(PARAM_NAME_PASSWORD);
-		UserDAO userDAO = new UserDAOImpl();
-		FlightDAO flightDAO = new FlightDAOImpl();
-		List<Flight> flights = flightDAO.findAllFlights();
 		String page = null;
-		User user = null;
 		try {
-			user = userDAO.findUser(login, pass);
-			Role role = user.getRole();
-			String welcomeUser = role + ": " + user.getName() + " "
-					+ user.getSurname();
-			request.getSession().setAttribute("role", role);
-			request.setAttribute("user", welcomeUser);
+			User body = LoginLogic.checkLogin(login, pass);
+			String user = body.getName() + " " + body.getSurname();
+			request.getSession().setAttribute("user", user);
+			List<Flight> flights = FlightLogic.findAllFlights();
 			request.setAttribute("flights", flights);
+			Role role = body.getRole();
 			switch (role) {
 			case ADMIN:
 				page = ConfigurationManager.getProperty("path.page.admin");

@@ -14,8 +14,9 @@ import by.pvt.epam.command.factory.ActionFactory;
 import by.pvt.epam.resource.ConfigurationManager;
 import by.pvt.epam.resource.MessageManager;
 
-@SuppressWarnings("serial")
 public class Controller extends HttpServlet {
+
+	private static final long serialVersionUID = -247767155410348813L;
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {

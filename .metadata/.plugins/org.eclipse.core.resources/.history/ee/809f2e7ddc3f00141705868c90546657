@@ -1,0 +1,17 @@
+package by.pvt.epam.command;
+
+import javax.servlet.http.HttpServletRequest;
+
+import by.pvt.epam.resource.ConfigurationManager;
+
+public class TeamCommand implements ActionCommand {
+	private static final String PARAM_NAME_FLIGHT = "flight";
+
+	@Override
+	public String execute(HttpServletRequest request) {
+		String page = ConfigurationManager.getProperty("path.page.dispatcher");
+		
+		return page;
+	}
+
+}

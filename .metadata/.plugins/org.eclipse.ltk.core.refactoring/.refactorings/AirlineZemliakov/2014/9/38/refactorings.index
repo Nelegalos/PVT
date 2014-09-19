@@ -19,3 +19,30 @@
 1410945700836	Copy file
 1410948029252	Delete element
 1410948308243	Rename method 'getAllFlights'
+1411025440320	Delete element
+1411025932485	Rename method 'getEmployeeById'
+1411026334747	Rename method 'getPlaneById'
+1411028874600	Copy file
+1411028880866	Copy file
+1411028886809	Copy file
+1411029202601	Delete elements
+1411029539849	Rename local variable 'user'
+1411029555903	Rename local variable 'welcomeUser'
+1411034890373	Rename resource 'pagecontent_en_en'
+1411035814270	Copy file
+1411035852722	Copy file
+1411036068049	Rename resource 'pagecontent_ru_ru'
+1411036162046	Rename resource 'pagecontent'
+1411036167469	Delete element
+1411036176324	Rename resource 'pagecontent_ru'
+1411037184781	Delete element
+1411037490281	Rename resource 'pagecontent_ru.properties'
+1411038017881	Delete element
+1411038036480	Rename resource 'pagecontent_r.properties'
+1411045480018	Move compilation unit
+1411049741015	Delete element
+1411055559479	Rename resource 'bg_img.jpg'
+1411055577772	Rename resource 'hd-wallpaper-airplanes.jpg'
+1411126284149	Rename type 'CrewDAOimpl'
+1411129021016	Rename local variable 'list'
+1411129212303	Rename local variable 'crew'
