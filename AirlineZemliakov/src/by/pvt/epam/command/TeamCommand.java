@@ -13,7 +13,9 @@ import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Flight;
 import by.pvt.epam.entity.Plane;
 import by.pvt.epam.entity.Position;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.resource.ConfigurationManager;
+import by.pvt.epam.resource.MessageManager;
 
 public class TeamCommand implements ActionCommand {
 	private static final String PARAM_NAME_FLIGHT = "flight";
@@ -54,7 +56,15 @@ public class TeamCommand implements ActionCommand {
 		request.setAttribute("crew", flightCrew);
 
 		CrewDAO cdi = new CrewDAOImpl();
-		List<Employee> employees = cdi.findAvailableEmployees();
+		List<Employee> employees = null;
+		try {
+			employees = cdi.findAvailableEmployees();
+		} catch (TechnicalException e) {
+			request.setAttribute("errorLoginPassMessage",
+					MessageManager.getProperty("message.loginerror"));
+			page = ConfigurationManager.getProperty("path.page.login");
+
+		}
 		request.setAttribute("employees", employees);
 
 		return page;

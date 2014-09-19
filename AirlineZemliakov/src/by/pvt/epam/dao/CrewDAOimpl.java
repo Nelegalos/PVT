@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import by.pvt.epam.controller.Controller;
 import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Position;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.pool.ConnectionPool;
 
 public class CrewDAOImpl extends CrewDAO {
@@ -47,7 +48,7 @@ public class CrewDAOImpl extends CrewDAO {
 	}
 
 	@Override
-	public Employee findEmployeeById(int id) {
+	public Employee findEmployeeById(int id) throws TechnicalException {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -69,7 +70,8 @@ public class CrewDAOImpl extends CrewDAO {
 						.toUpperCase()));
 			}
 		} catch (SQLException | ClassNotFoundException e) {
-			logger.error("TechnicalException", e);
+			throw new TechnicalException(e);
+			//logger.error("TechnicalException", e);
 		} finally {
 			FlightDAO.close(preparedStatement);
 			pool.backConnection(connection);
@@ -78,7 +80,7 @@ public class CrewDAOImpl extends CrewDAO {
 	}
 
 	@Override
-	public List<Employee> findAvailableEmployees() {
+	public List<Employee> findAvailableEmployees() throws TechnicalException {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		Statement statement = null;
@@ -100,7 +102,8 @@ public class CrewDAOImpl extends CrewDAO {
 				employees.add(employee);
 			}
 		} catch (SQLException | ClassNotFoundException e) {
-			logger.error("TechnicalException", e);
+			throw new TechnicalException(e);
+			//logger.error("TechnicalException", e);
 		} finally {
 			FlightDAO.close(statement);
 			pool.backConnection(connection);
