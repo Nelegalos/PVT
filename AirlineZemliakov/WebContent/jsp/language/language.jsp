@@ -19,7 +19,7 @@
 		<header>
 			<div class="wrapper">
 				<h1>
-					<a href="" id="logo"></a>
+					<a href="index.jsp" id="logo"></a>
 				</h1>
 				<span id="slogan"><fmt:message key="header.zemliakov" /></span>
 			</div>

@@ -8,7 +8,7 @@
 
 <html>
 <head>
-<title><fmt:message key="label.dispatcher" /></title>
+<title><fmt:message key="label.admin" /></title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="all">
 </head>
 <body id="page1">
@@ -17,7 +17,11 @@
 		<header>
 			<div class="wrapper">
 				<h1>
-					<a href="index.jsp" id="logo"></a>
+<<<<<<< HEAD
+					<a href="" id="logo"></a>
+=======
+					<a href="index.jsp" id="logo">AirLines</a>
+>>>>>>> 97fff3cd4743751fde30e83afbb6be594ef1f808
 				</h1>
 				<span id="slogan"><fmt:message key="header.zemliakov" /></span>
 			</div>
@@ -27,17 +31,30 @@
 		<section id="content">
 			<article class="col1">
 				<div class="content">
-					<fmt:message key="label.dispatcher" />
+					<fmt:message key="label.admin" />
 					: ${user}
 					<form name="logoutForm" method="POST" action="controller">
 						<input type="hidden" name="command" value="logout" /> <input
 							type="submit" value=<fmt:message key="option.logout" /> />
 					</form>
-					<form name="manageStaffForm" method="POST" action="controller">
-						<input type="hidden" name="command" value="manageStaff" /> <input
+					<form name="manageUsersForm" method="POST" action="controller">
+						<input type="hidden" name="command" value="manageUsers" /> <input
 							type="submit" value=<fmt:message key="manage.user" /> />
 					</form>
-					<br>
+					<form name="addFlightForm" method="POST" action="controller">
+						<input type="hidden" name="command" value="addFlight" />
+						<fmt:message key="flight.flight" />
+						: <input type="text" name="flight" value="" /> <br />
+						<fmt:message key="flight.to" />
+						: <input type="text" name="to" value="" /> <br />
+						<fmt:message key="flight.from" />
+						: <input type="text" name="from" value="" /> <br />
+						<fmt:message key="flight.date" />
+						: <input type="text" name="date" value="" /> <br />
+						<fmt:message key="flight.plane" />
+						: <input type="text" name="plane" value="" /> ${flightWasAdded} <br />
+						<input type="submit" value=<fmt:message key="flight.add" /> />
+					</form>
 					<table border=1>
 						<tr>
 							<td><fmt:message key="flight.flight" /></td>
@@ -52,10 +69,10 @@
 								<td><c:out value="${ flight.to }" /></td>
 								<td><c:out value="${ flight.from }" /></td>
 								<td><c:out value="${ flight.date }" /></td>
-								<td><form name="teamForm" method="POST" action="controller">
-										<input type="hidden" name="command" value="team" /> 
-										<input type="hidden" name="flight" value="${ flight.id }" /> 
-										<input type="submit" value=<fmt:message key="option.team" /> />
+								<td><form name="completeForm" method="POST"
+										action="controller">
+										<input type="hidden" name="command" value="complete" /> <input
+											type="submit" value=<fmt:message key="flight.complete" /> />
 									</form></td>
 							</tr>
 						</c:forEach>

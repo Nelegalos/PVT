@@ -17,7 +17,7 @@
 		<header>
 			<div class="wrapper">
 				<h1>
-					<a href="" id="logo"></a>
+					<a href="index.jsp" id="logo"></a>
 				</h1>
 				<span id="slogan"><fmt:message key="header.zemliakov" /></span>
 			</div>
@@ -31,7 +31,7 @@
 					: ${user}
 					<form name="logoutForm" method="POST" action="controller">
 						<input type="hidden" name="command" value="logout" /> <input
-							type="submit" value=<fmt:message key="option.logout" /> />
+							type="submit" value="<fmt:message key="option.logout" />" />
 					</form>
 					<br>
 
