@@ -17,11 +17,7 @@
 		<header>
 			<div class="wrapper">
 				<h1>
-<<<<<<< HEAD
 					<a href="" id="logo"></a>
-=======
-					<a href="index.jsp" id="logo">AirLines</a>
->>>>>>> 97fff3cd4743751fde30e83afbb6be594ef1f808
 				</h1>
 				<span id="slogan"><fmt:message key="header.zemliakov" /></span>
 			</div>
