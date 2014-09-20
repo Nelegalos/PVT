@@ -9,7 +9,9 @@
 <html>
 <head>
 <title><fmt:message key="option.login" /></title>
-<link rel="stylesheet" href="css/style.css" type="text/css" media="all">
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="all" />
+<link rel="stylesheet" href="css/layout.css" type="text/css" media="all" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
 </head>
 <body id="page1">
 	<div class="main">
@@ -17,7 +19,7 @@
 		<header>
 			<div class="wrapper">
 				<h1>
-					<a href="" id="logo">AirLines</a>
+					<a href="index.jsp" id="logo"></a>
 				</h1>
 				<span id="slogan"><fmt:message key="header.zemliakov" /></span>
 			</div>
@@ -28,33 +30,49 @@
 			<div class="for_banners">
 				<article class="col1">
 					<div class="tabs">
-						<div class="content">
-							<div class="tab-content" id="Rental">
-
-								<form name="loginForm" method="POST" action="controller">
+						<div class="box1">
+							<div class="notes">
+								<fmt:message key="lable.reg" />
+							</div>
+							<div class="tab-content" id="Flight">
+								<form id="form_4" name="loginForm" method="POST"
+									action="controller">
 									<input type="hidden" name="command" value="login" />
-									<fmt:message key="option.nick" />
-									<br /> <input type="text" name="login" value="" /> <br />
-									<fmt:message key="option.pass" />
-									<br /> <input type="password" name="password" value="" /> <br />
-									<input type="submit" value="<fmt:message key="option.login" />"
-										class="button1" /> ${errorLoginPassMessage} <br />
-									${wrongAction} <br /> ${nullPage}
+									<div>
+										<div class="row" style="margin-top: 20px;">
+											<span class="left"><fmt:message key="option.nick" /></span>
+											<input type="text" name="login" value="" class="input"/>
+										</div>
+
+										<div class="row">
+											<span class="left"><fmt:message key="option.pass" /></span>
+											<input type="password" name="password" value="" class="input"/>
+										</div>
+										<div class="wrapper">
+											<span class="right relative"> <input type="submit"
+												value="<fmt:message key="option.login" />" class="button1" />
+											</span>
+										</div>
+										<div class="wrapper" style="text-align: center; margin-top: 10px;">
+										${errorLoginPassMessage} <br /> ${wrongAction} <br />
+										${nullPage}
+										</div>
+									</div>
 								</form>
 							</div>
 						</div>
 					</div>
 				</article>
 			</div>
-			<div class="wrapper pad1">
-				<article class="col1">
-					<fmt:message key="contact.email" />
-				</article>
-				<article class="col2">
-					<fmt:message key="contact.phone" />
-				</article>
-			</div>
+			
 		</section>
+		<footer>
+			<div class="wrapper">
+				<div class="links">
+					<fmt:message key="contact.email" />
+				</div>
+			</div>
+		</footer>
 	</div>
 </body>
 </html>

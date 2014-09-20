@@ -17,7 +17,7 @@
 		<header>
 			<div class="wrapper">
 				<h1>
-					<a href="" id="logo">AirLines</a>
+					<a href="" id="logo"></a>
 				</h1>
 				<span id="slogan"><fmt:message key="header.zemliakov" /></span>
 			</div>
@@ -48,9 +48,8 @@
 						<fmt:message key="flight.date" />
 						: <input type="text" name="date" value="" /> <br />
 						<fmt:message key="flight.plane" />
-						: <input type="text" name="plane" value="" /> <br />
-						${flightWasAdded} <br /> <input type="submit"
-							value="<fmt:message key="flight.add" />" />
+						: <input type="text" name="plane" value="" /> ${flightWasAdded} <br />
+						<input type="submit" value=<fmt:message key="flight.add" /> />
 					</form>
 					<table border=1>
 						<tr>

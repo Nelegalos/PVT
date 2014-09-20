@@ -11,7 +11,7 @@
 <title><fmt:message key="lang.select" /></title>
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="all" />
 <link rel="stylesheet" href="css/layout.css" type="text/css" media="all" />
-<link rel="stylesheet" href="css/style1.css" type="text/css" media="all" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
 </head>
 <body id="page1">
 	<div class="main">
@@ -31,7 +31,7 @@
 				<article class="col1">
 					<div class="tabs">
 						<div class="notes">
-							<fmt:message key="lang.select" />:
+							<fmt:message key="lang.select" />
 						</div>
 						<div class="tab-content" id="Flight">
 							<form id="form_1" name="languageForm" method="post"

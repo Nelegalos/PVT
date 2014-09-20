@@ -58,18 +58,14 @@
 
 
 					<form name="employeeForm" method="POST" action="controller">
-						<input type="hidden" name="command" value="addEmployee" />
-						<p>
-							<select size="1" name="emloyeeId">
-								<option disabled>Select employee for the team</option>
-								<c:forEach var="pos" items="${employees}">
-									<option value="${ pos.id }">${ pos.position }: ${ pos.name } ${ pos.surname }</option>
-								</c:forEach>
-							</select>
-						</p>
-						<p>
-							<input type="submit" value="Submit">
-						</p>
+						<input type="hidden" name="command" value="addEmployee" /> <select
+							size="1" name="emloyeeId">
+							<option disabled>Select employee for the team</option>
+							<c:forEach var="pos" items="${employees}">
+								<option value="${ pos.id }">${ pos.position }:${ pos.name }
+									${ pos.surname }</option>
+							</c:forEach>
+						</select> <br /> <input type="submit" value=<fmt:message key="team.add" />>
 					</form>
 
 
