@@ -3,6 +3,7 @@ package by.pvt.epam.pool;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -17,6 +18,12 @@ public class DBConnector {
 	public Connection getConnection() {
 		Connection connection = null;
 
+		Properties properties = new Properties();
+		properties.setProperty("user", configBundle.getString("user"));
+		properties.setProperty("password", configBundle.getString("pass"));
+		properties.setProperty("useUnicode", "true");
+		properties.setProperty("characterEncoding", "UTF-8");
+
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -25,9 +32,7 @@ public class DBConnector {
 
 		try {
 			connection = DriverManager.getConnection(
-					configBundle.getString("url"),
-					configBundle.getString("user"),
-					configBundle.getString("pass"));
+					configBundle.getString("url"), properties);
 		} catch (SQLException e) {
 			logger.error("Technical Exception", e);
 		}
