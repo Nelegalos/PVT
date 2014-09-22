@@ -32,13 +32,15 @@
 	<section name="SourceActionDialog.methods">
 		<item value="false" key="SkipNull"/>
 		<item value="10" key="LimitValue"/>
-		<item value="0" key="ToStringTemplateSelected"/>
 		<item value="0" key="StringStyle"/>
-		<item value="false" key="Comments"/>
+		<item value="0" key="ToStringTemplateSelected"/>
 		<item value="1" key="VisibilityModifier"/>
-		<item value="false" key="LimitElements"/>
+		<item value="false" key="Comments"/>
 		<item value="2" key="InsertPosition.v2"/>
+		<item value="false" key="LimitElements"/>
+		<item value="true" key="InstanceOf"/>
 		<item value="false" key="SynchronizedModifier"/>
+		<item value="false" key="Blocks"/>
 		<item value="true" key="IgnoreDefault"/>
 		<item value="false" key="FinalModifier"/>
 	</section>
@@ -100,6 +102,13 @@
 		<item value="66" key="DIALOG_Y_ORIGIN"/>
 		<item value="708" key="DIALOG_X_ORIGIN"/>
 		<item value="677" key="DIALOG_HEIGHT"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="DialogBounds_GenerateHashCodeEqualsDialog">
+		<item value="516" key="DIALOG_WIDTH"/>
+		<item value="136" key="DIALOG_Y_ORIGIN"/>
+		<item value="572" key="DIALOG_HEIGHT"/>
+		<item value="710" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 	</section>
 </section>

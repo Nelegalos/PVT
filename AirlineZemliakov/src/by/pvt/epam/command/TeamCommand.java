@@ -13,18 +13,21 @@ import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Flight;
 import by.pvt.epam.entity.Plane;
 import by.pvt.epam.entity.Position;
-import by.pvt.epam.exception.TechnicalException;
+import by.pvt.epam.exception.DAOException;
 import by.pvt.epam.resource.ConfigurationManager;
 import by.pvt.epam.resource.MessageManager;
 
 public class TeamCommand implements ActionCommand {
-	private static final String PARAM_NAME_FLIGHT = "flight";
+	private static final String PARAM_NAME_FLIGHT_ID = "flight";
 
 	@Override
 	public String execute(HttpServletRequest request) {
 		String page = ConfigurationManager.getProperty("path.page.team");
 
-		int flightId = Integer.valueOf(request.getParameter(PARAM_NAME_FLIGHT));
+		int flightId = Integer.valueOf(request
+				.getParameter(PARAM_NAME_FLIGHT_ID));
+		request.getSession().setAttribute("flightId", flightId);
+
 		FlightDAO fdi = new FlightDAOImpl();
 		Flight flight = fdi.findFlightById(flightId);
 		Plane plane = flight.getPlane();
@@ -53,19 +56,19 @@ public class TeamCommand implements ActionCommand {
 			employee.setPosition(Position.STEWARD);
 			flightCrew.add(employee);
 		}
-		request.setAttribute("crew", flightCrew);
+		request.getSession().setAttribute("crew", flightCrew);
 
 		CrewDAO cdi = new CrewDAOImpl();
 		List<Employee> employees = null;
 		try {
 			employees = cdi.findAvailableEmployees();
-		} catch (TechnicalException e) {
+		} catch (DAOException e) {
 			request.setAttribute("errorLoginPassMessage",
 					MessageManager.getProperty("message.loginerror"));
 			page = ConfigurationManager.getProperty("path.page.login");
 
 		}
-		request.setAttribute("employees", employees);
+		request.getSession().setAttribute("employees", employees);
 
 		return page;
 	}

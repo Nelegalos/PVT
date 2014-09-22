@@ -1,0 +1,16 @@
+package by.pvt.epam.command;
+
+import javax.servlet.http.HttpServletRequest;
+
+public class CompleteFlightCommand implements ActionCommand {
+
+	@Override
+	public String execute(HttpServletRequest request) {
+		
+
+		
+		return null;
+
+	}
+
+}

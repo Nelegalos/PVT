@@ -1,5 +1,0 @@
-package by.pvt.epam.dao;
-
-public abstract class AbsractFlightDAO {
-
-}

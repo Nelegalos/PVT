@@ -1,0 +1,30 @@
+package by.pvt.epam.command;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import by.pvt.epam.dao.CrewDAO;
+import by.pvt.epam.dao.CrewDAOImpl;
+import by.pvt.epam.entity.Employee;
+import by.pvt.epam.resource.ConfigurationManager;
+
+public class FormTeamCommand implements ActionCommand {
+
+	@Override
+	public String execute(HttpServletRequest request) {
+
+		@SuppressWarnings("unchecked")
+		List<Employee> crew = (List<Employee>) request.getSession()
+				.getAttribute("crew");
+		for (Employee employee : crew) {
+			employee.setStatus(1);
+			CrewDAO cd = new CrewDAOImpl();
+			int id = employee.getId();
+			boolean flag = cd.addToFlight(id);
+		}
+		String page = ConfigurationManager.getProperty("path.page.dispatcher");
+		return page;
+	}
+
+}

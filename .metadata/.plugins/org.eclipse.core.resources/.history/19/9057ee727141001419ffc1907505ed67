@@ -1,0 +1,8 @@
+###############################
+## Messages ##
+###############################
+message.loginerror = Incorrect login or password.
+message.nullpage = Page not found. Business logic error.
+message.wrongaction = : command not found or wrong!
+team.message = This position is already staffed!
+team.added = Employee was successfully registered for the flight!

@@ -1,0 +1,30 @@
+package by.pvt.epam.logic;
+
+import java.sql.Date;
+import java.util.List;
+
+import by.pvt.epam.dao.FlightDAO;
+import by.pvt.epam.dao.FlightDAOImpl;
+import by.pvt.epam.entity.Flight;
+
+public class FlightLogic {
+	public static List<Flight> findAllFlights() {
+		FlightDAO flightDAO = new FlightDAOImpl();
+		List<Flight> flights = flightDAO.findAllFlights();
+		return flights;
+	}
+
+	public static List<Flight> findUnformedFlights() {
+		FlightDAO flightDAO = new FlightDAOImpl();
+		List<Flight> flights = flightDAO.findUnformedFlights();
+		return flights;
+	}
+
+	public static boolean validateAddFlight(int flightId, String to, String from, Date date, int plane, int status) {
+		
+		FlightDAO fd = new FlightDAOImpl();
+		boolean flag = fd.addFlight(flightId, to, from, date, plane, status);
+
+		return flag;
+	}
+}

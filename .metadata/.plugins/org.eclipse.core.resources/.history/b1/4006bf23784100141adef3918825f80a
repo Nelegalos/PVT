@@ -1,0 +1,19 @@
+package by.pvt.epam.command;
+
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import by.pvt.epam.entity.Employee;
+
+public class FormTeamCommand implements ActionCommand {
+
+	@Override
+	public String execute(HttpServletRequest request) {
+
+		@SuppressWarnings("unchecked")
+		List<Employee> crew = (List<Employee>) request.getSession()
+				.getAttribute("crew");
+
+		return null;
+	}
+
+}

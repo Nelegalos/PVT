@@ -1,10 +1,14 @@
 package by.pvt.epam.command;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
 import by.pvt.epam.entity.Flight;
+import by.pvt.epam.entity.Plane;
 import by.pvt.epam.entity.Role;
 import by.pvt.epam.entity.User;
+import by.pvt.epam.exception.DAOException;
 import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.logic.FlightLogic;
 import by.pvt.epam.logic.LoginLogic;
@@ -25,10 +29,12 @@ public class LoginCommand implements ActionCommand {
 			String user = body.getName() + " " + body.getSurname();
 			request.getSession().setAttribute("user", user);
 			List<Flight> flights = FlightLogic.findAllFlights();
-			request.setAttribute("flights", flights);
+			request.getSession().setAttribute("flights", flights);
 			Role role = body.getRole();
 			switch (role) {
 			case ADMIN:
+				List<Plane> planes = FlightLogic.findAllPlanes();
+				request.getSession().setAttribute("planes", planes);
 				page = ConfigurationManager.getProperty("path.page.admin");
 				break;
 			case DISPATCHER:
@@ -38,6 +44,10 @@ public class LoginCommand implements ActionCommand {
 		} catch (TechnicalException e) {
 			request.setAttribute("errorLoginPassMessage",
 					MessageManager.getProperty("message.loginerror"));
+			page = ConfigurationManager.getProperty("path.page.login");
+		} catch (DAOException e) {
+			request.setAttribute("wrongAction",
+					MessageManager.getProperty("message.daofail"));
 			page = ConfigurationManager.getProperty("path.page.login");
 		}
 		return page;

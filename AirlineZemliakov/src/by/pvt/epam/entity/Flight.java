@@ -8,16 +8,20 @@ public class Flight {
 	private String from;
 	private String to;
 	private Plane plane;
+	private int status;
 
 	public Flight() {
 	}
 
-	public Flight(int id, Date date, String from, String to, Plane plane) {
+	public Flight(int id, Date date, String from, String to, Plane plane,
+			int status) {
+		super();
 		this.id = id;
 		this.date = date;
 		this.from = from;
 		this.to = to;
 		this.plane = plane;
+		this.status = status;
 	}
 
 	public int getId() {
@@ -60,10 +64,19 @@ public class Flight {
 		this.plane = plane;
 	}
 
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
 		return "Flight [id=" + id + ", date=" + date + ", from=" + from
-				+ ", to=" + to + ", plane=" + plane + "]";
+				+ ", to=" + to + ", plane=" + plane + ", status=" + status
+				+ "]";
 	}
 
 }

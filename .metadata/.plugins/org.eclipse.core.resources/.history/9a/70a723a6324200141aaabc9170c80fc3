@@ -1,0 +1,5 @@
+message.loginerror = Incorrect login or password!
+message.nullpage = Page not found!
+message.wrongaction = Wrong command!
+team.message = This position is already staffed!
+team.added = Employee was added!

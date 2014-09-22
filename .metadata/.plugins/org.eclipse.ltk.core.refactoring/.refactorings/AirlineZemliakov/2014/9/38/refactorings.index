@@ -61,3 +61,19 @@
 1411200876023	Move 'BasicStyle.css' to 'workingbackup'
 1411200975310	Delete element
 1411203836340	Move 'banner1.jpg' to 'backup'
+1411205129685	Rename compilation unit 'CrewDAOimpl.java'
+1411205194985	Rename resource 'admin.jsp'
+1411205785487	Delete elements
+1411205793813	Delete element
+1411205810594	Delete elements
+1411209846405	Move 1 resources to 'backup'
+1411209857805	Rename resource 'NewFile.jsp'
+1411224004508	Copy file
+1411284213954	Rename local variable 'employees'
+1411284674763	Delete element
+1411291065567	Copy file
+1411291818071	Move compilation unit
+1411291858635	Move 1 resources to 'backup'
+1411302755887	Rename field 'PARAM_NAME_FLIGHTS'
+1411322237600	Rename local variable 'employees'
+1411322472028	Rename local variable 'id'

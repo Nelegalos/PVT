@@ -1,0 +1,31 @@
+package by.pvt.epam.command;
+
+import javax.servlet.http.HttpServletRequest;
+
+import by.pvt.epam.dao.FlightDAO;
+import by.pvt.epam.dao.FlightDAOImpl;
+import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.resource.ConfigurationManager;
+
+public class CompleteFlightCommand implements ActionCommand {
+	
+	private static final String PARAM_NAME_FLIGHT_ID = "flightId";
+
+	@Override
+	public String execute(HttpServletRequest request) {
+		
+		int flightId = (Integer) request.getSession().getAttribute(
+				PARAM_NAME_FLIGHT_ID);
+		FlightDAO fd = new FlightDAOImpl();
+		try {
+			fd.setFlightOnAir(flightId);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+
+		String page = ConfigurationManager.getProperty("path.page.admin");
+		return page;
+
+	}
+
+}

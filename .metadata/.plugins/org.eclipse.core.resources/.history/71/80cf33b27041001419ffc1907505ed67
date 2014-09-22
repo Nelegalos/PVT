@@ -1,0 +1,8 @@
+###############################
+## Messages ##
+###############################
+message.loginerror = Incorrect login or password.
+message.nullpage = Page not found. Business logic error.
+message.wrongaction = : command not found or wrong!
+message.adderror = There is no need in such employee here!
+team.message=This position is already staffed!

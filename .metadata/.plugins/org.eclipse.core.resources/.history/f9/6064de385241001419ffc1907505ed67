@@ -1,0 +1,5 @@
+package by.pvt.epam.exception;
+
+public class DAOException {
+
+}

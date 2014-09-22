@@ -1,0 +1,57 @@
+package by.pvt.epam.logic;
+
+import java.sql.Date;
+import java.util.List;
+
+import by.pvt.epam.dao.FlightDAO;
+import by.pvt.epam.dao.FlightDAOImpl;
+import by.pvt.epam.entity.Flight;
+
+public class FlightLogic {
+	public static List<Flight> findAllFlights() {
+		FlightDAO flightDAO = new FlightDAOImpl();
+		List<Flight> flights = flightDAO.findAllFlights();
+		return flights;
+	}
+
+	public static List<Flight> findUnformedFlights() {
+		FlightDAO flightDAO = new FlightDAOImpl();
+		List<Flight> flights = flightDAO.findUnformedFlights();
+		return flights;
+	}
+
+	public static boolean validateAddFlight(String id, String to, String from,
+			String dateInput, String planeInput) {
+
+		boolean flag = false;
+
+		if (isEmpty(to, from)) {
+			return flag;
+		}
+		int flightId;
+		Date date = null;
+		int plane;
+		try {
+			flightId = Integer.valueOf(id);
+			date = Date.valueOf(dateInput);
+			plane = Integer.valueOf(planeInput);
+		} catch (IllegalArgumentException e) {
+			return flag;
+		}
+		FlightDAO fd = new FlightDAOImpl();
+		List<Flight> allFlights = fd.findAllFlights();
+
+		for (Flight flight : allFlights) {
+			if (flightId == flight.getId()) {
+				return flag;
+			}
+		}
+		boolean flag = fd.addFlight(flightId, to, from, date, plane);
+		return flag;
+	}
+
+	private static boolean isEmpty(String to, String from) {
+		return to == "" || from == "";
+	}
+
+}
