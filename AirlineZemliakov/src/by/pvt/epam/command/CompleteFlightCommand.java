@@ -4,19 +4,19 @@ import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
-import by.pvt.epam.controller.Controller;
 import by.pvt.epam.dao.CrewDAO;
 import by.pvt.epam.dao.CrewDAOImpl;
 import by.pvt.epam.dao.FlightDAO;
 import by.pvt.epam.dao.FlightDAOImpl;
 import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Flight;
-import by.pvt.epam.exception.TechnicalException;
+import by.pvt.epam.exception.DAOException;
 import by.pvt.epam.resource.ConfigurationManager;
 
 public class CompleteFlightCommand implements ActionCommand {
 
-	private static Logger logger = Logger.getLogger(Controller.class);
+	private static Logger logger = Logger
+			.getLogger(CompleteFlightCommand.class);
 	private static final String PARAM_NAME_FLIGHT_ID = "flightId";
 
 	@Override
@@ -34,7 +34,7 @@ public class CompleteFlightCommand implements ActionCommand {
 		try {
 			crew = cd.findCrewByFlightId(flightId);
 			flights = flightDAO.findAllFlights();
-		} catch (TechnicalException e) {
+		} catch (DAOException e) {
 			flag = false;
 			logger.error("TechnicalException", e);
 		}

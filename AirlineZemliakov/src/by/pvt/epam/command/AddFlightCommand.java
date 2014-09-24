@@ -3,15 +3,14 @@ package by.pvt.epam.command;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
-import by.pvt.epam.controller.Controller;
 import by.pvt.epam.dao.FlightDAO;
 import by.pvt.epam.dao.FlightDAOImpl;
 import by.pvt.epam.entity.Flight;
-import by.pvt.epam.exception.TechnicalException;
+import by.pvt.epam.exception.DAOException;
 import by.pvt.epam.resource.ConfigurationManager;
 
 public class AddFlightCommand implements ActionCommand {
-	private static Logger logger = Logger.getLogger(Controller.class);
+	private static Logger logger = Logger.getLogger(AddFlightCommand.class);
 	private static final String PARAM_NAME_FLIGHT_ID = "addedflight";
 	private static final String PARAM_NAME_TO = "to";
 	private static final String PARAM_NAME_FROM = "from";
@@ -29,7 +28,7 @@ public class AddFlightCommand implements ActionCommand {
 		boolean flag = false;
 		try {
 			flag = addFlight(flightId, to, from, date, plane);
-		} catch (TechnicalException e) {
+		} catch (DAOException e) {
 			logger.error("TechnicalException", e);
 		}
 		if (flag) {
@@ -43,7 +42,7 @@ public class AddFlightCommand implements ActionCommand {
 	}
 
 	private static boolean addFlight(String idInput, String to, String from,
-			String dateInput, String planeInput) throws TechnicalException {
+			String dateInput, String planeInput) throws DAOException {
 		boolean flag = false;
 		if (isEmpty(to, from, dateInput)) {
 			return flag;
@@ -68,7 +67,7 @@ public class AddFlightCommand implements ActionCommand {
 	}
 
 	private static boolean isEmpty(String to, String from, String dateInput) {
-		return to == "" || from == "" || dateInput == "";
+		return to.isEmpty() || from.isEmpty() || dateInput.isEmpty();
 	}
 
 }

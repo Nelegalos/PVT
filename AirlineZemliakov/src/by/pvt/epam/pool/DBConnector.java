@@ -6,23 +6,22 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-public class DBConnector {
+import org.apache.log4j.Logger;
 
-	private static final ResourceBundle configBundle = ResourceBundle
+public class DBConnector {
+	private static Logger logger = Logger.getLogger(DBConnector.class);
+	private static final ResourceBundle CONFIG_BUNDLE = ResourceBundle
 			.getBundle("resources.database");
 
-	public Connection getConnection() throws ClassNotFoundException,
-			SQLException {
+	public Connection getConnection(Properties properties) {
 		Connection connection = null;
-		Properties properties = new Properties();
-		properties.setProperty("user", configBundle.getString("user"));
-		properties.setProperty("password", configBundle.getString("pass"));
-		properties.setProperty("useUnicode", configBundle.getString("unicode"));
-		properties.setProperty("characterEncoding",
-				configBundle.getString("encoding"));
-		DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-		connection = DriverManager.getConnection(configBundle.getString("url"),
-				properties);
+		try {
+			connection = DriverManager.getConnection(
+					CONFIG_BUNDLE.getString("url"), properties);
+		} catch (SQLException e) {
+			logger.fatal("Fatal Error", e);
+			throw new RuntimeException(e);
+		}
 		return connection;
 	}
 }

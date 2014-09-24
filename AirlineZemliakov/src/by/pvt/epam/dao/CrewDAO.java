@@ -4,22 +4,22 @@ import java.util.List;
 import java.util.Set;
 
 import by.pvt.epam.entity.Employee;
-import by.pvt.epam.exception.TechnicalException;
+import by.pvt.epam.exception.DAOException;
 
 public abstract class CrewDAO extends AbstractDAO {
 
 	public abstract boolean addEmployee(String name, String surname,
 			int position);
 
-	public abstract Employee findEmployeeById(int id) throws TechnicalException;
+	public abstract Employee findEmployeeById(int id) throws DAOException;
 
 	public abstract List<Employee> findAvailableEmployees()
-			throws TechnicalException;
+			throws DAOException;
 
 	public abstract boolean addToFlight(int employeeId);
 
 	public abstract Set<Employee> findCrewByFlightId(int id)
-			throws TechnicalException;
+			throws DAOException;
 
 	public abstract boolean releaseEmployee(int employeeId);
 

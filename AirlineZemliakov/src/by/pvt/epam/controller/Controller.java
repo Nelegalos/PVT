@@ -1,7 +1,6 @@
 package by.pvt.epam.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -20,12 +19,8 @@ public class Controller extends HttpServlet {
 	private static final long serialVersionUID = -247767155410348813L;
 
 	@Override
-	public void init(ServletConfig config) {
-		try {
-			super.init(config);
-		} catch (ServletException e) {
-			logger.error("TechnicalException", e);
-		}
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
 		String log4j = config.getInitParameter("log4j-pass");
 		String path = getServletContext().getRealPath(log4j);
 		PropertyConfigurator.configure(path);
@@ -46,26 +41,21 @@ public class Controller extends HttpServlet {
 		String page = null;
 		ActionFactory actionFactory = new ActionFactory();
 		ActionCommand command = actionFactory.defineCommand(request);
-		page = command.execute(request);
 		try {
+			page = command.execute(request);
 			RequestDispatcher dispatcher = getServletContext()
 					.getRequestDispatcher(page);
 			dispatcher.forward(request, response);
-		} catch (ServletException | IOException | NullPointerException e) {
+		} catch (ServletException | IOException e) {
 			logger.error("TechnicalException", e);
-			request.setAttribute("error", e);
-			response.sendError(404);
+			response.sendError(500);
 		}
 	}
 
 	@Override
 	public void destroy() {
 		super.destroy();
-		try {
-			ConnectionPool.getInstance().cleanUp();
-		} catch (ClassNotFoundException | SQLException e) {
-			logger.error("TechnicalException", e);
-		}
+		ConnectionPool.getInstance().cleanUp();
 	}
 
 }

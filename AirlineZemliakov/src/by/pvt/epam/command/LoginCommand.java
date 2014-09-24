@@ -3,7 +3,6 @@ package by.pvt.epam.command;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
-import by.pvt.epam.controller.Controller;
 import by.pvt.epam.dao.FlightDAO;
 import by.pvt.epam.dao.FlightDAOImpl;
 import by.pvt.epam.dao.UserDAO;
@@ -12,13 +11,13 @@ import by.pvt.epam.entity.Flight;
 import by.pvt.epam.entity.Plane;
 import by.pvt.epam.entity.Role;
 import by.pvt.epam.entity.User;
-import by.pvt.epam.exception.TechnicalException;
+import by.pvt.epam.exception.DAOException;
 import by.pvt.epam.resource.ConfigurationManager;
 
 public class LoginCommand implements ActionCommand {
 	private static final String PARAM_NAME_LOGIN = "login";
 	private static final String PARAM_NAME_PASSWORD = "password";
-	private static Logger logger = Logger.getLogger(Controller.class);
+	private static Logger logger = Logger.getLogger(LoginCommand.class);
 
 	@Override
 	public String execute(HttpServletRequest request) {
@@ -48,7 +47,7 @@ public class LoginCommand implements ActionCommand {
 			default:
 				page = ConfigurationManager.getProperty("path.page.index");
 			}
-		} catch (TechnicalException e) {
+		} catch (DAOException e) {
 			request.setAttribute("errorLoginPassMessage", "login.error");
 			page = ConfigurationManager.getProperty("path.page.login");
 			logger.error("TechnicalException", e);

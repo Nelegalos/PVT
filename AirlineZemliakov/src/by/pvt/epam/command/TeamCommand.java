@@ -2,12 +2,8 @@ package by.pvt.epam.command;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
-
-import by.pvt.epam.controller.Controller;
 import by.pvt.epam.dao.CrewDAO;
 import by.pvt.epam.dao.CrewDAOImpl;
 import by.pvt.epam.dao.FlightDAO;
@@ -16,12 +12,12 @@ import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Flight;
 import by.pvt.epam.entity.Plane;
 import by.pvt.epam.entity.Position;
-import by.pvt.epam.exception.TechnicalException;
+import by.pvt.epam.exception.DAOException;
 import by.pvt.epam.resource.ConfigurationManager;
 
 public class TeamCommand implements ActionCommand {
 
-	private static Logger logger = Logger.getLogger(Controller.class);
+	private static Logger logger = Logger.getLogger(TeamCommand.class);
 	private static final String PARAM_NAME_FLIGHT_ID = "flight";
 
 	@Override
@@ -38,7 +34,7 @@ public class TeamCommand implements ActionCommand {
 			flight = fdi.findFlightById(flightId);
 			employees = cdi.findAvailableEmployees();
 			request.getSession().setAttribute("employees", employees);
-		} catch (TechnicalException e) {
+		} catch (DAOException e) {
 			logger.error("TechnicalException", e);
 			request.setAttribute("teamNotFormed", "team.empty");
 			return page;

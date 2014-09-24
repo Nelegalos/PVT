@@ -3,19 +3,18 @@ package by.pvt.epam.command;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
-import by.pvt.epam.controller.Controller;
 import by.pvt.epam.dao.CrewDAO;
 import by.pvt.epam.dao.CrewDAOImpl;
 import by.pvt.epam.dao.FlightDAO;
 import by.pvt.epam.dao.FlightDAOImpl;
 import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Flight;
-import by.pvt.epam.exception.TechnicalException;
+import by.pvt.epam.exception.DAOException;
 import by.pvt.epam.resource.ConfigurationManager;
 
 public class FormTeamCommand implements ActionCommand {
 
-	private static Logger logger = Logger.getLogger(Controller.class);
+	private static Logger logger = Logger.getLogger(FormTeamCommand.class);
 	private static final String PARAM_NAME_FLIGHT_ID = "flightId";
 
 	@Override
@@ -48,7 +47,7 @@ public class FormTeamCommand implements ActionCommand {
 		List<Flight> flights = null;
 		try {
 			flights = flightDAO.findUnformedFlights();
-		} catch (TechnicalException e) {
+		} catch (DAOException e) {
 			flag = false;
 			logger.error("TechnicalException", e);
 		}
