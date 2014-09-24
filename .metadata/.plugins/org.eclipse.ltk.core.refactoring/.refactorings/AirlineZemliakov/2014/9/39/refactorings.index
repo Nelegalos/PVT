@@ -6,3 +6,16 @@
 1411391166528	Delete element
 1411391177111	Delete element
 1411391197064	Delete element
+1411465578371	Rename resource 'messages.properties'
+1411465598438	Rename resource 'messagesOld.properties'
+1411488201022	Delete element
+1411490241270	Delete element
+1411490269839	Delete element
+1411492166880	Delete element
+1411492201023	Rename type 'DAOException'
+1411492240410	Delete element
+1411493769169	Delete element
+1411549051287	Rename method 'validateAddFlight'
+1411556446528	Delete element
+1411556587991	Delete element
+1411561116136	Rename local variable 'log4jLocation'

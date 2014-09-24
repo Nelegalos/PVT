@@ -8,7 +8,7 @@
 		<servlet-name>Controller</servlet-name>
 		<servlet-class>by.pvt.epam.controller.Controller</servlet-class>
 		<init-param>
-			<param-name>log4j-location</param-name>
+			<param-name>log4j-pass</param-name>
 			<param-value>WEB-INF/log4j.properties</param-value>
 		</init-param>
 	</servlet>
@@ -21,11 +21,11 @@
 	</welcome-file-list>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/jsp/error/error.jsp</location>
+		<location>/error/error.jsp</location>
 	</error-page>
 	<error-page>
 		<exception-type>java.lang.RuntimeException</exception-type>
-		<location>/jsp/error/error.jsp</location>
+		<location>/error/error.jsp</location>
 	</error-page>
 	<filter>
 		<filter-name>encodingfilter</filter-name>

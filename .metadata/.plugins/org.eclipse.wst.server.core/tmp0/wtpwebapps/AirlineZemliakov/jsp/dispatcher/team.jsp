@@ -2,10 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
 <fmt:setLocale value="${ lang }" scope="session" />
 <fmt:setBundle basename="resources.pagecontent" />
-
 <html>
 <head>
 <title><fmt:message key="label.dispatcher" /></title>
@@ -15,14 +13,12 @@
 </head>
 <body id="page1">
 	<div class="main">
-		<!--header -->
 		<header>
 			<div class="wrapper">
 				<h1>
 					<a href="index.jsp" id="logo"></a>
 				</h1>
 				<span id="slogan"><fmt:message key="header.zemliakov" /></span>
-				<!-- блок с двумя кнопками сверху -->
 				<table class="top_bottons">
 					<tr>
 						<td style="width: 300px;"><p
@@ -37,14 +33,13 @@
 						</td>
 						<td>
 							<form action="controller" method="post">
-								<input type="hidden" name="command" value="manageUsers" /><input
+								<input type="hidden" name="command" value="backToDispatcher" /><input
 									class="button1" type="submit"
-									value=<fmt:message key="manage.staff" /> />
+									value=<fmt:message key="back.flights" /> />
 							</form>
 						</td>
 					</tr>
 				</table>
-				<!-- конец блока с двумя кнопками сверху -->
 			</div>
 		</header>
 		<!-- / header -->
@@ -53,10 +48,8 @@
 			<div class="for_banners">
 				<article class="col1">
 					<div class="tabs">
-						<!--отдельная форма  -->
 						<div class="box1" style="margin-bottom: 20px;">
 							<div class="notes">
-								<!--заголовок  -->
 								<fmt:message key="crew.new" />
 							</div>
 							<div class="tab-content" id="Flight">
@@ -81,22 +74,25 @@
 												class="button1" />
 											</span>
 										</div>
-										<span class="right relative"> ${ wrongEmployee }</span>
+										<span class="right relative"> <c:if
+												test="${ employeeAdded != null }">
+												<fmt:message key="${ employeeAdded }" />
+											</c:if> <c:if test="${ employeeNotAdded != null }">
+												<fmt:message key="${ employeeNotAdded }" />
+											</c:if>
+										</span>
 									</div>
 								</form>
 							</div>
 						</div>
-						<!--конец отдельной формы  -->
 					</div>
 				</article>
 				<article class="col2">
 					<div class="box1" style="margin-top: 245px;">
 						<div class="notes">
-							<!--заголовок  -->
 							<fmt:message key="flight.flight" />
 						</div>
 						<div>
-							<!--таблица -->
 							<table class="flight_table">
 								<tr>
 									<td><fmt:message key="position.name" /></td>
@@ -118,22 +114,21 @@
 										value=<fmt:message key="option.team" /> />
 								</form>
 							</div>
+							<span><c:if test="${ teamEmpty != null }">
+									<fmt:message key="${ teamEmpty }" />
+								</c:if></span>
 						</div>
 					</div>
 				</article>
 			</div>
 		</section>
-		<!--content end-->
-		<!--footer -->
 		<footer>
 			<div class="wrapper">
 				<div class="links">
-					<fmt:message key="label.admin" />
-					${user}
+					<fmt:message key="contact.email" />
 				</div>
 			</div>
 		</footer>
-		<!--footer end-->
 	</div>
 </body>
 </html>

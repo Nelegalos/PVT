@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
+import by.pvt.epam.controller.Controller;
 import by.pvt.epam.dao.CrewDAO;
 import by.pvt.epam.dao.CrewDAOImpl;
 import by.pvt.epam.dao.FlightDAO;
@@ -13,23 +16,33 @@ import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Flight;
 import by.pvt.epam.entity.Plane;
 import by.pvt.epam.entity.Position;
-import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.resource.ConfigurationManager;
-import by.pvt.epam.resource.MessageManager;
 
 public class TeamCommand implements ActionCommand {
+
+	private static Logger logger = Logger.getLogger(Controller.class);
 	private static final String PARAM_NAME_FLIGHT_ID = "flight";
 
 	@Override
 	public String execute(HttpServletRequest request) {
-		String page = ConfigurationManager.getProperty("path.page.team");
-
+		String page = ConfigurationManager.getProperty("path.page.dispatcher");
 		int flightId = Integer.valueOf(request
 				.getParameter(PARAM_NAME_FLIGHT_ID));
 		request.getSession().setAttribute("flightId", flightId);
-
 		FlightDAO fdi = new FlightDAOImpl();
-		Flight flight = fdi.findFlightById(flightId);
+		CrewDAO cdi = new CrewDAOImpl();
+		List<Employee> employees = null;
+		Flight flight = null;
+		try {
+			flight = fdi.findFlightById(flightId);
+			employees = cdi.findAvailableEmployees();
+			request.getSession().setAttribute("employees", employees);
+		} catch (TechnicalException e) {
+			logger.error("TechnicalException", e);
+			request.setAttribute("teamNotFormed", "team.empty");
+			return page;
+		}
 		Plane plane = flight.getPlane();
 		List<Employee> flightCrew = new ArrayList<>();
 		int pilot = plane.getPilot();
@@ -57,19 +70,7 @@ public class TeamCommand implements ActionCommand {
 			flightCrew.add(employee);
 		}
 		request.getSession().setAttribute("crew", flightCrew);
-
-		CrewDAO cdi = new CrewDAOImpl();
-		List<Employee> employees = null;
-		try {
-			employees = cdi.findAvailableEmployees();
-		} catch (DAOException e) {
-			request.setAttribute("errorLoginPassMessage",
-					MessageManager.getProperty("message.loginerror"));
-			page = ConfigurationManager.getProperty("path.page.login");
-
-		}
-		request.getSession().setAttribute("employees", employees);
-
+		page = ConfigurationManager.getProperty("path.page.team");
 		return page;
 	}
 

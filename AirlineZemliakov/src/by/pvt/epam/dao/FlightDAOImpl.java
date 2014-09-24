@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import by.pvt.epam.controller.Controller;
 import by.pvt.epam.entity.Flight;
 import by.pvt.epam.entity.Plane;
-import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.pool.ConnectionPool;
 
 public class FlightDAOImpl extends FlightDAO {
@@ -28,7 +28,7 @@ public class FlightDAOImpl extends FlightDAO {
 	private static final String SQL_QUERY_FIND_ALL_PLANES = "SELECT * FROM plane_staff";
 
 	@Override
-	public List<Flight> findAllFlights() {
+	public List<Flight> findAllFlights() throws TechnicalException {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		Statement statement = null;
@@ -52,7 +52,7 @@ public class FlightDAOImpl extends FlightDAO {
 				flights.add(flight);
 			}
 		} catch (SQLException | ClassNotFoundException e) {
-			logger.error("TechnicalException", e);
+			throw new TechnicalException(e);
 		} finally {
 			FlightDAO.close(statement);
 			pool.backConnection(connection);
@@ -61,7 +61,7 @@ public class FlightDAOImpl extends FlightDAO {
 	}
 
 	@Override
-	public Flight findFlightById(int id) {
+	public Flight findFlightById(int id) throws TechnicalException {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -85,7 +85,7 @@ public class FlightDAOImpl extends FlightDAO {
 				flight.setPlane(plane);
 			}
 		} catch (SQLException | ClassNotFoundException e) {
-			logger.error("TechnicalException", e);
+			throw new TechnicalException(e);
 		} finally {
 			FlightDAO.close(preparedStatement);
 			pool.backConnection(connection);
@@ -94,7 +94,7 @@ public class FlightDAOImpl extends FlightDAO {
 	}
 
 	@Override
-	public Plane findPlaneById(int id) {
+	public Plane findPlaneById(int id) throws TechnicalException {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -116,7 +116,7 @@ public class FlightDAOImpl extends FlightDAO {
 				plane.setSteward(resultSet.getInt(5));
 			}
 		} catch (SQLException | ClassNotFoundException e) {
-			logger.error("TechnicalException", e);
+			throw new TechnicalException(e);
 		} finally {
 			FlightDAO.close(preparedStatement);
 			pool.backConnection(connection);
@@ -125,7 +125,7 @@ public class FlightDAOImpl extends FlightDAO {
 	}
 
 	@Override
-	public boolean setFlightOnAir(int id) throws DAOException {
+	public boolean setFlightOnAir(int id) {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -139,7 +139,7 @@ public class FlightDAOImpl extends FlightDAO {
 			preparedStatement.executeUpdate();
 			flag = true;
 		} catch (SQLException | ClassNotFoundException e) {
-			throw new DAOException(e);
+			logger.error("TechnicalException", e);
 		} finally {
 			FlightDAO.close(preparedStatement);
 			pool.backConnection(connection);
@@ -148,7 +148,7 @@ public class FlightDAOImpl extends FlightDAO {
 	}
 
 	@Override
-	public List<Flight> findUnformedFlights() {
+	public List<Flight> findUnformedFlights() throws TechnicalException {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		Statement statement = null;
@@ -172,7 +172,7 @@ public class FlightDAOImpl extends FlightDAO {
 				flights.add(flight);
 			}
 		} catch (SQLException | ClassNotFoundException e) {
-			logger.error("TechnicalException", e);
+			throw new TechnicalException(e);
 		} finally {
 			FlightDAO.close(statement);
 			pool.backConnection(connection);
@@ -181,7 +181,7 @@ public class FlightDAOImpl extends FlightDAO {
 	}
 
 	@Override
-	public boolean setFlightCompleted(int id) throws DAOException {
+	public boolean setFlightCompleted(int id) {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -195,7 +195,7 @@ public class FlightDAOImpl extends FlightDAO {
 			preparedStatement.executeUpdate();
 			flag = true;
 		} catch (SQLException | ClassNotFoundException e) {
-			throw new DAOException(e);
+			logger.error("TechnicalException", e);
 		} finally {
 			FlightDAO.close(preparedStatement);
 			pool.backConnection(connection);
@@ -205,7 +205,7 @@ public class FlightDAOImpl extends FlightDAO {
 
 	@Override
 	public boolean addFlight(int flightId, String to, String from, String date,
-			int plane) throws DAOException {
+			int plane) {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -223,7 +223,7 @@ public class FlightDAOImpl extends FlightDAO {
 			preparedStatement.executeUpdate();
 			flag = true;
 		} catch (SQLException | ClassNotFoundException e) {
-			throw new DAOException(e);
+			logger.error("TechnicalException", e);
 		} finally {
 			FlightDAO.close(preparedStatement);
 			pool.backConnection(connection);
@@ -232,7 +232,7 @@ public class FlightDAOImpl extends FlightDAO {
 	}
 
 	@Override
-	public List<Plane> findAllPlanes() throws DAOException {
+	public List<Plane> findAllPlanes() throws TechnicalException {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		Statement statement = null;
@@ -253,7 +253,7 @@ public class FlightDAOImpl extends FlightDAO {
 				planes.add(plane);
 			}
 		} catch (SQLException | ClassNotFoundException e) {
-			throw new DAOException(e);
+			throw new TechnicalException(e);
 		} finally {
 			FlightDAO.close(statement);
 			pool.backConnection(connection);

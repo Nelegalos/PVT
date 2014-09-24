@@ -3,7 +3,6 @@
 <head>
 <title>Index</title>
 </head>
-
 <body>
 	<jsp:forward page="/jsp/language/language.jsp" />
 </body>

@@ -2,15 +2,21 @@ package by.pvt.epam.command.factory;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 import by.pvt.epam.command.ActionCommand;
 import by.pvt.epam.command.EmptyCommand;
 import by.pvt.epam.command.client.CommandEnum;
-import by.pvt.epam.resource.MessageManager;
+import by.pvt.epam.controller.Controller;
 
 public class ActionFactory {
+
+	private static Logger logger = Logger.getLogger(Controller.class);
+
 	public ActionCommand defineCommand(HttpServletRequest request) {
 		ActionCommand current = new EmptyCommand();
 		String action = request.getParameter("command");
+		request.removeAttribute("wrongAction");
 		if (action == null || action.isEmpty()) {
 			return current;
 		}
@@ -18,8 +24,8 @@ public class ActionFactory {
 			CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase());
 			current = currentEnum.getCurrentCommand();
 		} catch (IllegalArgumentException e) {
-			request.setAttribute("wrongAction",
-					action + MessageManager.getProperty("message.wrongaction"));
+			logger.error(e);
+			request.setAttribute("wrongAction", "message.wrongaction");
 		}
 		return current;
 	}

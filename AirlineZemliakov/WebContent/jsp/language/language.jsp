@@ -2,10 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
 <fmt:setLocale value="en" />
 <fmt:setBundle basename="resources.pagecontent" />
-
 <html>
 <head>
 <title><fmt:message key="lang.select" /></title>
@@ -15,7 +13,6 @@
 </head>
 <body id="page1">
 	<div class="main">
-		<!--header -->
 		<header>
 			<div class="wrapper">
 				<h1>
@@ -24,8 +21,6 @@
 				<span id="slogan"><fmt:message key="header.zemliakov" /></span>
 			</div>
 		</header>
-		<!-- / header -->
-		<!--content -->
 		<section id="content">
 			<div class="for_banners">
 				<article class="col1">
@@ -61,8 +56,6 @@
 				</article>
 			</div>
 		</section>
-		<!--content end-->
-		<!--footer -->
 		<footer>
 			<div class="wrapper">
 				<div class="links">
@@ -70,7 +63,6 @@
 				</div>
 			</div>
 		</footer>
-		<!--footer end-->
 	</div>
 </body>
 </html>

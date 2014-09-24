@@ -2,10 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
 <fmt:setLocale value="${ lang }" scope="session" />
 <fmt:setBundle basename="resources.pagecontent" />
-
 <html>
 <head>
 <title><fmt:message key="option.login" /></title>
@@ -15,7 +13,6 @@
 </head>
 <body id="page1">
 	<div class="main">
-		<!--header -->
 		<header>
 			<div class="wrapper">
 				<h1>
@@ -24,8 +21,6 @@
 				<span id="slogan"><fmt:message key="header.zemliakov" /></span>
 			</div>
 		</header>
-		<!-- / header -->
-		<!--content -->
 		<section id="content">
 			<div class="for_banners">
 				<article class="col1">
@@ -41,21 +36,29 @@
 									<div>
 										<div class="row" style="margin-top: 20px;">
 											<span class="left"><fmt:message key="option.nick" /></span>
-											<input type="text" name="login" value="" class="input"/>
+											<input type="text" name="login" value="" class="input" />
 										</div>
 
 										<div class="row">
 											<span class="left"><fmt:message key="option.pass" /></span>
-											<input type="password" name="password" value="" class="input"/>
+											<input type="password" name="password" value="" class="input" />
 										</div>
 										<div class="wrapper">
 											<span class="right relative"> <input type="submit"
 												value="<fmt:message key="option.login" />" class="button1" />
 											</span>
 										</div>
-										<div class="wrapper" style="text-align: center; margin-top: 10px;">
-										${errorLoginPassMessage} <br /> ${wrongAction} <br />
-										${nullPage}
+										<div class="wrapper"
+											style="text-align: center; margin-top: 10px;">
+											<c:if test="${errorLoginPassMessage != null }">
+												<fmt:message key="${ errorLoginPassMessage }" />
+											</c:if>
+											<c:if test="${ wrongAction != null }">
+												<fmt:message key="${ wrongAction }" />
+											</c:if>
+											<c:if test="${ nullPage != null }">
+												<fmt:message key="${ nullPage }" />
+											</c:if>
 										</div>
 									</div>
 								</form>
@@ -64,7 +67,6 @@
 					</div>
 				</article>
 			</div>
-			
 		</section>
 		<footer>
 			<div class="wrapper">

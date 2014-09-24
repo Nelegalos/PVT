@@ -17,7 +17,7 @@ public abstract class AbstractDAO {
 				st.close();
 			}
 		} catch (SQLException e) {
-			logger.error("TechnicalException", e);
+			logger.error("DAOException", e);
 		}
 	}
 

@@ -2,7 +2,7 @@ package by.pvt.epam.exception;
 
 public class TechnicalException extends Exception {
 
-	private static final long serialVersionUID = -8176188285892073422L;
+	private static final long serialVersionUID = 1L;
 
 	public TechnicalException() {
 		super();

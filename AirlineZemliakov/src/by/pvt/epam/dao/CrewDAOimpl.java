@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -14,15 +15,18 @@ import org.apache.log4j.Logger;
 import by.pvt.epam.controller.Controller;
 import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Position;
-import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.pool.ConnectionPool;
 
 public class CrewDAOImpl extends CrewDAO {
 	private static Logger logger = Logger.getLogger(Controller.class);
 	private static final String SQL_QUERY_FIND_EMPLOYEE_BY_ID = "SELECT employee.id, employee.name, employee.surname, position.position FROM employee LEFT JOIN position on employee.position_id = position.id  WHERE employee.id=?";
 	private static final String SQL_QUERY_FIND_AVAILABLE_EMPLOYEES = "SELECT employee.id, employee.name, employee.surname, position.position FROM employee LEFT JOIN position on employee.position_id = position.id WHERE employee.status=0";
+	private static final String SQL_QUERY_FIND_CREW_BY_FLIGHT_ID = "SELECT employee.id, employee.name, employee.surname, position.position FROM crew LEFT JOIN employee on crew.employee_id=employee.id LEFT JOIN position on employee.position_id = position.id WHERE flight_id=?";
 	private static final String SQL_QUERY_ADD_EMPLOYEE = "INSERT INTO employee (name, surname, position_id) VALUES (?,?,?)";
+	private static final String SQL_QUERY_ADD_CREW = "INSERT INTO crew (flight_id, employee_id) VALUES (?,?)";
 	private static final String SQL_QUERY_CHANGE_STATUS_TO_BUSY = "UPDATE employee SET status = 1 WHERE id = ?";
+	private static final String SQL_QUERY_CHANGE_STATUS_TO_AVAILABLE = "UPDATE employee SET status = 0 WHERE id = ?";
 
 	@Override
 	public boolean addEmployee(String name, String surname, int position) {
@@ -41,7 +45,7 @@ public class CrewDAOImpl extends CrewDAO {
 			preparedStatement.executeUpdate();
 			flag = true;
 		} catch (SQLException | ClassNotFoundException e) {
-			logger.error("TechnicalException addEmployee", e);
+			logger.error("DAOException", e);
 		} finally {
 			CrewDAO.close(preparedStatement);
 			pool.backConnection(connection);
@@ -50,7 +54,7 @@ public class CrewDAOImpl extends CrewDAO {
 	}
 
 	@Override
-	public Employee findEmployeeById(int id) throws DAOException {
+	public Employee findEmployeeById(int id) throws TechnicalException {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -72,8 +76,7 @@ public class CrewDAOImpl extends CrewDAO {
 						.toUpperCase()));
 			}
 		} catch (SQLException | ClassNotFoundException e) {
-			throw new DAOException(e);
-			// logger.error("TechnicalException", e);
+			throw new TechnicalException(e);
 		} finally {
 			FlightDAO.close(preparedStatement);
 			pool.backConnection(connection);
@@ -82,7 +85,7 @@ public class CrewDAOImpl extends CrewDAO {
 	}
 
 	@Override
-	public List<Employee> findAvailableEmployees() throws DAOException {
+	public List<Employee> findAvailableEmployees() throws TechnicalException {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		Statement statement = null;
@@ -104,8 +107,7 @@ public class CrewDAOImpl extends CrewDAO {
 				employees.add(employee);
 			}
 		} catch (SQLException | ClassNotFoundException e) {
-			throw new DAOException(e);
-			// logger.error("TechnicalException", e);
+			throw new TechnicalException(e);
 		} finally {
 			FlightDAO.close(statement);
 			pool.backConnection(connection);
@@ -114,7 +116,7 @@ public class CrewDAOImpl extends CrewDAO {
 	}
 
 	@Override
-	public boolean addToFlight(int id) throws DAOException {
+	public boolean addToFlight(int id) {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -128,7 +130,7 @@ public class CrewDAOImpl extends CrewDAO {
 			preparedStatement.executeUpdate();
 			flag = true;
 		} catch (SQLException | ClassNotFoundException e) {
-			throw new DAOException(e);
+			logger.error("DAOException", e);
 		} finally {
 			FlightDAO.close(preparedStatement);
 			pool.backConnection(connection);
@@ -137,15 +139,86 @@ public class CrewDAOImpl extends CrewDAO {
 	}
 
 	@Override
-	public Set<Employee> findCrewByFlightId() {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<Employee> findCrewByFlightId(int flightId)
+			throws TechnicalException {
+		ConnectionPool pool = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		Set<Employee> employees = new HashSet<Employee>();
+		try {
+			pool = ConnectionPool.getInstance();
+			connection = pool.getConnection();
+			preparedStatement = connection
+					.prepareStatement(SQL_QUERY_FIND_CREW_BY_FLIGHT_ID);
+			preparedStatement.setInt(1, flightId);
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				Employee employee = new Employee();
+				employee.setId(resultSet.getInt(1));
+				employee.setName(resultSet.getString(2));
+				employee.setSurname(resultSet.getString(3));
+				employee.setPosition(Position.valueOf((resultSet.getString(4))
+						.toUpperCase()));
+				employees.add(employee);
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			throw new TechnicalException(e);
+		} finally {
+			FlightDAO.close(preparedStatement);
+			pool.backConnection(connection);
+		}
+		return employees;
 	}
 
 	@Override
 	public boolean releaseEmployee(int employeeId) {
-		// TODO Auto-generated method stub
-		return false;
+		ConnectionPool pool = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		boolean flag = false;
+		try {
+			pool = ConnectionPool.getInstance();
+			connection = pool.getConnection();
+			preparedStatement = connection
+					.prepareStatement(SQL_QUERY_CHANGE_STATUS_TO_AVAILABLE);
+			preparedStatement.setInt(1, employeeId);
+			preparedStatement.executeUpdate();
+			flag = true;
+		} catch (SQLException | ClassNotFoundException e) {
+			logger.error("DAOException", e);
+		} finally {
+			FlightDAO.close(preparedStatement);
+			pool.backConnection(connection);
+		}
+		return flag;
+
+	}
+
+	@Override
+	public boolean formCrew(int flightId, List<Employee> crew) {
+		ConnectionPool pool = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		boolean flag = false;
+		try {
+			pool = ConnectionPool.getInstance();
+			connection = pool.getConnection();
+			preparedStatement = connection.prepareStatement(SQL_QUERY_ADD_CREW);
+			for (Employee employee : crew) {
+				int employeeId = employee.getId();
+				preparedStatement.setInt(1, flightId);
+				preparedStatement.setInt(2, employeeId);
+				preparedStatement.executeUpdate();
+			}
+			flag = true;
+		} catch (SQLException | ClassNotFoundException e) {
+			logger.error("DAOException", e);
+		} finally {
+			CrewDAO.close(preparedStatement);
+			pool.backConnection(connection);
+		}
+		return flag;
 	}
 
 }

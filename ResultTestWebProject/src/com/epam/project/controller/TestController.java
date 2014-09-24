@@ -24,7 +24,7 @@ public class TestController extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		String log4jLocation = config.getInitParameter("log4j-location");
+		String log4jLocation = config.getInitParameter("log4j-pass");
 		String path = getServletContext().getRealPath(log4jLocation);
 		PropertyConfigurator.configure(path);
 		PoolSingleton.INSTANCE.getInstance();

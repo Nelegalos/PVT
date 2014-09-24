@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import by.pvt.epam.entity.Role;
 import by.pvt.epam.entity.User;
-import by.pvt.epam.exception.LogicException;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.pool.ConnectionPool;
 
 public class UserDAOImpl extends UserDAO {
@@ -14,7 +14,8 @@ public class UserDAOImpl extends UserDAO {
 	private static final String SQL_QUERY_FIND_USER = "SELECT user.login, user.name, user.surname, role.role FROM user LEFT JOIN role on user.role_id=role.id WHERE user.login = ( SELECT login FROM user WHERE login = ? AND pass = ?)";
 
 	@Override
-	public User findUser(String login, String password) throws LogicException {
+	public User findUser(String login, String password)
+			throws TechnicalException {
 		ConnectionPool pool = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -35,7 +36,7 @@ public class UserDAOImpl extends UserDAO {
 			Role userRole = Role.valueOf(role.toUpperCase());
 			user = new User(name, surname, userRole, log);
 		} catch (SQLException | ClassNotFoundException e) {
-			throw new LogicException(e);
+			throw new TechnicalException(e);
 		} finally {
 			UserDAO.close(preparedStatement);
 			pool.backConnection(connection);

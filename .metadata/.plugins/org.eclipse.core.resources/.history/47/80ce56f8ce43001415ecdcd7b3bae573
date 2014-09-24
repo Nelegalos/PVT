@@ -1,0 +1,58 @@
+package by.pvt.epam.command;
+
+import java.util.List;
+import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.log4j.Logger;
+import by.pvt.epam.controller.Controller;
+import by.pvt.epam.dao.CrewDAO;
+import by.pvt.epam.dao.CrewDAOImpl;
+import by.pvt.epam.dao.FlightDAO;
+import by.pvt.epam.dao.FlightDAOImpl;
+import by.pvt.epam.entity.Employee;
+import by.pvt.epam.entity.Flight;
+import by.pvt.epam.exception.TechnicalException;
+import by.pvt.epam.logic.FlightLogic;
+import by.pvt.epam.resource.ConfigurationManager;
+
+public class CompleteFlightCommand implements ActionCommand {
+
+	private static Logger logger = Logger.getLogger(Controller.class);
+	private static final String PARAM_NAME_FLIGHT_ID = "flightId";
+
+	@Override
+	public String execute(HttpServletRequest request) {
+
+		int flightId = Integer.valueOf(request
+				.getParameter(PARAM_NAME_FLIGHT_ID));
+		FlightDAO fd = new FlightDAOImpl();
+		CrewDAO cd = new CrewDAOImpl();
+		Set<Employee> crew = null;
+		boolean flag = fd.setFlightCompleted(flightId);
+		if (flag) {
+
+		} else {
+
+		}
+
+		try {
+			crew = cd.findCrewByFlightId(flightId);
+		} catch (TechnicalException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for (Employee employee : crew) {
+			int employeeId = employee.getId();
+
+			cd.releaseEmployee(employeeId);
+
+		}
+		List<Flight> flights = FlightLogic.findAllFlights();
+		request.getSession().setAttribute("flights", flights);
+		request.setAttribute("flightCompleted", "flight.completed");
+		request.removeAttribute("flightAdded");
+		request.removeAttribute("flightNotAdded");
+		String page = ConfigurationManager.getProperty("path.page.admin");
+		return page;
+	}
+}

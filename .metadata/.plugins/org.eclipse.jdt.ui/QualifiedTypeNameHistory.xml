@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="java.lang.Character"/>
-<fullyQualifiedTypeName name="java.util.regex.Matcher"/>
 <fullyQualifiedTypeName name="by.pvt.epam.composite.CompositeBlock"/>
 <fullyQualifiedTypeName name="by.pvt.epam.composite.LeafWord"/>
 <fullyQualifiedTypeName name="java.util.Collections"/>
@@ -52,7 +50,6 @@
 <fullyQualifiedTypeName name="java.util.Set"/>
 <fullyQualifiedTypeName name="by.pvt.epam.entity.Employee"/>
 <fullyQualifiedTypeName name="by.pvt.epam.dao.CrewDAO"/>
-<fullyQualifiedTypeName name="by.pvt.epam.dao.CrewDAOImpl"/>
 <fullyQualifiedTypeName name="by.pvt.epam.dao.FlightDAO"/>
 <fullyQualifiedTypeName name="by.pvt.epam.logic.FlightLogic"/>
 <fullyQualifiedTypeName name="by.pvt.epam.dao.FlightDAOImpl"/>
@@ -60,4 +57,7 @@
 <fullyQualifiedTypeName name="java.sql.Date"/>
 <fullyQualifiedTypeName name="by.pvt.epam.entity.Plane"/>
 <fullyQualifiedTypeName name="by.pvt.epam.exception.DAOException"/>
+<fullyQualifiedTypeName name="by.pvt.epam.dao.CrewDAOImpl"/>
+<fullyQualifiedTypeName name="java.util.HashSet"/>
+<fullyQualifiedTypeName name="by.pvt.epam.exception.TechnicalException"/>
 </qualifiedTypeNameHistroy>

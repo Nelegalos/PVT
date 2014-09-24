@@ -6,36 +6,23 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
-
-import by.pvt.epam.controller.Controller;
-
 public class DBConnector {
-	private static Logger logger = Logger.getLogger(Controller.class);
+
 	private static final ResourceBundle configBundle = ResourceBundle
 			.getBundle("resources.database");
 
-	public Connection getConnection() {
+	public Connection getConnection() throws ClassNotFoundException,
+			SQLException {
 		Connection connection = null;
-
 		Properties properties = new Properties();
 		properties.setProperty("user", configBundle.getString("user"));
 		properties.setProperty("password", configBundle.getString("pass"));
-		properties.setProperty("useUnicode", "true");
-		properties.setProperty("characterEncoding", "UTF-8");
-
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			logger.error("Technical Exception", e);
-		}
-
-		try {
-			connection = DriverManager.getConnection(
-					configBundle.getString("url"), properties);
-		} catch (SQLException e) {
-			logger.error("Technical Exception", e);
-		}
+		properties.setProperty("useUnicode", configBundle.getString("unicode"));
+		properties.setProperty("characterEncoding",
+				configBundle.getString("encoding"));
+		DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+		connection = DriverManager.getConnection(configBundle.getString("url"),
+				properties);
 		return connection;
 	}
 }

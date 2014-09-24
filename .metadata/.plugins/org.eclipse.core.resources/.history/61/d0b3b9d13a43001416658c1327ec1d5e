@@ -1,0 +1,11 @@
+message.loginerror = Incorrect login or password!
+message.nullpage = Page is not found!
+message.wrongaction = Wrong command!
+team.message = Unable to add!
+team.added = Employee was added!
+flight.added = Flight was added!
+flight.notadded = Incorrect flight details!
+message.daofail = Problems reaching database!
+flight.completed = Flight is completed!
+team.empty = Team is not formed!
+team.formed = Team was formed!
