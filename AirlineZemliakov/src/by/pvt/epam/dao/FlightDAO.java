@@ -17,12 +17,12 @@ public abstract class FlightDAO extends AbstractDAO {
 
 	public abstract boolean setFlightCompleted(int id);
 
-	public abstract List<Flight> findUnformedFlights()
-			throws DAOException;
+	public abstract List<Flight> findUnformedFlights() throws DAOException;
 
 	public abstract boolean addFlight(int flightId, String to, String from,
 			String date, int plane);
 
 	public abstract List<Plane> findAllPlanes() throws DAOException;
 
+	public abstract boolean deleteFlight(int flightId);
 }

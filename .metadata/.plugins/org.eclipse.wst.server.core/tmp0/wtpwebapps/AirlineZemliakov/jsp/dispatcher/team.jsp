@@ -61,7 +61,7 @@
 
 											<select style="width: 85%; margin-left: 5px;" size="1"
 												name="employeeId">
-												<option disabled>Select employee for the team</option>
+												<option disabled><fmt:message key="position.select" /></option>
 												<c:forEach var="pos" items="${employees}">
 													<option value="${ pos.id }">${ pos.position }:${ pos.name }
 														${ pos.surname }</option>

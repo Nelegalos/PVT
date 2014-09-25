@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.apache.log4j.Logger;
+
 import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Position;
 import by.pvt.epam.exception.DAOException;
@@ -21,6 +23,7 @@ public class CrewDAOImpl extends CrewDAO {
 	private static final String SQL_QUERY_FIND_AVAILABLE_EMPLOYEES = "SELECT employee.id, employee.name, employee.surname, position.position FROM employee LEFT JOIN position on employee.position_id = position.id WHERE employee.status=0";
 	private static final String SQL_QUERY_FIND_CREW_BY_FLIGHT_ID = "SELECT employee.id, employee.name, employee.surname, position.position FROM crew LEFT JOIN employee on crew.employee_id=employee.id LEFT JOIN position on employee.position_id = position.id WHERE flight_id=?";
 	private static final String SQL_QUERY_ADD_EMPLOYEE = "INSERT INTO employee (name, surname, position_id) VALUES (?,?,?)";
+	private static final String SQL_QUERY_MODIFY_EMPLOYEE = "UPDATE employee SET name=?, surname=?, position_id=? WHERE id=?";
 	private static final String SQL_QUERY_ADD_CREW = "INSERT INTO crew (flight_id, employee_id) VALUES (?,?)";
 	private static final String SQL_QUERY_CHANGE_STATUS_TO_BUSY = "UPDATE employee SET status = 1 WHERE id = ?";
 	private static final String SQL_QUERY_CHANGE_STATUS_TO_AVAILABLE = "UPDATE employee SET status = 0 WHERE id = ?";
@@ -217,4 +220,30 @@ public class CrewDAOImpl extends CrewDAO {
 		return flag;
 	}
 
+	@Override
+	public boolean modifyEmployee(int id, String name, String surname,
+			int position) {
+		ConnectionPool pool = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		boolean flag = false;
+		try {
+			pool = ConnectionPool.getInstance();
+			connection = pool.getConnection();
+			preparedStatement = connection
+					.prepareStatement(SQL_QUERY_MODIFY_EMPLOYEE);
+			preparedStatement.setString(1, name);
+			preparedStatement.setString(2, surname);
+			preparedStatement.setInt(3, position);
+			preparedStatement.setInt(4, id);
+			preparedStatement.executeUpdate();
+			flag = true;
+		} catch (SQLException e) {
+			logger.error("DAOException", e);
+		} finally {
+			CrewDAO.close(preparedStatement);
+			pool.backConnection(connection);
+		}
+		return flag;
+	}
 }

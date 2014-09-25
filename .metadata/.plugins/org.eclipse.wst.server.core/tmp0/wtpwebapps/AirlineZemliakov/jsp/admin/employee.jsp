@@ -62,20 +62,20 @@
 									<div>
 										<div class="row" style="margin-top: 20px;">
 											<span class="left"><fmt:message key="position.name" />
-												: </span> <select class="input" name="position">
+												: </span> <select class="input" name="modifiedPosition">												
 												<c:forEach var="pos" items="${positions}">
 													<option value="${ pos }">${ pos }</option>
-												</c:forEach>
+												</c:forEach>												
 											</select>
 
 										</div>
 										<div class="row">
 											<span class="left"><fmt:message key="employee.name" />
-												: </span> <input type="text" name="to" value="" class="input" />
+												: </span> <input required="required" type="text" name="modifiedName" value="${ employeeToModify.name }" class="input" />
 										</div>
 										<div class="row">
 											<span class="left"><fmt:message key="employee.surname" />
-												: </span> <input type="text" name="from" value="" class="input" />
+												: </span> <input required="required" type="text" name="modifiedSurname" value="${ employeeToModify.surname }" class="input" />
 										</div>
 
 

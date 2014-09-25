@@ -63,6 +63,7 @@
 										<div class="row" style="margin-top: 20px;">
 											<span class="left"><fmt:message key="position.name" />
 												: </span> <select class="input" name="position">
+												<option disabled><fmt:message key="position.select" /></option>
 												<c:forEach var="pos" items="${positions}">
 													<option value="${ pos }">${ pos }</option>
 												</c:forEach>
@@ -71,11 +72,13 @@
 										</div>
 										<div class="row">
 											<span class="left"><fmt:message key="employee.name" />
-												: </span> <input type="text" name="to" value="" class="input" />
+												: </span> <input required="required" type="text" name="name"
+												value="" class="input" />
 										</div>
 										<div class="row">
 											<span class="left"><fmt:message key="employee.surname" />
-												: </span> <input type="text" name="from" value="" class="input" />
+												: </span> <input required="required" type="text" name="surname"
+												value="" class="input" />
 										</div>
 
 
@@ -109,9 +112,10 @@
 											<span class="left"><fmt:message
 													key="employee.employee" /> : </span> <select class="input"
 												name="employeeId">
+												<option disabled><fmt:message key="position.select" /></option>
 												<c:forEach var="modifiedEmployee" items="${employees}">
 													<option value="${ modifiedEmployee.id }">${ modifiedEmployee.position }:
-														${ modifiedEmployee.name }{ modifiedEmployee.surname }</option>
+														${ modifiedEmployee.name } ${ modifiedEmployee.surname }</option>
 												</c:forEach>
 											</select>
 
@@ -126,7 +130,9 @@
 
 										<span class="right relative"> <c:if
 												test="${ employeeWasModified != null }">
-												<fmt:message key="${ eemployeeWasModified }" />
+												<fmt:message key="${ employeeWasModified }" />
+											</c:if> <c:if test="${ employeeWasntModified != null }">
+												<fmt:message key="${ employeeWasntModified }" />
 											</c:if>
 
 										</span>

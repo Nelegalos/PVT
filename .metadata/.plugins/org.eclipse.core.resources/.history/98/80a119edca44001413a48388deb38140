@@ -1,0 +1,52 @@
+package by.pvt.epam.command;
+
+import javax.servlet.http.HttpServletRequest;
+
+import by.pvt.epam.dao.CrewDAO;
+import by.pvt.epam.dao.CrewDAOImpl;
+import by.pvt.epam.entity.Position;
+import by.pvt.epam.resource.ConfigurationManager;
+
+public class ChangeEmployeeCommand implements ActionCommand {
+
+	private static final String PARAM_NAME_MODIFIED_NAME = "modifiedName";
+	private static final String PARAM_NAME_MODIFIED_SURNAME = "modifiedSurname";
+	private static final String PARAM_NAME_MODIFIED_POSITION = "modifiedPosition";
+	private static final String PARAM_NAME_EMPLOYEE_ID = "employeeId";
+
+	@Override
+	public String execute(HttpServletRequest request) {
+		int employeeId = Integer.valueOf(request
+				.getParameter(PARAM_NAME_EMPLOYEE_ID));
+		String name = request.getParameter(PARAM_NAME_MODIFIED_NAME);
+		String surname = request.getParameter(PARAM_NAME_MODIFIED_SURNAME);
+		Position position = Position.valueOf(request
+				.getParameter(PARAM_NAME_MODIFIED_POSITION));
+		int pos = 0;
+		switch (position) {
+		case PILOT:
+			pos = 1;
+			break;
+		case NAVIGATOR:
+			pos = 2;
+			break;
+		case RADIOMAN:
+			pos = 3;
+			break;
+		case STEWARD:
+			pos = 4;
+			break;
+		}
+		boolean flag = false;
+		CrewDAO cdi = new CrewDAOImpl();
+		flag = cdi.modifyEmployee(employeeId, name, surname, pos);
+		if (flag) {
+			request.removeAttribute("employeeWasntModified");
+			request.setAttribute("employeeWasModified", "emloyee.modified");
+		} else {
+			request.setAttribute("employeeWasntModified", "emloyee.notmodified");
+			return ConfigurationManager.getProperty("path.page.employee");
+		}
+		return ConfigurationManager.getProperty("path.page.staff");
+	}
+}

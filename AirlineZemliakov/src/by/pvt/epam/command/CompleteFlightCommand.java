@@ -53,6 +53,8 @@ public class CompleteFlightCommand implements ActionCommand {
 		}
 		request.removeAttribute("flightAdded");
 		request.removeAttribute("flightNotAdded");
+		request.removeAttribute("flightDeleted");
+		request.removeAttribute("flightNotDeleted");
 		return ConfigurationManager.getProperty("path.page.admin");
 	}
 }

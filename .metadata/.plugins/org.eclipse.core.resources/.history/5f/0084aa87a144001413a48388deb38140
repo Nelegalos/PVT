@@ -1,0 +1,13 @@
+package by.pvt.epam;
+
+import by.pvt.epam.dao.FlightDAO;
+import by.pvt.epam.dao.FlightDAOImpl;
+
+public class Test {
+	FlightDAO fd = new FlightDAOImpl();
+	
+	boolean flag = false;
+	
+	flag = fd.deleteFlight(flightId);
+
+}

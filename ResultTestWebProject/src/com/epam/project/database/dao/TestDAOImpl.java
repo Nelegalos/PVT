@@ -36,7 +36,7 @@ public class TestDAOImpl implements TestDAO {
 	private static final String SQL_QUERY_ADD_QUESTION = "INSERT INTO question (text, mark, test_id) VALUES (?,?,?)";
 	private static final String SQL_QUERY_ADD_ANSWER = "INSERT INTO answer (text, correct, question_id) VALUES (?,?,?)";
 	private static final String SQL_QUERY_DELETE_TEST = "DELETE FROM test WHERE id = ?";
-	private static final String SQL_QUERY_DELETE_QUESTION = "DELETE FROM question WHERE test_id = ?";
+	private static final String SQL_QUERY_DELETE_QUESTION = "SET FOREIGN_KEY_CHECKS=0; DELETE flight.*, crew.* FROM flight INNER JOIN crew WHERE flight.id=crew.flight_id AND flight.id=? AND flight.`status`=2; SET FOREIGN_KEY_CHECKS=1;";
 	private static final String SQL_QUERY_DELETE_ANSWER = "DELETE FROM answer WHERE id = ?";
 
 	@Override

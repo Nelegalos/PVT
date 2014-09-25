@@ -20,7 +20,7 @@
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 	<error-page>
-		<error-code>404</error-code>
+		<error-code>500</error-code>
 		<location>/error/error.jsp</location>
 	</error-page>
 	<error-page>
@@ -51,4 +51,7 @@
 		<filter-name>redirectfilter</filter-name>
 		<url-pattern>/jsp/*</url-pattern>
 	</filter-mapping>
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
 </web-app>

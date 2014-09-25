@@ -26,6 +26,10 @@ public class FlightDAOImpl extends FlightDAO {
 	private static final String SQL_QUERY_FIND_UNFORMED_FLIGHTS = "SELECT * FROM flight WHERE status=0";
 	private static final String SQL_QUERY_ADD_FLIGHT = "INSERT INTO flight VALUES (?,?,?,?,?,0)";
 	private static final String SQL_QUERY_FIND_ALL_PLANES = "SELECT * FROM plane_staff";
+	// private static final String SQL_QUERY_DELETE_FLIGHT =
+	// "DELETE flight.*, crew.* FROM flight INNER JOIN crew WHERE flight.id=crew.flight_id AND flight.id=?";
+	private static final String SQL_QUERY_DELETE_FLIGHT_BY_ID = "DELETE FROM flight WHERE id=?";
+	private static final String SQL_QUERY_DELETE_CREW_BY_ID = "DELETE FROM crew WHERE flight_id=?";
 
 	@Override
 	public List<Flight> findAllFlights() throws DAOException {
@@ -85,6 +89,7 @@ public class FlightDAOImpl extends FlightDAO {
 				flight.setPlane(plane);
 			}
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 			throw new DAOException(e);
 		} finally {
 			FlightDAO.close(preparedStatement);
@@ -260,4 +265,58 @@ public class FlightDAOImpl extends FlightDAO {
 		}
 		return planes;
 	}
+
+	@Override
+	public boolean deleteFlight(int flightId) {
+		ConnectionPool pool = null;
+		Connection connection = null;
+		PreparedStatement preparedStatementFlight = null;
+		PreparedStatement preparedStatementCrew = null;
+		boolean flag = false;
+		try {
+			pool = ConnectionPool.getInstance();
+			connection = pool.getConnection();
+
+			preparedStatementCrew = connection
+					.prepareStatement(SQL_QUERY_DELETE_CREW_BY_ID);
+			preparedStatementCrew.setInt(1, flightId);
+			preparedStatementCrew.executeUpdate();
+			preparedStatementFlight = connection
+					.prepareStatement(SQL_QUERY_DELETE_FLIGHT_BY_ID);
+			preparedStatementFlight.setInt(1, flightId);
+			preparedStatementFlight.executeUpdate();
+			flag = true;
+		} catch (SQLException e) {
+			logger.error("TechnicalException", e);
+		} finally {
+			FlightDAO.close(preparedStatementFlight);
+			FlightDAO.close(preparedStatementCrew);
+			pool.backConnection(connection);
+		}
+		return flag;
+	}
+
+	// public boolean deleteFlight(int flightId) {
+	// ConnectionPool pool = null;
+	// Connection connection = null;
+	// PreparedStatement preparedStatement = null;
+	// boolean flag = false;
+	// try {
+	// pool = ConnectionPool.getInstance();
+	// connection = pool.getConnection();
+	// preparedStatement = connection
+	// .prepareStatement(SQL_QUERY_DELETE_FLIGHT);
+	// preparedStatement.setInt(1, flightId);
+	// System.out.println(flightId);
+	// preparedStatement.executeUpdate();
+	// flag = true;
+	// } catch (SQLException e) {
+	// logger.error("TechnicalException", e);
+	// } finally {
+	// FlightDAO.close(preparedStatement);
+	// pool.backConnection(connection);
+	// }
+	// return flag;
+	// }
+
 }

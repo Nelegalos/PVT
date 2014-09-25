@@ -24,9 +24,7 @@
 				</article>
 				<article class="col2">
 					<div class="box1" style="margin-top: 245px;">
-						<div class="notes">
-							ERROR
-						</div>
+						<div class="notes">ERROR</div>
 						<div>
 							<table class="flight_table">
 								<tr>
@@ -41,7 +39,7 @@
 									<td>Status code: ${pageContext.errorData.statusCode}</td>
 								</tr>
 								<tr>
-									<td>Exception: ${error} ${pageContext.errorData.throwable}</td>
+									<td>Exception: ${pageContext.errorData.throwable}</td>
 								</tr>
 								<tr>
 									<td><a href="/AirlineZemliakov"

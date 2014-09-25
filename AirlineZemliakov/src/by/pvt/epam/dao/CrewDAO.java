@@ -13,8 +13,7 @@ public abstract class CrewDAO extends AbstractDAO {
 
 	public abstract Employee findEmployeeById(int id) throws DAOException;
 
-	public abstract List<Employee> findAvailableEmployees()
-			throws DAOException;
+	public abstract List<Employee> findAvailableEmployees() throws DAOException;
 
 	public abstract boolean addToFlight(int employeeId);
 
@@ -24,5 +23,8 @@ public abstract class CrewDAO extends AbstractDAO {
 	public abstract boolean releaseEmployee(int employeeId);
 
 	public abstract boolean formCrew(int flightId, List<Employee> crew);
+
+	public abstract boolean modifyEmployee(int id, String name, String surname,
+			int position);
 
 }
