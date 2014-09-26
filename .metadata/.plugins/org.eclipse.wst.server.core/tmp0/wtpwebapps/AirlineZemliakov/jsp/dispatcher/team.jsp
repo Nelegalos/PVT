@@ -63,10 +63,25 @@
 												name="employeeId">
 												<option disabled><fmt:message key="position.select" /></option>
 												<c:forEach var="pos" items="${employees}">
-													<option value="${ pos.id }">${ pos.position }:${ pos.name }
-														${ pos.surname }</option>
+													<option value="${ pos.id }">
+														<c:choose>
+															<c:when test="${ pos.position == pilot }">
+																<fmt:message key="${ pilot }" />
+															</c:when>
+															<c:when test="${ pos.position == navigator }">
+																<fmt:message key="${ navigator }" />
+															</c:when>
+															<c:when test="${ pos.position == radioman }">
+																<fmt:message key="${ radioman }" />
+															</c:when>
+															<c:when test="${ pos.position == steward }">
+																<fmt:message key="${ steward }" />
+															</c:when>
+														</c:choose> :${ pos.name } ${ pos.surname }
+													</option>
 												</c:forEach>
 											</select>
+
 										</div>
 										<div class="wrapper">
 											<span style="margin-right: 145px;" class="right relative">
@@ -101,7 +116,20 @@
 								</tr>
 								<c:forEach var="employee" items="${crew}">
 									<tr>
-										<td><c:out value="${ employee.position }" /></td>
+										<td><c:choose>
+												<c:when test="${ employee.position == pilot }">
+													<fmt:message key="${ pilot }" />
+												</c:when>
+												<c:when test="${ employee.position == navigator }">
+													<fmt:message key="${ navigator }" />
+												</c:when>
+												<c:when test="${ employee.position == radioman }">
+													<fmt:message key="${ radioman }" />
+												</c:when>
+												<c:when test="${ employee.position == steward }">
+													<fmt:message key="${ steward }" />
+												</c:when>
+											</c:choose></td>
 										<td><c:out value="${ employee.name }" /></td>
 										<td><c:out value="${ employee.surname }" /></td>
 									</tr>

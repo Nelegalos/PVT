@@ -29,6 +29,11 @@ public class ManageStaffCommand implements ActionCommand {
 			request.getSession().setAttribute("positions", positions);
 			request.getSession().setAttribute("employees", employees);
 			request.removeAttribute("employeesNull");
+			request.getSession().setAttribute("employees", employees);
+			request.getSession().setAttribute("pilot", "PILOT");
+			request.getSession().setAttribute("navigator", "NAVIGATOR");
+			request.getSession().setAttribute("radioman", "RADIOMAN");
+			request.getSession().setAttribute("steward", "STEWARD");
 		} catch (DAOException e) {
 			logger.error("TechnicalException", e);
 			request.setAttribute("employeesNull", "employees.null");

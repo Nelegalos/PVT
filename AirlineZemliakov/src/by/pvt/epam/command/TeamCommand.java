@@ -34,6 +34,10 @@ public class TeamCommand implements ActionCommand {
 			flight = fdi.findFlightById(flightId);
 			employees = cdi.findAvailableEmployees();
 			request.getSession().setAttribute("employees", employees);
+			request.getSession().setAttribute("pilot", "PILOT");
+			request.getSession().setAttribute("navigator", "NAVIGATOR");
+			request.getSession().setAttribute("radioman", "RADIOMAN");
+			request.getSession().setAttribute("steward", "STEWARD");
 		} catch (DAOException e) {
 			logger.error("TechnicalException", e);
 			request.setAttribute("teamNotFormed", "team.empty");

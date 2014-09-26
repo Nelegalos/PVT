@@ -65,7 +65,22 @@
 												: </span> <select class="input" name="position">
 												<option disabled><fmt:message key="position.select" /></option>
 												<c:forEach var="pos" items="${positions}">
-													<option value="${ pos }">${ pos }</option>
+													<option value="${ pos }">
+														<c:choose>
+															<c:when test="${ pos == pilot }">
+																<fmt:message key="${ pilot }" />
+															</c:when>
+															<c:when test="${ pos == navigator }">
+																<fmt:message key="${ navigator }" />
+															</c:when>
+															<c:when test="${ pos == radioman }">
+																<fmt:message key="${ radioman }" />
+															</c:when>
+															<c:when test="${ pos == steward }">
+																<fmt:message key="${ steward }" />
+															</c:when>
+														</c:choose>
+													</option>
 												</c:forEach>
 											</select>
 
@@ -114,8 +129,23 @@
 												name="employeeId">
 												<option disabled><fmt:message key="position.select" /></option>
 												<c:forEach var="modifiedEmployee" items="${employees}">
-													<option value="${ modifiedEmployee.id }">${ modifiedEmployee.position }:
-														${ modifiedEmployee.name } ${ modifiedEmployee.surname }</option>
+													<option value="${ modifiedEmployee.id }">
+														<c:choose>
+															<c:when test="${ modifiedEmployee.position == pilot }">
+																<fmt:message key="${ pilot }" />
+															</c:when>
+															<c:when
+																test="${ modifiedEmployee.position == navigator }">
+																<fmt:message key="${ navigator }" />
+															</c:when>
+															<c:when test="${ modifiedEmployee.position == radioman }">
+																<fmt:message key="${ radioman }" />
+															</c:when>
+															<c:when test="${ modifiedEmployee.position == steward }">
+																<fmt:message key="${ steward }" />
+															</c:when>
+														</c:choose> : ${ modifiedEmployee.name } ${ modifiedEmployee.surname }
+													</option>
 												</c:forEach>
 											</select>
 

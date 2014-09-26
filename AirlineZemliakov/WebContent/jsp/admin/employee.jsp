@@ -62,20 +62,40 @@
 									<div>
 										<div class="row" style="margin-top: 20px;">
 											<span class="left"><fmt:message key="position.name" />
-												: </span> <select class="input" name="modifiedPosition">												
+												: </span> <select class="input" name="modifiedPosition">
 												<c:forEach var="pos" items="${positions}">
-													<option value="${ pos }">${ pos }</option>
-												</c:forEach>												
+													<option value="${ pos }">
+														<c:choose>
+															<c:when test="${ pos == pilot }">
+																<fmt:message key="${ pilot }" />
+															</c:when>
+															<c:when test="${ pos == navigator }">
+																<fmt:message key="${ navigator }" />
+															</c:when>
+															<c:when test="${ pos == radioman }">
+																<fmt:message key="${ radioman }" />
+															</c:when>
+															<c:when test="${ pos == steward }">
+																<fmt:message key="${ steward }" />
+															</c:when>
+														</c:choose>
+
+													</option>
+												</c:forEach>
 											</select>
 
 										</div>
 										<div class="row">
 											<span class="left"><fmt:message key="employee.name" />
-												: </span> <input required="required" type="text" name="modifiedName" value="${ employeeToModify.name }" class="input" />
+												: </span> <input required="required" type="text"
+												name="modifiedName" value="${ employeeToModify.name }"
+												class="input" />
 										</div>
 										<div class="row">
 											<span class="left"><fmt:message key="employee.surname" />
-												: </span> <input required="required" type="text" name="modifiedSurname" value="${ employeeToModify.surname }" class="input" />
+												: </span> <input required="required" type="text"
+												name="modifiedSurname" value="${ employeeToModify.surname }"
+												class="input" />
 										</div>
 
 
@@ -92,20 +112,22 @@
 										</span>
 									</div>
 								</form>
-								
-								
+
+
 
 								<div class="wrapper">
-									
+
 									<form action="controller" method="post">
-										<input type="hidden" name="command" value="backToStaff" /> 
-										<span class="right relative" style="margin-bottom: 20px; margin-right: 30px;">
-										<input type="submit" value=<fmt:message key="back.staff" /> class="button1" />
+										<input type="hidden" name="command" value="backToStaff" /> <span
+											class="right relative"
+											style="margin-bottom: 20px; margin-right: 30px;"> <input
+											type="submit" value=<fmt:message key="back.staff" />
+											class="button1" />
 										</span>
 									</form>
-									
+
 								</div>
-								
+
 
 
 
