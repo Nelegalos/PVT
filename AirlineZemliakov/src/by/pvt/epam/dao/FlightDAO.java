@@ -19,6 +19,9 @@ public abstract class FlightDAO extends AbstractDAO {
 
 	public abstract List<Flight> findUnformedFlights() throws DAOException;
 
+	public abstract List<Flight> findFlightsByStatus(int status, int page)
+			throws DAOException;
+
 	public abstract boolean addFlight(int flightId, String to, String from,
 			String date, int plane);
 

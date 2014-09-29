@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="ctg" uri="customtags"%>
 <fmt:setLocale value="${ lang }" scope="session" />
 <fmt:setBundle basename="resources.pagecontent" />
 <html>
@@ -55,25 +56,39 @@
 									<td><fmt:message key="flight.date" /></td>
 									<td><fmt:message key="flight.action" /></td>
 								</tr>
-								<c:forEach var="flight" items="${flights}">
-									<c:set var="status" value="${ flight.status}" />
-									<c:if test="${ status == 0}">
-										<tr>
-											<td><c:out value="${ flight.id }" /></td>
-											<td><c:out value="${ flight.to }" /></td>
-											<td><c:out value="${ flight.from }" /></td>
-											<td><c:out value="${ flight.date }" /></td>
-											<td><form style="margin-bottom: 0;" name="teamForm"
-													method="POST" action="controller">
-													<input type="hidden" name="command" value="team" /> <input
-														type="hidden" name="flight" value="${ flight.id }" /> <input
-														class="button1" type="submit"
-														value=<fmt:message key="option.team" /> />
-												</form></td>
-										</tr>
-									</c:if>
-								</c:forEach>
+								<ctg:table-flights flights="${flights}">
+									<jsp:attribute name="buttonPart1">
+										<form style="margin-bottom: 0;" name="teamForm" method="POST"
+											action="controller"> <input type="hidden"
+												name="command" value="team" /> <input type="hidden"
+												name="flight"
+												value=" </jsp:attribute><jsp:attribute name="buttonPart2">" /> <input
+												class="button1" type="submit"
+												value=<fmt:message key="option.team" /> />
+										</form>
+									</jsp:attribute>
+								</ctg:table-flights>
 							</table>
+							<div>
+								<table>
+									<tr>
+										<c:if test="${ flightsPage >= 1 }">
+											<td><form method="POST" action="controller">
+													<input type="hidden" name="command" value="previousFlight" />
+													<input class="button1" type="submit"
+														value="<fmt:message key="flight.previous" />" />
+												</form></td>
+										</c:if>
+										<c:if test="${ flights.size() > (flightsPage+1)}">
+											<td><form method="POST" action="controller">
+													<input type="hidden" name="command" value="nextFlight" />
+													<input class="button1" type="submit"
+														value="<fmt:message key="flight.next" />" />
+												</form></td>
+										</c:if>
+									</tr>
+								</table>
+							</div>
 							<span> <c:if test="${ teamFormed != null }">
 									<fmt:message key="${ teamFormed }" />
 								</c:if> <c:if test="${ teamNotFormed != null }">

@@ -20,7 +20,7 @@ public class ConnectionPool {
 	private static ConnectionPool instance;
 	private ArrayBlockingQueue<Connection> pool;
 	private ArrayBlockingQueue<Connection> inUse;
-	private static final ResourceBundle CONFIGBUNDLE = ResourceBundle
+	private static final ResourceBundle CONFIG_BUNDLE = ResourceBundle
 			.getBundle("resources.database");
 	private static final Lock LOCK = new ReentrantLock();
 
@@ -39,11 +39,11 @@ public class ConnectionPool {
 		}
 		DBConnector dbConnector = new DBConnector();
 		Properties properties = new Properties();
-		properties.setProperty("user", CONFIGBUNDLE.getString("user"));
-		properties.setProperty("password", CONFIGBUNDLE.getString("pass"));
-		properties.setProperty("useUnicode", CONFIGBUNDLE.getString("unicode"));
+		properties.setProperty("user", CONFIG_BUNDLE.getString("user"));
+		properties.setProperty("password", CONFIG_BUNDLE.getString("pass"));
+		properties.setProperty("useUnicode", CONFIG_BUNDLE.getString("unicode"));
 		properties.setProperty("characterEncoding",
-				CONFIGBUNDLE.getString("encoding"));
+				CONFIG_BUNDLE.getString("encoding"));
 		for (int i = 0; i <= DEFAULT_POOL_SIZE; i++) {
 			Connection connection = dbConnector.getConnection(properties);
 			pool.offer(connection);

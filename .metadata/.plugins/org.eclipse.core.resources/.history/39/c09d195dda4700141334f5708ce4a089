@@ -1,0 +1,73 @@
+package by.pvt.epam.command;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+
+import by.pvt.epam.dao.FlightDAO;
+import by.pvt.epam.dao.FlightDAOImpl;
+import by.pvt.epam.entity.Flight;
+import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.resource.ConfigurationManager;
+
+public class PreviousFlightCommand implements ActionCommand {
+
+	private static Logger logger = Logger
+			.getLogger(PreviousFlightCommand.class);
+
+	@Override
+	public String execute(HttpServletRequest request) {
+
+		String page = null;
+		int currentFlightsPage = (Integer) request.getSession().getAttribute(
+				"flightsPage");
+		System.out.println(currentFlightsPage);
+		FlightDAO fd = new FlightDAOImpl();
+		int previousPageFlights = currentFlightsPage - 2;
+		System.out.println(previousPageFlights);
+		boolean isPreviousFlightsPage = false;
+		try {
+			if ((fd.findFlightsByStatus(1, previousPageFlights)).isEmpty()) {
+				request.setAttribute("wrongAction", "message.wrongaction");
+				page = ConfigurationManager.getProperty("path.page.login");
+			}
+			List<Flight> formedFlights = fd.findFlightsByStatus(1,
+					previousPageFlights);
+			request.getSession().setAttribute("formedFlights", formedFlights);
+			request.getSession().setAttribute("flightsPage",
+					previousPageFlights);
+			isPreviousFlightsPage = true;
+			int futurePreviousPageFlights = previousPageFlights - 2;
+			System.out.println("vot1");
+			System.out.println(futurePreviousPageFlights);
+				if ((fd.findFlightsByStatus(1, futurePreviousPageFlights))
+						.isEmpty()) {
+					isPreviousFlightsPage = false;
+				}
+				System.out.println("vot2");
+						
+			request.getSession().setAttribute("isPreviousFlightsPage",
+					isPreviousFlightsPage);
+			boolean isNextFlightsPage = true;
+
+			request.getSession().setAttribute("isNextFlightsPage",
+					isNextFlightsPage);
+			page = ConfigurationManager.getProperty("path.page.admin");
+		} catch (DAOException e) {
+			request.setAttribute("wrongAction", "message.wrongaction");
+			page = ConfigurationManager.getProperty("path.page.login");
+			logger.error("TechnicalException", e);
+		}
+		return page;
+
+		// int flightsPage = (Integer) request.getSession().getAttribute(
+		// "flightsPage");
+		// int previousPage = flightsPage - 1;
+		// if (flightsPage >= 1) {
+		// request.getSession().setAttribute("flightsPage", previousPage);
+		// }
+		// return ConfigurationManager.getProperty("path.page.dispatcher");
+	}
+}

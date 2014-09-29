@@ -23,3 +23,14 @@
 1411582756071	Delete element
 1411642186971	Delete element
 1411709272515	Delete element
+1411728747390	Rename type 'TableFlight'
+1411729742815	Delete element
+1411741585357	Rename local variable 'nextPage'
+1411742973395	Rename field 'button99'
+1411743003986	Rename field 'button101'
+1411743025838	Rename local variable 'button101'
+1411743034898	Rename local variable 'button99'
+1411743043438	Rename local variable 'buttonPart2'
+1411895506338	Rename type 'ConPoolListener'
+1411921749923	Rename field 'CONFIGBUNDLE'
+1411922019761	Rename type 'ConPoolTestRule'

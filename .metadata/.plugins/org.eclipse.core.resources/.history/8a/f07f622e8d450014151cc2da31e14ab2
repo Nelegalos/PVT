@@ -1,0 +1,28 @@
+package by.pvt.epam.command;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import by.pvt.epam.entity.Flight;
+import by.pvt.epam.resource.ConfigurationManager;
+
+public class NextFlightCommand implements ActionCommand {
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public String execute(HttpServletRequest request) {
+
+		List<Flight> flights = (List<Flight>) request.getSession()
+				.getAttribute("flights");
+		int flightsPage = (Integer) request.getSession().getAttribute(
+				"flightsPage");
+		int nextPage = flightsPage + 1;
+		System.out.println(nextPage);
+		if (flights.size() > nextPage) {
+			request.getSession().setAttribute("flightsPage", nextPage);
+		}
+		return ConfigurationManager.getProperty("path.page.dispatcher");
+	}
+
+}

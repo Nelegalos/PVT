@@ -1,0 +1,17 @@
+package by.pvt.epam.command;
+
+import javax.servlet.http.HttpServletRequest;
+
+public class NextFlightCommand implements ActionCommand {
+
+	@Override
+	public String execute(HttpServletRequest request) {
+
+		int flightsPage = (Integer) request.getSession().getAttribute(
+				"flightsPage");
+
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

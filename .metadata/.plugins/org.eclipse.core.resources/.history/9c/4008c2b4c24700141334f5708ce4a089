@@ -1,0 +1,69 @@
+package by.pvt.epam.command;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+
+import by.pvt.epam.dao.FlightDAO;
+import by.pvt.epam.dao.FlightDAOImpl;
+import by.pvt.epam.entity.Flight;
+import by.pvt.epam.entity.Role;
+import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.resource.ConfigurationManager;
+
+public class NextFlightCommand implements ActionCommand {
+	
+	private static Logger logger = Logger.getLogger(NextFlightCommand.class);
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public String execute(HttpServletRequest request) {
+
+		String page;
+		int flightsPage = (Integer) request.getSession().getAttribute(
+				"flightsPage");
+		Role role = Role.valueOf((String) request.getSession().getAttribute("role"));
+		switch (role) {
+		case ADMIN:
+			FlightDAO fd = new FlightDAOImpl();
+			int nextPageFlights=1;
+			try {
+				if ((fd.findFlightsByStatus(1, (flightsPage + 1))).isEmpty()) {
+					nextPageFlights = 0;
+				} 
+			} catch (DAOException e) {
+				request.setAttribute("errorLoginPassMessage", "login.error");
+				page = ConfigurationManager.getProperty("path.page.login");
+				logger.error("TechnicalException", e);
+			}
+			request.getSession().setAttribute("nextPageFlights",
+					nextPageFlights);
+			page = ConfigurationManager.getProperty("path.page.dispatcher");
+			break;
+		case DISPATCHER:
+		
+		
+		ConfigurationManager.getProperty("path.page.dispatcher");
+		
+		List<Flight> flights = (List<Flight>) request.getSession()
+				.getAttribute("flights");
+		
+		int nextPage = flightsPage + 1;
+		if (flights.size() > nextPage) {
+			request.getSession().setAttribute("flightsPage", nextPage);
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		return page;
+	}
+
+}

@@ -28,12 +28,14 @@ public class CompleteFlightCommand implements ActionCommand {
 		CrewDAO cd = new CrewDAOImpl();
 		FlightDAO flightDAO = new FlightDAOImpl();
 		List<Flight> flights = null;
+		List<Flight> formedFlights = null;
 		Set<Employee> crew = null;
 		boolean flag = false;
 		flag = fd.setFlightCompleted(flightId);
 		try {
 			crew = cd.findCrewByFlightId(flightId);
 			flights = flightDAO.findAllFlights();
+			formedFlights = fd.findFlightsByStatus(1, 0);
 		} catch (DAOException e) {
 			flag = false;
 			logger.error("TechnicalException", e);
@@ -48,6 +50,23 @@ public class CompleteFlightCommand implements ActionCommand {
 		if (flag) {
 			request.getSession().setAttribute("flights", flights);
 			request.setAttribute("flightCompleted", "flight.completed");
+
+			request.getSession().setAttribute("formedFlights", formedFlights);
+			boolean isPreviousFlightsPage = false;
+			request.getSession().setAttribute("isPreviousFlightsPage",
+					isPreviousFlightsPage);
+			boolean isNextFlightsPage = true;
+			try {
+				if ((fd.findFlightsByStatus(1, 2)).isEmpty()) {
+					isNextFlightsPage = false;
+				}
+				request.getSession().setAttribute("isNextFlightsPage",
+						isNextFlightsPage);
+			} catch (DAOException e) {
+				request.setAttribute("noMore", "flight.nomore");
+				return ConfigurationManager.getProperty("path.page.admin");
+			}
+
 		} else {
 			request.setAttribute("flightNotCompleted", "flight.notcompleted");
 		}

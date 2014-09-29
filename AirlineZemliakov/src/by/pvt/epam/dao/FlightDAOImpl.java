@@ -24,6 +24,7 @@ public class FlightDAOImpl extends FlightDAO {
 	private static final String SQL_QUERY_CHANGE_STATUS_TO_ON_AIR = "UPDATE flight SET status = 1 WHERE id = ?";
 	private static final String SQL_QUERY_CHANGE_STATUS_TO_COMPLETED = "UPDATE flight SET status = 2 WHERE id = ?";
 	private static final String SQL_QUERY_FIND_UNFORMED_FLIGHTS = "SELECT * FROM flight WHERE status=0";
+	private static final String SQL_QUERY_FIND_FLIGHTS_BY_STATUS = "SELECT * FROM flight WHERE status=? LIMIT ?,2";
 	private static final String SQL_QUERY_ADD_FLIGHT = "INSERT INTO flight VALUES (?,?,?,?,?,0)";
 	private static final String SQL_QUERY_FIND_ALL_PLANES = "SELECT * FROM plane_staff";
 	// private static final String SQL_QUERY_DELETE_FLIGHT =
@@ -294,6 +295,44 @@ public class FlightDAOImpl extends FlightDAO {
 			pool.backConnection(connection);
 		}
 		return flag;
+	}
+
+	@Override
+	public List<Flight> findFlightsByStatus(int status, int page)
+			throws DAOException {
+		ConnectionPool pool = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		List<Flight> flights = new ArrayList<Flight>();
+		try {
+			pool = ConnectionPool.getInstance();
+			connection = pool.getConnection();
+			preparedStatement = connection
+					.prepareStatement(SQL_QUERY_FIND_FLIGHTS_BY_STATUS);
+			preparedStatement.setInt(1, status);
+			preparedStatement.setInt(2, page);
+			resultSet = preparedStatement
+					.executeQuery();
+			while (resultSet.next()) {
+				Flight flight = new Flight();
+				flight.setId(resultSet.getInt(1));
+				flight.setDate(resultSet.getDate(2));
+				flight.setFrom(resultSet.getString(3));
+				flight.setTo(resultSet.getString(4));
+				flight.setStatus(status);
+				int id = resultSet.getInt(5);
+				Plane plane = findPlaneById(id);
+				flight.setPlane(plane);
+				flights.add(flight);
+			}
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			FlightDAO.close(preparedStatement);
+			pool.backConnection(connection);
+		}
+		return flights;
 	}
 
 	// public boolean deleteFlight(int flightId) {

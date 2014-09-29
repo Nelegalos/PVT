@@ -15,6 +15,8 @@ import by.pvt.epam.command.LoginCommand;
 import by.pvt.epam.command.LogoutCommand;
 import by.pvt.epam.command.ManageStaffCommand;
 import by.pvt.epam.command.ModifyEmployeeCommand;
+import by.pvt.epam.command.NextFlightCommand;
+import by.pvt.epam.command.PreviousFlightCommand;
 import by.pvt.epam.command.RegisterEmployeeCommand;
 import by.pvt.epam.command.TeamCommand;
 
@@ -67,6 +69,16 @@ public enum CommandEnum {
 	ADDFLIGHT {
 		{
 			this.command = new AddFlightCommand();
+		}
+	},
+	NEXTFLIGHT {
+		{
+			this.command = new NextFlightCommand();
+		}
+	},
+	PREVIOUSFLIGHT {
+		{
+			this.command = new PreviousFlightCommand();
 		}
 	},
 	BACKTODISPATCHER {
