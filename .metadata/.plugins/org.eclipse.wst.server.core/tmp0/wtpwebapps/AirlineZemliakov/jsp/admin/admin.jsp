@@ -4,16 +4,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <fmt:setLocale value="${ lang }" scope="session" />
 <fmt:setBundle basename="resources.pagecontent" />
-
 <html>
-
 <head>
 <title><fmt:message key="label.admin" /></title>
 <link rel="stylesheet" href="css/layout.css" type="text/css" media="all" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="all">
 </head>
-
 <body id="page1">
 	<div class="main">
 		<!--header -->
@@ -93,7 +90,6 @@
 												value=<fmt:message key="flight.add" /> class="button1" />
 											</span>
 										</div>
-
 										<span class="right relative"> <c:if
 												test="${ flightNotAdded != null }">
 												<fmt:message key="${ flightNotAdded }" />
@@ -105,9 +101,6 @@
 								</form>
 							</div>
 						</div>
-
-
-
 						<div class="box1" style="margin-bottom: 20px;">
 							<div class="notes">
 								<fmt:message key="flight.delete" />
@@ -123,7 +116,7 @@
 												<c:forEach var="flight" items="${flights}">
 													<c:set var="status" value="${ flight.status}" />
 													<c:if test="${ status == 2}">
-														<option value="${ flight.id }">${ flight.id }${ flight.to }-${ flight.from }
+														<option value="${ flight.id }">${ flight.id }-${ flight.to }-${ flight.from }
 															${ flight.date }</option>
 													</c:if>
 												</c:forEach>
@@ -134,7 +127,6 @@
 												value=<fmt:message key="flight.delete" /> class="button1" />
 											</span>
 										</div>
-
 										<span class="right relative"> <c:if
 												test="${ flightDeleted != null }">
 												<fmt:message key="${ flightDeleted }" />
@@ -149,9 +141,8 @@
 					</div>
 				</article>
 				<article class="col2">
-					<div class="box1" style="margin-top: 280px;">
+					<div class="box1" style="margin-top: 220px;">
 						<div class="notes">
-							<!--заголовок  -->
 							<fmt:message key="flight.flights" />
 						</div>
 						<div>
@@ -215,8 +206,6 @@
 				</article>
 			</div>
 		</section>
-		<!--content end-->
-		<!--footer -->
 		<footer>
 			<div class="wrapper">
 				<div class="links">
@@ -224,7 +213,6 @@
 				</div>
 			</div>
 		</footer>
-		<!--footer end-->
 	</div>
 </body>
 </html>

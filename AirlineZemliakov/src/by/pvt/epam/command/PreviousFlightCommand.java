@@ -1,11 +1,8 @@
 package by.pvt.epam.command;
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
-
 import by.pvt.epam.dao.FlightDAO;
 import by.pvt.epam.dao.FlightDAOImpl;
 import by.pvt.epam.entity.Flight;
@@ -26,10 +23,13 @@ public class PreviousFlightCommand implements ActionCommand {
 				"flightsPage");
 		FlightDAO fd = new FlightDAOImpl();
 		Role role = (Role) request.getSession().getAttribute("role");
+		int previousPageFlights = currentFlightsPage - 2;
+		boolean isPreviousFlightsPage = false;
+		isPreviousFlightsPage = false;
+		int futurePreviousPageFlights = previousPageFlights - 2;
+
 		switch (role) {
 		case ADMIN:
-			int previousPageFlights = currentFlightsPage - 2;
-			boolean isPreviousFlightsPage = false;
 			try {
 				if ((fd.findFlightsByStatus(1, previousPageFlights)).isEmpty()) {
 					request.setAttribute("noMore", "flight.nomore");
@@ -41,17 +41,9 @@ public class PreviousFlightCommand implements ActionCommand {
 						formedFlights);
 				request.getSession().setAttribute("flightsPage",
 						previousPageFlights);
-				isPreviousFlightsPage = false;
-				int futurePreviousPageFlights = previousPageFlights - 2;
 				if (futurePreviousPageFlights >= 0) {
 					isPreviousFlightsPage = true;
 				}
-				request.getSession().setAttribute("isPreviousFlightsPage",
-						isPreviousFlightsPage);
-				boolean isNextFlightsPage = true;
-
-				request.getSession().setAttribute("isNextFlightsPage",
-						isNextFlightsPage);
 				page = ConfigurationManager.getProperty("path.page.admin");
 			} catch (DAOException e) {
 				logger.error("TechnicalException", e);
@@ -60,12 +52,33 @@ public class PreviousFlightCommand implements ActionCommand {
 			}
 			break;
 		case DISPATCHER:
-			int previousPage = currentFlightsPage - 1;
-			if (currentFlightsPage >= 1) {
-				request.getSession().setAttribute("flightsPage", previousPage);
+			try {
+				if ((fd.findFlightsByStatus(0, previousPageFlights)).isEmpty()) {
+					request.setAttribute("noMore", "flight.nomore");
+					return ConfigurationManager
+							.getProperty("path.page.dispatcher");
+				}
+				List<Flight> newFlights = fd.findFlightsByStatus(0,
+						previousPageFlights);
+				request.getSession().setAttribute("newFlights", newFlights);
+				request.getSession().setAttribute("flightsPage",
+						previousPageFlights);
+				if (futurePreviousPageFlights >= 0) {
+					isPreviousFlightsPage = true;
+				}
+				page = ConfigurationManager.getProperty("path.page.dispatcher");
+			} catch (DAOException e) {
+				logger.error("TechnicalException", e);
+				request.setAttribute("noMore", "flight.nomore");
+				return ConfigurationManager.getProperty("path.page.dispatcher");
 			}
-			page = ConfigurationManager.getProperty("path.page.dispatcher");
+			break;
 		}
+		boolean isNextFlightsPage = true;
+		request.getSession().setAttribute("isNextFlightsPage",
+				isNextFlightsPage);
+		request.getSession().setAttribute("isPreviousFlightsPage",
+				isPreviousFlightsPage);
 		return page;
 	}
 }

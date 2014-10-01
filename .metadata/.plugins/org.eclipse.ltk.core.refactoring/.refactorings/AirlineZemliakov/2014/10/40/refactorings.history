@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;fd&apos; in &apos;by.pvt.epam.command.LoginCommand.execute(...)&apos; to &apos;flightDAO&apos;&#x0D;&#x0A;- Original project: &apos;AirlineZemliakov&apos;&#x0D;&#x0A;- Original element: &apos;by.pvt.epam.command.LoginCommand.execute(HttpServletRequest).fd&apos;&#x0D;&#x0A;- Renamed element: &apos;fd&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;fd&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;by.pvt.epam.command{LoginCommand.java[LoginCommand~execute~QHttpServletRequest;@fd!1218!1252!1228!1229!QFlightDAO;!0!false" name="flightDAO" references="true" stamp="1412152925862" version="1.0"/>
+</session>

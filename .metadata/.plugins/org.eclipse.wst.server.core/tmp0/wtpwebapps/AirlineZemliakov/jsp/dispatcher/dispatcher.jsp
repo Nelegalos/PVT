@@ -20,7 +20,6 @@
 					<a href="index.jsp" id="logo"></a>
 				</h1>
 				<span id="slogan"><fmt:message key="header.zemliakov" /></span>
-				<!-- блок с двумя кнопками сверху -->
 				<table class="top_bottons">
 					<tr>
 						<td style="width: 420px;"><p
@@ -43,7 +42,7 @@
 					<div class="tabs"></div>
 				</article>
 				<article class="col2">
-					<div class="box1" style="margin-top: 255px;">
+					<div class="box1" style="margin-top: 230px;">
 						<div class="notes">
 							<fmt:message key="flight.flights" />
 						</div>
@@ -56,30 +55,38 @@
 									<td><fmt:message key="flight.date" /></td>
 									<td><fmt:message key="flight.action" /></td>
 								</tr>
-								<ctg:table-flights flights="${flights}">
-									<jsp:attribute name="buttonPart1">
-										<form style="margin-bottom: 0;" name="teamForm" method="POST"
-											action="controller"> <input type="hidden"
-												name="command" value="team" /> <input type="hidden"
-												name="flight"
-												value=" </jsp:attribute><jsp:attribute name="buttonPart2">" /> <input
-												class="button1" type="submit"
-												value=<fmt:message key="option.team" /> />
-										</form>
-									</jsp:attribute>
-								</ctg:table-flights>
+								<c:forEach var="flight" items="${ newFlights }">
+									<c:set var="status" value="${ flight.status}" />
+									<c:if test="${ status == 0}">
+										<tr>
+											<td><c:out value="${ flight.id }" /></td>
+											<td><c:out value="${ flight.to }" /></td>
+											<td><c:out value="${ flight.from }" /></td>
+											<td><c:out value="${ flight.date }" /></td>
+											<td>
+												<form style="margin-bottom: 0;" name="teamForm"
+													method="POST" action="controller">
+													<input type="hidden" name="command" value="team" /> <input
+														type="hidden" name="flight" value="${ flight.id }" /> <input
+														class="button1" type="submit"
+														value=<fmt:message key="option.team" /> />
+												</form>
+											</td>
+										</tr>
+									</c:if>
+								</c:forEach>
 							</table>
 							<div>
 								<table>
 									<tr>
-										<c:if test="${ flightsPage >= 1 }">
+										<c:if test="${ isPreviousFlightsPage == true }">
 											<td><form method="POST" action="controller">
 													<input type="hidden" name="command" value="previousFlight" />
 													<input class="button1" type="submit"
 														value="<fmt:message key="flight.previous" />" />
 												</form></td>
 										</c:if>
-										<c:if test="${ flights.size() > (flightsPage+1)}">
+										<c:if test="${ isNextFlightsPage == true }">
 											<td><form method="POST" action="controller">
 													<input type="hidden" name="command" value="nextFlight" />
 													<input class="button1" type="submit"
@@ -93,6 +100,8 @@
 									<fmt:message key="${ teamFormed }" />
 								</c:if> <c:if test="${ teamNotFormed != null }">
 									<fmt:message key="${ teamNotFormed }" />
+								</c:if> <c:if test="${ noMore != null }">
+									<fmt:message key="${ noMore }" />
 								</c:if>
 							</span>
 						</div>

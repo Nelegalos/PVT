@@ -43,7 +43,6 @@
 <fullyQualifiedTypeName name="java.util.Date"/>
 <fullyQualifiedTypeName name="java.sql.Date"/>
 <fullyQualifiedTypeName name="by.pvt.epam.entity.Plane"/>
-<fullyQualifiedTypeName name="by.pvt.epam.exception.DAOException"/>
 <fullyQualifiedTypeName name="by.pvt.epam.dao.CrewDAOImpl"/>
 <fullyQualifiedTypeName name="java.util.HashSet"/>
 <fullyQualifiedTypeName name="by.pvt.epam.exception.TechnicalException"/>
@@ -60,4 +59,5 @@
 <fullyQualifiedTypeName name="java.sql.Connection"/>
 <fullyQualifiedTypeName name="org.junit.Assert"/>
 <fullyQualifiedTypeName name="by.pvt.epam.entity.Role"/>
+<fullyQualifiedTypeName name="by.pvt.epam.exception.DAOException"/>
 </qualifiedTypeNameHistroy>

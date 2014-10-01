@@ -17,7 +17,6 @@ public class NextFlightCommand implements ActionCommand {
 
 	private static Logger logger = Logger.getLogger(NextFlightCommand.class);
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public String execute(HttpServletRequest request) {
 
@@ -26,9 +25,11 @@ public class NextFlightCommand implements ActionCommand {
 				"flightsPage");
 		FlightDAO fd = new FlightDAOImpl();
 		Role role = (Role) request.getSession().getAttribute("role");
+		int nextPageFlights = currentFlightsPage + 2;
+		boolean isNextFlightsPage = true;
+		int futureNextPageFlights = nextPageFlights + 2;
 		switch (role) {
 		case ADMIN:
-			int nextPageFlights = currentFlightsPage + 2;
 			try {
 				if ((fd.findFlightsByStatus(1, nextPageFlights)).isEmpty()) {
 					request.setAttribute("noMore", "flight.nomore");
@@ -38,36 +39,45 @@ public class NextFlightCommand implements ActionCommand {
 						nextPageFlights);
 				request.getSession().setAttribute("formedFlights",
 						formedFlights);
-				request.getSession().setAttribute("flightsPage",
-						nextPageFlights);
-				boolean isNextFlightsPage = true;
-				int futureNextPageFlights = nextPageFlights + 2;
 				if ((fd.findFlightsByStatus(1, futureNextPageFlights))
 						.isEmpty()) {
 					isNextFlightsPage = false;
 				}
-				request.getSession().setAttribute("isNextFlightsPage",
-						isNextFlightsPage);
-				boolean isPreviousFlightsPage = true;
-				request.getSession().setAttribute("isPreviousFlightsPage",
-						isPreviousFlightsPage);
 				page = ConfigurationManager.getProperty("path.page.admin");
 			} catch (DAOException e) {
 				logger.error("TechnicalException", e);
 				request.setAttribute("noMore", "flight.nomore");
-				return ConfigurationManager.getProperty("path.page.admin");				
+				return ConfigurationManager.getProperty("path.page.admin");
 			}
 			break;
 		case DISPATCHER:
-			List<Flight> flights = (List<Flight>) request.getSession()
-					.getAttribute("flights");
-			int nextPage = currentFlightsPage + 1;
-			if (flights.size() > nextPage) {
-				request.getSession().setAttribute("flightsPage", nextPage);
+			try {
+				if ((fd.findFlightsByStatus(0, nextPageFlights)).isEmpty()) {
+					request.setAttribute("noMore", "flight.nomore");
+					return ConfigurationManager
+							.getProperty("path.page.dispatcher");
+				}
+				List<Flight> newFlights = fd.findFlightsByStatus(0,
+						nextPageFlights);
+				request.getSession().setAttribute("newFlights", newFlights);
+				if ((fd.findFlightsByStatus(0, futureNextPageFlights))
+						.isEmpty()) {
+					isNextFlightsPage = false;
+				}
+				page = ConfigurationManager.getProperty("path.page.dispatcher");
+			} catch (DAOException e) {
+				logger.error("TechnicalException", e);
+				request.setAttribute("noMore", "flight.nomore");
+				return ConfigurationManager.getProperty("path.page.dispatcher");
 			}
-			page = ConfigurationManager.getProperty("path.page.dispatcher");
 			break;
 		}
+		request.getSession().setAttribute("flightsPage", nextPageFlights);
+		boolean isPreviousFlightsPage = true;
+		request.getSession().setAttribute("isPreviousFlightsPage",
+				isPreviousFlightsPage);
+		request.getSession().setAttribute("isNextFlightsPage",
+				isNextFlightsPage);
 		return page;
 	}
 }

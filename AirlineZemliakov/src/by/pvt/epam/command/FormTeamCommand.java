@@ -30,33 +30,53 @@ public class FormTeamCommand implements ActionCommand {
 				return ConfigurationManager.getProperty("path.page.team");
 			}
 		}
+		int flightsPage = 0;
+		int nextPageFlights = flightsPage + 2;
+		request.getSession().setAttribute("flightsPage", flightsPage);
+		boolean isPreviousFlightsPage = false;
+		request.getSession().setAttribute("isPreviousFlightsPage",
+				isPreviousFlightsPage);
 		boolean flag = false;
+		boolean isNextFlightsPage = false;
 		CrewDAO cd = new CrewDAOImpl();
-		for (Employee employee : crew) {
-			int id = employee.getId();
-			flag = cd.addToFlight(id);
-			if (flag == false) {
-				break;
-			}
-		}
-		int flightId = (Integer) request.getSession().getAttribute(
-				PARAM_NAME_FLIGHT_ID);
-		flag = cd.formCrew(flightId, crew);
 		FlightDAO flightDAO = new FlightDAOImpl();
-		flag = flightDAO.setFlightOnAir(flightId);
-		List<Flight> flights = null;
+		List<Flight> newFlights = null;
 		try {
-			flights = flightDAO.findUnformedFlights();
+			
+			for (Employee employee : crew) {
+				int id = employee.getId();
+				flag = cd.addToFlight(id);
+				if (flag == false) {
+					throw new DAOException();
+				}
+			}
+			int flightId = (Integer) request.getSession().getAttribute(
+					PARAM_NAME_FLIGHT_ID);
+			flag = flightDAO.setFlightOnAir(flightId);
+			if ((flightDAO.findFlightsByStatus(0, nextPageFlights)).size() > 0) {
+				isNextFlightsPage = true;
+			}
+			
+			
+			if (flag == false) {
+				throw new DAOException();
+			}
+			flag = cd.formCrew(flightId, crew);
+			if (flag == false) {
+				throw new DAOException();
+			}
+			newFlights = flightDAO.findFlightsByStatus(0, flightsPage);
 		} catch (DAOException e) {
-			flag = false;
-			logger.error("TechnicalException", e);
-		}
-		if (flag) {
-			request.getSession().setAttribute("flights", flights);
-			request.setAttribute("teamFormed", "team.formed");
-		} else {
+			request.getSession().setAttribute("isNextFlightsPage",
+					isNextFlightsPage);
 			request.setAttribute("teamNotFormed", "team.empty");
+			logger.error("TechnicalException", e);
+			return ConfigurationManager.getProperty("path.page.dispatcher");
 		}
+		request.getSession().setAttribute("newFlights", newFlights);
+		request.setAttribute("teamFormed", "team.formed");
+		request.getSession().setAttribute("isNextFlightsPage",
+				isNextFlightsPage);
 		return ConfigurationManager.getProperty("path.page.dispatcher");
 	}
 }
