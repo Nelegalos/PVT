@@ -58,11 +58,11 @@ public class FormTeamCommand implements ActionCommand {
 			}
 			
 			
-			if (flag == false) {
+			if (!flag) {
 				throw new DAOException();
 			}
 			flag = cd.formCrew(flightId, crew);
-			if (flag == false) {
+			if (!flag) {
 				throw new DAOException();
 			}
 			newFlights = flightDAO.findFlightsByStatus(0, flightsPage);
