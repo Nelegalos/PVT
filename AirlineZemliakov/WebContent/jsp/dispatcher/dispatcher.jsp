@@ -42,7 +42,7 @@
 					<div class="tabs"></div>
 				</article>
 				<article class="col2">
-					<div class="box1" style="margin-top: 230px;">
+					<div class="box1" style="margin-top: 220px;">
 						<div class="notes">
 							<fmt:message key="flight.flights" />
 						</div>
