@@ -1,0 +1,102 @@
+package by.pvt.epam.command;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+
+import by.pvt.epam.dao.FlightDAO;
+import by.pvt.epam.dao.FlightDAOImpl;
+import by.pvt.epam.dao.UserDAO;
+import by.pvt.epam.dao.UserDAOImpl;
+import by.pvt.epam.entity.Flight;
+import by.pvt.epam.entity.Plane;
+import by.pvt.epam.entity.Role;
+import by.pvt.epam.entity.User;
+import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.resource.ConfigurationManager;
+import by.pvt.epam.service.FlightService;
+import by.pvt.epam.service.UserService;
+
+public class LoginCommand implements ActionCommand {
+
+	private static final Logger LOGGER = Logger.getLogger(LoginCommand.class);
+	private static final String PARAM_NAME_LOGIN = "login";
+	private static final String PARAM_NAME_PASSWORD = "password";
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE = "flightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE = "isPreviousFlightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHTS = "flights";
+	private static final String REQUEST_ATTRIBUTE_NAME_PLANES = "planes";
+	private static final String REQUEST_ATTRIBUTE_NAME_ROLE = "role";
+	private static final String REQUEST_ATTRIBUTE_NAME_FORMED_FLIGHTS = "formedFlights";
+	private static final String REQUEST_ATTRIBUTE_NAME_USER = "user";
+	private static final String REQUEST_ATTRIBUTE_NAME_NEW_FLIGHTS = "newFlights";
+
+	@Override
+	public String execute(HttpServletRequest request) {
+
+		String login = request.getParameter(PARAM_NAME_LOGIN);
+		String pass = request.getParameter(PARAM_NAME_PASSWORD);
+		String page = null;
+		try {
+			UserService userService = new UserService();
+			User body = userService.findUser(login, pass);
+			String user = body.getName() + " " + body.getSurname();
+			request.getSession()
+					.setAttribute(REQUEST_ATTRIBUTE_NAME_USER, user);
+			FlightService flightService = new FlightService();
+			int flightsPage = 0;
+			request.getSession().setAttribute(
+					REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE, flightsPage);
+			Role role = body.getRole();
+			request.getSession()
+					.setAttribute(REQUEST_ATTRIBUTE_NAME_ROLE, role);
+			boolean isNextFlightsPage = true;
+			int nextPageFlights = flightsPage + 2;
+			boolean isPreviousFlightsPage = false;
+			request.getSession().setAttribute(
+					REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE,
+					isPreviousFlightsPage);
+			switch (role) {
+			case ADMIN:
+				List<Flight> flights = flightService.findAllFlights();
+				request.getSession().setAttribute(
+						REQUEST_ATTRIBUTE_NAME_FLIGHTS, flights);
+				List<Plane> planes = flightService.findAllPlanes();
+				request.getSession().setAttribute(
+						REQUEST_ATTRIBUTE_NAME_PLANES, planes);
+				List<Flight> formedFlights = flightService.findFlightsByStatus(
+						1, flightsPage);
+				request.getSession().setAttribute(
+						REQUEST_ATTRIBUTE_NAME_FORMED_FLIGHTS, formedFlights);
+				if ((flightService.findFlightsByStatus(1, nextPageFlights))
+						.isEmpty()) {
+					isNextFlightsPage = false;
+				}
+				page = ConfigurationManager.getProperty("path.page.admin");
+				break;
+			case DISPATCHER:
+				List<Flight> newFlights = flightService.findFlightsByStatus(0,
+						flightsPage);
+				request.getSession().setAttribute(
+						REQUEST_ATTRIBUTE_NAME_NEW_FLIGHTS, newFlights);
+				if ((flightService.findFlightsByStatus(0, nextPageFlights))
+						.isEmpty()) {
+					isNextFlightsPage = false;
+				}
+				page = ConfigurationManager.getProperty("path.page.dispatcher");
+				break;
+			default:
+				page = ConfigurationManager.getProperty("path.page.index");
+			}
+			request.getSession().setAttribute("isNextFlightsPage",
+					isNextFlightsPage);
+		} catch (DAOException e) {
+			request.setAttribute("errorLoginPassMessage", "login.error");
+			page = ConfigurationManager.getProperty("path.page.login");
+			LOGGER.error("TechnicalException", e);
+		}
+		return page;
+	}
+}

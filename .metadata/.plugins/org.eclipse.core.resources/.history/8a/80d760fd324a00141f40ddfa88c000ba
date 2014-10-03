@@ -1,0 +1,99 @@
+package by.pvt.epam.command;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+
+import by.pvt.epam.dao.CrewDAO;
+import by.pvt.epam.dao.CrewDAOImpl;
+import by.pvt.epam.dao.FlightDAOImpl;
+import by.pvt.epam.entity.Employee;
+import by.pvt.epam.entity.Flight;
+import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.resource.ConfigurationManager;
+import by.pvt.epam.service.CrewService;
+import by.pvt.epam.service.FlightService;
+
+public class FormTeamCommand implements ActionCommand {
+
+	private static final Logger LOGGER = Logger
+			.getLogger(FormTeamCommand.class);
+	private static final String PARAM_NAME_FLIGHT_ID = "flightId";
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE = "flightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE = "isPreviousFlightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE = "isNextFlightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_NEW_FLIGHTS = "newFlights";
+	private static final String REQUEST_ATTRIBUTE_CREW = "crew";
+	private static final String REQUEST_ATTRIBUTE_TEAM_EMPTY = "teamEmpty";
+	private static final String REQUEST_ATTRIBUTE_TEAM_NOT_FORMED = "teamNotFormed";
+	private static final String REQUEST_ATTRIBUTE_TEAM_FORMED = "teamFormed";
+	private static final String REQUEST_ATTRIBUTE_NAME_ERROR = "error";
+
+	@Override
+	public String execute(HttpServletRequest request) {
+
+		@SuppressWarnings("unchecked")
+		List<Employee> crew = (List<Employee>) request.getSession()
+				.getAttribute(REQUEST_ATTRIBUTE_CREW);
+		for (Employee employee : crew) {
+			int id = employee.getId();
+			if (id == 0) {
+				request.setAttribute(REQUEST_ATTRIBUTE_TEAM_EMPTY, "team.empty");
+				return ConfigurationManager.getProperty("path.page.team");
+			}
+		}
+
+		request.getSession().setAttribute(REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE,
+				0);
+		boolean isPreviousFlightsPage = false;
+		request.getSession().setAttribute(
+				REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE,
+				isPreviousFlightsPage);
+		boolean flag = false;
+		boolean isNextFlightsPage = false;
+		CrewService cs = new CrewService();
+		FlightService flightService = new FlightService();
+		List<Flight> newFlights = null;
+		try {
+
+			for (Employee employee : crew) {
+				int id = employee.getId();
+				flag = cs.addToFlight(id);
+				if (flag == false) {
+					throw new DAOException();
+				}
+			}
+			int flightId = (Integer) request.getSession().getAttribute(
+					PARAM_NAME_FLIGHT_ID);
+			flag = flightService.setFlightOnAir(flightId);
+			if ((flightService.findFlightsByStatus(0, 2)).size() > 0) {
+				isNextFlightsPage = true;
+			}
+
+			if (!flag) {
+				throw new DAOException();
+			}
+			flag = cs.formCrew(flightId, crew);
+			if (!flag) {
+				throw new DAOException();
+			}
+			newFlights = flightService.findFlightsByStatus(0, 0);
+		} catch (DAOException e) {
+			request.getSession().setAttribute(
+					REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE,
+					isNextFlightsPage);
+			request.setAttribute(REQUEST_ATTRIBUTE_TEAM_NOT_FORMED,
+					"team.empty");
+			LOGGER.error("TechnicalException", e);
+			return ConfigurationManager.getProperty("path.page.dispatcher");
+		}
+		request.getSession().setAttribute(REQUEST_ATTRIBUTE_NAME_NEW_FLIGHTS,
+				newFlights);
+		request.setAttribute(REQUEST_ATTRIBUTE_TEAM_FORMED, "team.formed");
+		request.getSession().setAttribute(
+				REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE, isNextFlightsPage);
+		return ConfigurationManager.getProperty("path.page.dispatcher");
+	}
+}

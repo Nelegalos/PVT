@@ -1,0 +1,120 @@
+package by.pvt.epam.command;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+
+import by.pvt.epam.entity.Flight;
+import by.pvt.epam.entity.Role;
+import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.resource.ConfigurationManager;
+import by.pvt.epam.service.FlightService;
+
+public class NextFlightCommand implements ActionCommand {
+
+	private static final Logger LOGGER = Logger.getLogger(NextFlightCommand.class);
+	private static final String SESSION_ATTRIBUTE_NAME_ROLE = "role";
+	private static final String REQUEST_ATTRIBUTE_NAME_NO_MORE_FLIGHTS = "noMore";
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE = "flightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE = "isPreviousFlightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE = "isNextFlightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_NEW_FLIGHTS = "newFlights";
+
+	@Override
+	public String execute(HttpServletRequest request) {
+
+		String page = null;
+		
+		int currentFlightsPage = (Integer) request.getAttribute(
+				REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE);
+		
+		
+		int newPageFlights = currentFlightsPage + 2;
+		boolean nextButton = true;
+		int nextPageFlights = newPageFlights + 2;
+		
+		
+		
+		FlightService flightService = new FlightService();
+		Role role = (Role) request.getSession().getAttribute(SESSION_ATTRIBUTE_NAME_ROLE);
+		switch (role) {
+		case ADMIN:
+			try {
+				if (!moreFlights(1, newPageFlights)) {
+					request.setAttribute(REQUEST_ATTRIBUTE_NAME_NO_MORE_FLIGHTS, "flight.nomore");
+					request.setAttribute(REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE, currentFlightsPage);
+					return ConfigurationManager.getProperty("path.page.admin");
+				}
+				List<Flight> formedFlights = flightService.findFlightsByStatus(1,
+						newPageFlights);
+				request.getSession().setAttribute("formedFlights",
+						formedFlights);
+				
+				nextButton = false;	
+				if (moreFlights(1, nextPageFlights)) {
+					nextButton = true;
+				}
+				
+				
+				page = ConfigurationManager.getProperty("path.page.admin");
+			} catch (DAOException e) {
+				LOGGER.error("TechnicalException", e);
+				request.setAttribute(REQUEST_ATTRIBUTE_NAME_NO_MORE_FLIGHTS, "flight.nomore");
+				return ConfigurationManager.getProperty("path.page.admin");
+			}
+			break;
+		case DISPATCHER:
+			try {
+				if (!moreFlights(0, newPageFlights)) {
+					request.setAttribute(REQUEST_ATTRIBUTE_NAME_NO_MORE_FLIGHTS, "flight.nomore");
+					return ConfigurationManager
+							.getProperty("path.page.dispatcher");
+				}
+				
+				List<Flight> newFlights = flightService.findFlightsByStatus(0,
+						newPageFlights);
+				request.setAttribute(REQUEST_ATTRIBUTE_NAME_NEW_FLIGHTS, newFlights);
+				
+				nextButton = false;				
+				if (moreFlights(0, nextPageFlights)) {
+					nextButton = true;
+				}
+				
+				page = ConfigurationManager.getProperty("path.page.dispatcher");
+			} catch (DAOException e) {
+				LOGGER.error("TechnicalException", e);
+				request.setAttribute(REQUEST_ATTRIBUTE_NAME_NO_MORE_FLIGHTS, "flight.nomore");
+				return ConfigurationManager.getProperty("path.page.dispatcher");
+			}
+			break;
+		}
+		request.getSession().setAttribute("flightsPage", newPageFlights);
+		boolean isPreviousFlightsPage = true;
+		request.getSession().setAttribute("isPreviousFlightsPage",
+				isPreviousFlightsPage);
+		request.getSession().setAttribute("isNextFlightsPage",
+				nextButton);
+		return page;
+	}
+	
+	private boolean moreFlights(int status, int startElement)
+			throws DAOException {
+		FlightService flightService = new FlightService();
+		return !flightService.findFlightsByStatus(status, startElement)
+				.isEmpty();
+	}
+	
+	private boolean nextButton(int status, int startElement) throws DAOException{
+		boolean nextButton = false;				
+		if (moreFlights(status, startElement)) {
+			nextButton = true;
+		}
+		return nextButton;
+	}
+	
+	
+	
+	
+}

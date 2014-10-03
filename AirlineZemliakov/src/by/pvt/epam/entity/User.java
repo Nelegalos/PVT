@@ -1,7 +1,11 @@
 package by.pvt.epam.entity;
 
-public class User {
+public class User extends AbstractEntity{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String surname;
 	private Role role;

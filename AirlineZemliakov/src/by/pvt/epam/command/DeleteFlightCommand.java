@@ -6,42 +6,69 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
-import by.pvt.epam.dao.FlightDAO;
-import by.pvt.epam.dao.FlightDAOImpl;
 import by.pvt.epam.entity.Flight;
-import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.resource.ConfigurationManager;
+import by.pvt.epam.service.FlightService;
 
 public class DeleteFlightCommand implements ActionCommand {
 
-	private static Logger logger = Logger.getLogger(DeleteFlightCommand.class);
+	private static final Logger LOGGER = Logger
+			.getLogger(DeleteFlightCommand.class);
 	private static final String PARAM_NAME_DELETED_FLIGHT_ID = "delFlightId";
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHT_DELETED = "flightDeleted";
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHT_NOT_DELETED = "flightNotDeleted";
+	private static final String REQUEST_ATTRIBUTE_NAME_COMPLETED_FLIGHTS = "completedFlights";
+	private static final String REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS = "userFlights";
+
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE = "flightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE = "isPreviousFlightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE = "isNextFlightsPage";
 
 	@Override
 	public String execute(HttpServletRequest request) {
-		String page = ConfigurationManager.getProperty("path.page.admin");
-		String id = request.getParameter(PARAM_NAME_DELETED_FLIGHT_ID);
-		if (id == null) {
-			return page;
-		}
-		int flightId = Integer.valueOf(id);
-		boolean flag = false;
-		FlightDAO fd = new FlightDAOImpl();
-		flag = fd.deleteFlight(flightId);
-		List<Flight> flights = null;
 		try {
-			flights = fd.findAllFlights();
-		} catch (DAOException e) {
-			flag = false;
-			logger.error("TechnicalException", e);
+			int flightId = Integer.valueOf(request
+					.getParameter(PARAM_NAME_DELETED_FLIGHT_ID));
+			deleteFlight(flightId);
+			FlightService flightService = new FlightService();
+			List<Flight> completedFlights = flightService.findStatusFlights(2);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_COMPLETED_FLIGHTS,
+					completedFlights);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_FLIGHT_DELETED,
+					"flight.deleted");
+			List<Flight> formedFlights = flightService
+					.findFlightsByStatus(1, 0);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS,
+					formedFlights);
+			request.getSession().setAttribute(
+					REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE, 0);
+			request.getSession().setAttribute(
+					REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE, false);
+			request.getSession().setAttribute(
+					REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE,
+					moreFlights(1, 2));
+		} catch (TechnicalException e) {
+			LOGGER.error("TechnicalException", e);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_FLIGHT_NOT_DELETED,
+					"flight.notdeleted");
 		}
-		if (flag) {
-			request.getSession().setAttribute("flights", flights);
-			request.setAttribute("flightDeleted", "flight.deleted");
-			request.removeAttribute("flightNotDeleted");
-		} else {
-			request.setAttribute("flightNotDeleted", "flight.notdeleted");
-		}
-		return page;
+		return ConfigurationManager.getProperty("path.page.admin");
 	}
+
+	private void deleteFlight(int flightId) throws TechnicalException {
+		FlightService flightService = new FlightService();
+		boolean flag = flightService.deleteFlight(flightId);
+		if (!flag) {
+			throw new TechnicalException();
+		}
+	}
+
+	private boolean moreFlights(int status, int startElement)
+			throws TechnicalException {
+		FlightService flightService = new FlightService();
+		return !flightService.findFlightsByStatus(status, startElement)
+				.isEmpty();
+	}
+
 }

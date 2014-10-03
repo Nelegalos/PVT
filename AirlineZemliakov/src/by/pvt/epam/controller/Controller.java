@@ -15,7 +15,7 @@ import by.pvt.epam.pool.ConnectionPool;
 
 public class Controller extends HttpServlet {
 
-	private static Logger logger = Logger.getLogger(Controller.class);
+	private static final Logger LOGGER = Logger.getLogger(Controller.class);
 	private static final long serialVersionUID = -247767155410348813L;
 
 	@Override
@@ -47,7 +47,7 @@ public class Controller extends HttpServlet {
 					.getRequestDispatcher(page);
 			dispatcher.forward(request, response);
 		} catch (ServletException | IOException e) {
-			logger.error("TechnicalException", e);
+			LOGGER.error("TechnicalException", e);
 			response.sendError(500);
 		}
 	}

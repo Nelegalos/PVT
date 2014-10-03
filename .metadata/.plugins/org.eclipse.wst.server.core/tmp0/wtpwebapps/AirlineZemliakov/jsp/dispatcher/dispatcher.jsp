@@ -55,25 +55,22 @@
 									<td><fmt:message key="flight.date" /></td>
 									<td><fmt:message key="flight.action" /></td>
 								</tr>
-								<c:forEach var="flight" items="${ newFlights }">
-									<c:set var="status" value="${ flight.status}" />
-									<c:if test="${ status == 0}">
-										<tr>
-											<td><c:out value="${ flight.id }" /></td>
-											<td><c:out value="${ flight.to }" /></td>
-											<td><c:out value="${ flight.from }" /></td>
-											<td><c:out value="${ flight.date }" /></td>
-											<td>
-												<form style="margin-bottom: 0;" name="teamForm"
-													method="POST" action="controller">
-													<input type="hidden" name="command" value="team" /> <input
-														type="hidden" name="flight" value="${ flight.id }" /> <input
-														class="button1" type="submit"
-														value=<fmt:message key="option.team" /> />
-												</form>
-											</td>
-										</tr>
-									</c:if>
+								<c:forEach var="flight" items="${userFlights}">
+									<tr>
+										<td><c:out value="${ flight.id }" /></td>
+										<td><c:out value="${ flight.to }" /></td>
+										<td><c:out value="${ flight.from }" /></td>
+										<td><c:out value="${ flight.date }" /></td>
+										<td>
+											<form style="margin-bottom: 0;" name="teamForm" method="POST"
+												action="controller">
+												<input type="hidden" name="command" value="team" /> <input
+													type="hidden" name="flight" value="${ flight.id }" /> <input
+													class="button1" type="submit"
+													value=<fmt:message key="option.team" /> />
+											</form>
+										</td>
+									</tr>
 								</c:forEach>
 							</table>
 							<div>

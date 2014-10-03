@@ -1,21 +1,32 @@
 package by.pvt.epam.command;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
-import by.pvt.epam.dao.FlightDAO;
-import by.pvt.epam.dao.FlightDAOImpl;
+
 import by.pvt.epam.entity.Flight;
-import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.resource.ConfigurationManager;
+import by.pvt.epam.service.FlightService;
 
 public class AddFlightCommand implements ActionCommand {
-	private static Logger logger = Logger.getLogger(AddFlightCommand.class);
+	private static final Logger LOGGER = Logger
+			.getLogger(AddFlightCommand.class);
 	private static final String PARAM_NAME_FLIGHT_ID = "addedflight";
 	private static final String PARAM_NAME_TO = "to";
 	private static final String PARAM_NAME_FROM = "from";
 	private static final String PARAM_NAME_DATE = "date";
 	private static final String PARAM_NAME_PLANE_ID = "plane";
+	private static final String REQUEST_ATTRIBUTE_NAME_COMPLETED_FLIGHTS = "completedFlights";
+	private static final String REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS = "userFlights";
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHT_ADDED = "flightAdded";
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHT_NOT_ADDED = "flightNotAdded";
+
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE = "flightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE = "isPreviousFlightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE = "isNextFlightsPage";
 
 	@Override
 	public String execute(HttpServletRequest request) {
@@ -24,50 +35,69 @@ public class AddFlightCommand implements ActionCommand {
 		String from = request.getParameter(PARAM_NAME_FROM);
 		String date = request.getParameter(PARAM_NAME_DATE);
 		String plane = request.getParameter(PARAM_NAME_PLANE_ID);
-		String page = ConfigurationManager.getProperty("path.page.admin");
-		boolean flag = false;
 		try {
-			flag = addFlight(flightId, to, from, date, plane);
-		} catch (DAOException e) {
-			logger.error("TechnicalException", e);
+			FlightService flightService = new FlightService();
+			List<Flight> completedFlights = flightService.findStatusFlights(2);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_COMPLETED_FLIGHTS,
+					completedFlights);
+			List<Flight> formedFlights = flightService
+					.findFlightsByStatus(1, 0);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS,
+					formedFlights);
+			addFlight(flightId, to, from, date, plane);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_FLIGHT_ADDED,
+					"flight.added");
+			request.getSession().setAttribute(
+					REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE, 0);
+			request.getSession().setAttribute(
+					REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE, false);
+			request.getSession().setAttribute(
+					REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE,
+					moreFlights(1, 2));
+		} catch (TechnicalException e) {
+			LOGGER.error("TechnicalException", e);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_FLIGHT_NOT_ADDED,
+					"flight.notadded");
 		}
-		if (flag) {
-			request.setAttribute("flightAdded", "flight.added");
-		} else {
-			request.setAttribute("flightNotAdded", "flight.notadded");
-		}
-		request.removeAttribute("flightCompleted");
-		request.removeAttribute("flightNotCompleted");
-		return page;
+		return ConfigurationManager.getProperty("path.page.admin");
 	}
 
-	private static boolean addFlight(String idInput, String to, String from,
-			String dateInput, String planeInput) throws DAOException {
-		boolean flag = false;
+	private void addFlight(String idInput, String to, String from,
+			String dateInput, String planeInput) throws TechnicalException {
 		if (isEmpty(to, from, dateInput)) {
-			return flag;
+			throw new TechnicalException();
 		}
-		int flightId;
-		int plane;
+		int flightId = 0;
+		int plane = 0;
 		try {
 			flightId = Integer.valueOf(idInput);
 			plane = Integer.valueOf(planeInput);
 		} catch (IllegalArgumentException e) {
-			return flag;
+			throw new TechnicalException(e);
 		}
-		FlightDAO fd = new FlightDAOImpl();
-		List<Flight> allFlights = fd.findAllFlights();
+		FlightService flightService = new FlightService();
+		List<Flight> allFlights = flightService.findAllFlights();
 		for (Flight flight : allFlights) {
 			if (flightId == flight.getId()) {
-				return flag;
+				throw new TechnicalException();
 			}
 		}
-		flag = fd.addFlight(flightId, to, from, dateInput, plane);
-		return flag;
+		boolean flag = flightService.addFlight(flightId, to, from, dateInput,
+				plane);
+		if (!flag) {
+			throw new TechnicalException();
+		}
 	}
 
-	private static boolean isEmpty(String to, String from, String dateInput) {
+	private boolean isEmpty(String to, String from, String dateInput) {
 		return to.isEmpty() || from.isEmpty() || dateInput.isEmpty();
+	}
+
+	private boolean moreFlights(int status, int startElement)
+			throws TechnicalException {
+		FlightService flightService = new FlightService();
+		return !flightService.findFlightsByStatus(status, startElement)
+				.isEmpty();
 	}
 
 }

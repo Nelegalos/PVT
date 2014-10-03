@@ -1,0 +1,48 @@
+package by.pvt.epam.command;
+
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.log4j.Logger;
+import by.pvt.epam.entity.Flight;
+import by.pvt.epam.exception.TechnicalException;
+import by.pvt.epam.resource.ConfigurationManager;
+import by.pvt.epam.service.FlightService;
+
+public class DeleteFlightCommand implements ActionCommand {
+
+	private static final Logger LOGGER = Logger
+			.getLogger(DeleteFlightCommand.class);
+	private static final String PARAM_NAME_DELETED_FLIGHT_ID = "delFlightId";
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHT_DELETED = "flightDeleted";
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHT_NOT_DELETED = "flightNotDeleted";
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHTS = "flights";
+
+	@Override
+	public String execute(HttpServletRequest request) {
+		try {
+			int flightId = Integer.valueOf(request
+					.getParameter(PARAM_NAME_DELETED_FLIGHT_ID));
+			deleteFlight(flightId);
+			FlightService flightService = new FlightService();
+			List<Flight> flights = flightService.findAllFlights();
+			request.getSession().setAttribute(REQUEST_ATTRIBUTE_NAME_FLIGHTS,
+					flights);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_FLIGHT_DELETED,
+					"flight.deleted");
+		} catch (TechnicalException e) {
+			LOGGER.error("TechnicalException", e);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_FLIGHT_NOT_DELETED,
+					"flight.notdeleted");
+		}
+		return ConfigurationManager.getProperty("path.page.admin");
+	}
+
+	private void deleteFlight(int flightId) throws TechnicalException {
+		FlightService flightService = new FlightService();
+		boolean flag = flightService.deleteFlight(flightId);
+		if (!flag) {
+			throw new TechnicalException();
+		}
+	}
+
+}

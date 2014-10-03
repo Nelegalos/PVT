@@ -55,7 +55,10 @@
 											</c:if>
 											<c:if test="${ wrongAction != null }">
 												<fmt:message key="${ wrongAction }" />
-											</c:if>											
+											</c:if>
+											<c:if test="${not empty error}">
+												<fmt:message key="${error}" />
+											</c:if>
 										</div>
 									</div>
 								</form>

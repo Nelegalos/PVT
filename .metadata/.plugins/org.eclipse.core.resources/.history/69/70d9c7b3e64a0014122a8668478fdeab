@@ -1,0 +1,129 @@
+package by.pvt.epam.command;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import by.pvt.epam.entity.Flight;
+import by.pvt.epam.entity.Role;
+import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.resource.ConfigurationManager;
+import by.pvt.epam.service.FlightService;
+
+public class PreviousFlightCommand implements ActionCommand {
+
+	private static final Logger LOGGER = Logger
+			.getLogger(PreviousFlightCommand.class);
+	private static final String SESSION_ATTRIBUTE_NAME_ROLE = "role";
+	private static final String SESSION_ATTRIBUTE_NAME_FLIGHTS_PAGE = "flightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_NO_MORE_FLIGHTS = "noMore";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE = "isPreviousFlightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE = "isNextFlightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS = "userFlights";
+
+	@Override
+	public String execute(HttpServletRequest request) {
+
+		String page = null;
+		Role role = (Role) request.getSession().getAttribute(
+				SESSION_ATTRIBUTE_NAME_ROLE);
+		int flightsStatus = 0;
+		switch (role) {
+		case ADMIN:
+			flightsStatus = 1;
+			page = ConfigurationManager.getProperty("path.page.admin");
+			break;
+		case DISPATCHER:
+			page = ConfigurationManager.getProperty("path.page.dispatcher");
+			break;
+		}
+		goToPreviousPage(flightsStatus, request);
+		return page;
+	}
+
+	private void goToPreviousPage(int flightsStatus, HttpServletRequest request) {
+		int currentFlightsPage = (Integer) request.getSession().getAttribute(
+				"flightsPage");
+
+		Role role = (Role) request.getSession().getAttribute("role");
+		int previousPageFlights = currentFlightsPage - 2;
+		boolean isPreviousFlightsPage = false;
+		isPreviousFlightsPage = false;
+		int futurePreviousPageFlights = previousPageFlights - 2;
+
+		switch (role) {
+		case ADMIN:
+			try {
+				FlightService flightService = new FlightService();
+				if (moreFlights(flightsStatus, previousPageFlights)) {
+					List<Flight> formedFlights = flightService
+							.findFlightsByStatus(1, previousPageFlights);
+					request.setAttribute(REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS,
+							formedFlights);
+					request.getSession().setAttribute(
+							SESSION_ATTRIBUTE_NAME_FLIGHTS_PAGE,
+							previousPageFlights);
+					if (futurePreviousPageFlights >= 0) {
+						isPreviousFlightsPage = true;
+					}
+					request.setAttribute("noMore", "flight.nomore");
+				}
+
+			} catch (DAOException e) {
+				LOGGER.error("TechnicalException", e);
+				request.setAttribute("noMore", "flight.nomore");
+
+			}
+			break;
+		case DISPATCHER:
+			try {
+				FlightService flightService = new FlightService();
+				if (flightService.findFlightsByStatus(0, previousPageFlights)
+						.isEmpty()
+
+				) {
+					request.setAttribute("noMore", "flight.nomore");
+
+				}
+				List<Flight> newFlights = flightService.findFlightsByStatus(0,
+						previousPageFlights);
+				request.getSession().setAttribute("newFlights", newFlights);
+				request.getSession().setAttribute("flightsPage",
+						previousPageFlights);
+				if (futurePreviousPageFlights >= 0) {
+					isPreviousFlightsPage = true;
+				}
+
+			} catch (DAOException e) {
+				LOGGER.error("TechnicalException", e);
+				request.setAttribute("noMore", "flight.nomore");
+
+			}
+			break;
+		}
+		boolean isNextFlightsPage = true;
+		request.getSession().setAttribute("isNextFlightsPage",
+				isNextFlightsPage);
+		request.getSession().setAttribute("isPreviousFlightsPage",
+				isPreviousFlightsPage);
+
+	}
+
+	private boolean moreFlights(int status, int startElement)
+			throws DAOException {
+		FlightService flightService = new FlightService();
+		return !flightService.findFlightsByStatus(status, startElement)
+				.isEmpty();
+	}
+
+	private boolean isNextButton(int status, int startElement)
+			throws DAOException {
+		boolean nextButton = false;
+		if (moreFlights(status, startElement)) {
+			nextButton = true;
+		}
+		return nextButton;
+	}
+
+}

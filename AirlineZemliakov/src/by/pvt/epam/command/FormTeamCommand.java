@@ -1,82 +1,107 @@
 package by.pvt.epam.command;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
-import by.pvt.epam.dao.CrewDAO;
-import by.pvt.epam.dao.CrewDAOImpl;
-import by.pvt.epam.dao.FlightDAO;
-import by.pvt.epam.dao.FlightDAOImpl;
+
 import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Flight;
-import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.resource.ConfigurationManager;
+import by.pvt.epam.service.CrewService;
+import by.pvt.epam.service.FlightService;
 
 public class FormTeamCommand implements ActionCommand {
 
-	private static Logger logger = Logger.getLogger(FormTeamCommand.class);
-	private static final String PARAM_NAME_FLIGHT_ID = "flightId";
+	private static final Logger LOGGER = Logger
+			.getLogger(FormTeamCommand.class);
+	private static final String SESSION_ATTRIBUTE_NAME_FLIGHT_ID = "flightId";
+	private static final String SESSION_ATTRIBUTE_CREW = "crew";
+	private static final String SESSION_ATTRIBUTE_NAME_FLIGHTS_PAGE = "flightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE = "isPreviousFlightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE = "isNextFlightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS = "userFlights";
+	private static final String REQUEST_ATTRIBUTE_TEAM_EMPTY = "teamEmpty";
+	private static final String REQUEST_ATTRIBUTE_TEAM_NOT_FORMED = "teamNotFormed";
+	private static final String REQUEST_ATTRIBUTE_TEAM_FORMED = "teamFormed";
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public String execute(HttpServletRequest request) {
 
-		@SuppressWarnings("unchecked")
 		List<Employee> crew = (List<Employee>) request.getSession()
-				.getAttribute("crew");
+				.getAttribute(SESSION_ATTRIBUTE_CREW);
+		if (!isTeamFormed(crew)) {
+			request.setAttribute(REQUEST_ATTRIBUTE_TEAM_EMPTY, "team.empty");
+			return ConfigurationManager.getProperty("path.page.team");
+		}
+		try {
+			int flightId = (Integer) request.getSession().getAttribute(
+					SESSION_ATTRIBUTE_NAME_FLIGHT_ID);
+			formCrew(crew, flightId);
+			setCrewOnAir(crew);
+			setFlightOnAir(flightId);
+			FlightService flightService = new FlightService();
+			List<Flight> newFlights = flightService.findFlightsByStatus(0, 0);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS,
+					newFlights);
+			request.setAttribute(REQUEST_ATTRIBUTE_TEAM_FORMED, "team.formed");
+			request.getSession().setAttribute(
+					SESSION_ATTRIBUTE_NAME_FLIGHTS_PAGE, 0);
+			request.setAttribute(
+					REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE, false);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE,
+					isNextFlightsPage());
+		} catch (TechnicalException e) {
+			request.setAttribute(REQUEST_ATTRIBUTE_TEAM_NOT_FORMED,
+					"team.empty");
+			LOGGER.error("TechnicalException", e);
+		}
+		return ConfigurationManager.getProperty("path.page.dispatcher");
+	}
+
+	private boolean isTeamFormed(List<Employee> crew) {
 		for (Employee employee : crew) {
 			int id = employee.getId();
 			if (id == 0) {
-				request.setAttribute("teamEmpty", "team.empty");
-				return ConfigurationManager.getProperty("path.page.team");
+				return false;
 			}
 		}
-		int flightsPage = 0;
-		int nextPageFlights = flightsPage + 2;
-		request.getSession().setAttribute("flightsPage", flightsPage);
-		boolean isPreviousFlightsPage = false;
-		request.getSession().setAttribute("isPreviousFlightsPage",
-				isPreviousFlightsPage);
-		boolean flag = false;
-		boolean isNextFlightsPage = false;
-		CrewDAO cd = new CrewDAOImpl();
-		FlightDAO flightDAO = new FlightDAOImpl();
-		List<Flight> newFlights = null;
-		try {
-			
-			for (Employee employee : crew) {
-				int id = employee.getId();
-				flag = cd.addToFlight(id);
-				if (flag == false) {
-					throw new DAOException();
-				}
-			}
-			int flightId = (Integer) request.getSession().getAttribute(
-					PARAM_NAME_FLIGHT_ID);
-			flag = flightDAO.setFlightOnAir(flightId);
-			if ((flightDAO.findFlightsByStatus(0, nextPageFlights)).size() > 0) {
-				isNextFlightsPage = true;
-			}
-			
-			
+		return true;
+	}
+
+	private boolean isNextFlightsPage() throws TechnicalException {
+		FlightService flightService = new FlightService();
+		return (flightService.findFlightsByStatus(0, 2)).size() > 0;
+	}
+
+	private void setCrewOnAir(List<Employee> crew) throws TechnicalException {
+		CrewService crewService = new CrewService();
+		for (Employee employee : crew) {
+			int id = employee.getId();
+			boolean flag = crewService.addToFlight(id);
 			if (!flag) {
-				throw new DAOException();
+				throw new TechnicalException();
 			}
-			flag = cd.formCrew(flightId, crew);
-			if (!flag) {
-				throw new DAOException();
-			}
-			newFlights = flightDAO.findFlightsByStatus(0, flightsPage);
-		} catch (DAOException e) {
-			request.getSession().setAttribute("isNextFlightsPage",
-					isNextFlightsPage);
-			request.setAttribute("teamNotFormed", "team.empty");
-			logger.error("TechnicalException", e);
-			return ConfigurationManager.getProperty("path.page.dispatcher");
 		}
-		request.getSession().setAttribute("newFlights", newFlights);
-		request.setAttribute("teamFormed", "team.formed");
-		request.getSession().setAttribute("isNextFlightsPage",
-				isNextFlightsPage);
-		return ConfigurationManager.getProperty("path.page.dispatcher");
+	}
+
+	private void formCrew(List<Employee> crew, int flightId)
+			throws TechnicalException {
+		CrewService crewService = new CrewService();
+		boolean flag = crewService.formCrew(flightId, crew);
+		if (!flag) {
+			throw new TechnicalException();
+		}
+	}
+
+	private void setFlightOnAir(int flightId) throws TechnicalException {
+		FlightService flightService = new FlightService();
+		boolean flag = flightService.setFlightOnAir(flightId);
+		if (!flag) {
+			throw new TechnicalException();
+		}
 	}
 }

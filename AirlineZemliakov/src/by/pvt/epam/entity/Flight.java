@@ -2,7 +2,11 @@ package by.pvt.epam.entity;
 
 import java.sql.Date;
 
-public class Flight {
+public class Flight extends AbstractEntity{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private Date date;
 	private String from;

@@ -2,14 +2,11 @@ package by.pvt.epam.dao;
 
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import org.apache.log4j.Logger;
-
-import by.pvt.epam.controller.Controller;
 
 public abstract class AbstractDAO {
 
-	private static Logger logger = Logger.getLogger(Controller.class);
+	private static final Logger LOGGER = Logger.getLogger(AbstractDAO.class);
 
 	public static void close(Statement st) {
 		try {
@@ -17,7 +14,7 @@ public abstract class AbstractDAO {
 				st.close();
 			}
 		} catch (SQLException e) {
-			logger.error("DAOException", e);
+			LOGGER.error("DAOException", e);
 		}
 	}
 

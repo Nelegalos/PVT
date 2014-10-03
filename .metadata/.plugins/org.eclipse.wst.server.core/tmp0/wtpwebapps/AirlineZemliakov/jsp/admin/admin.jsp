@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<fmt:setLocale value="${ lang }" scope="session" />
+<fmt:setLocale value="${lang}" scope="session" />
 <fmt:setBundle basename="resources.pagecontent" />
 <html>
 <head>
@@ -37,8 +37,8 @@
 								<input type="hidden" name="command" value="manageStaff" /><input
 									class="button1" type="submit"
 									value=<fmt:message key="manage.staff" /> />
-							</form> <c:if test="${ employeesNull != null }">
-								<fmt:message key="${ employeesNull }" />
+							</form> <c:if test="${not empty employeesNull}">
+								<fmt:message key="${employeesNull}" />
 							</c:if>
 						</td>
 					</tr>
@@ -81,7 +81,7 @@
 												: </span> <select class="input" name="plane">
 												<option disabled><fmt:message key="position.select" /></option>
 												<c:forEach var="pl" items="${planes}">
-													<option value="${ pl.id }">${ pl.id }</option>
+													<option value="${pl.id}">${pl.id}</option>
 												</c:forEach>
 											</select>
 										</div>
@@ -91,10 +91,10 @@
 											</span>
 										</div>
 										<span class="right relative"> <c:if
-												test="${ flightNotAdded != null }">
-												<fmt:message key="${ flightNotAdded }" />
-											</c:if> <c:if test="${ flightAdded != null }">
-												<fmt:message key="${ flightAdded }" />
+												test="${not empty flightNotAdded}">
+												<fmt:message key="${flightNotAdded}" />
+											</c:if> <c:if test="${not empty flightAdded}">
+												<fmt:message key="${flightAdded}" />
 											</c:if>
 										</span>
 									</div>
@@ -113,12 +113,9 @@
 											<span class="left"><fmt:message key="flight.flight" />
 												: </span> <select required="required" class="input"
 												name="delFlightId">
-												<c:forEach var="flight" items="${flights}">
-													<c:set var="status" value="${ flight.status}" />
-													<c:if test="${ status == 2}">
-														<option value="${ flight.id }">${ flight.id }-${ flight.to }-${ flight.from }
-															${ flight.date }</option>
-													</c:if>
+												<c:forEach var="flight" items="${completedFlights}">													
+														<option value="${flight.id}">${flight.id}-${flight.to}-${flight.from}
+															${flight.date}</option>													
 												</c:forEach>
 											</select>
 										</div>
@@ -128,10 +125,10 @@
 											</span>
 										</div>
 										<span class="right relative"> <c:if
-												test="${ flightDeleted != null }">
-												<fmt:message key="${ flightDeleted }" />
-											</c:if> <c:if test="${ flightNotDeleted != null }">
-												<fmt:message key="${ flightNotDeleted }" />
+												test="${not empty flightDeleted}">
+												<fmt:message key="${flightDeleted}" />
+											</c:if> <c:if test="${not empty flightNotDeleted}">
+												<fmt:message key="${flightNotDeleted}" />
 											</c:if>
 										</span>
 									</div>
@@ -154,19 +151,19 @@
 									<td><fmt:message key="flight.date" /></td>
 									<td><fmt:message key="flight.action" /></td>
 								</tr>
-								<c:forEach var="flight" items="${formedFlights}">
-									<c:set var="status" value="${ flight.status}" />
-									<c:if test="${ status == 1}">
+								<c:forEach var="flight" items="${userFlights}">
+									<c:set var="status" value="${flight.status}" />
+									<c:if test="${status == 1}">
 										<tr>
-											<td><c:out value="${ flight.id }" /></td>
-											<td><c:out value="${ flight.to }" /></td>
-											<td><c:out value="${ flight.from }" /></td>
-											<td><c:out value="${ flight.date }" /></td>
+											<td><c:out value="${flight.id}" /></td>
+											<td><c:out value="${flight.to}" /></td>
+											<td><c:out value="${flight.from}" /></td>
+											<td><c:out value="${flight.date}" /></td>
 											<td>
 												<form style="margin-bottom: 0;" name="teamForm"
 													method="POST" action="controller">
 													<input type="hidden" name="command" value="completeFlight" />
-													<input type="hidden" name="flightId" value="${ flight.id }" />
+													<input type="hidden" name="flightId" value="${flight.id}" />
 													<input class="button1" type="submit"
 														value=<fmt:message key="flight.complete" /> />
 												</form>
@@ -177,14 +174,14 @@
 							</table>
 							<table>
 								<tr>
-									<c:if test="${ isPreviousFlightsPage == true }">
+									<c:if test="${isPreviousFlightsPage == true}">
 										<td><form method="POST" action="controller">
 												<input type="hidden" name="command" value="previousFlight" />
 												<input class="button1" type="submit"
 													value="<fmt:message key="flight.previous" />" />
 											</form></td>
 									</c:if>
-									<c:if test="${ isNextFlightsPage == true }">
+									<c:if test="${isNextFlightsPage == true}">
 										<td><form method="POST" action="controller">
 												<input type="hidden" name="command" value="nextFlight" /> <input
 													class="button1" type="submit"
@@ -193,12 +190,12 @@
 									</c:if>
 								</tr>
 							</table>
-							<span> <c:if test="${ flightCompleted != null }">
-									<fmt:message key="${ flightCompleted }" />
-								</c:if> <c:if test="${ flightNotCompleted != null }">
+							<span> <c:if test="${not empty flightCompleted}">
+									<fmt:message key="${flightCompleted}" />
+								</c:if> <c:if test="${not empty flightNotCompleted}">
 									<fmt:message key="${ flightNotCompleted }" />
-								</c:if> <c:if test="${ noMore != null }">
-									<fmt:message key="${ noMore }" />
+								</c:if> <c:if test="${not empty noMore}">
+									<fmt:message key="${noMore}" />
 								</c:if>
 							</span>
 						</div>

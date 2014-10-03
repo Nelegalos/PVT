@@ -1,84 +1,110 @@
 package by.pvt.epam.command;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
-import by.pvt.epam.dao.FlightDAO;
-import by.pvt.epam.dao.FlightDAOImpl;
+
 import by.pvt.epam.entity.Flight;
 import by.pvt.epam.entity.Role;
-import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.resource.ConfigurationManager;
+import by.pvt.epam.service.FlightService;
 
 public class PreviousFlightCommand implements ActionCommand {
 
-	private static Logger logger = Logger
+	private static final Logger LOGGER = Logger
 			.getLogger(PreviousFlightCommand.class);
+	private static final String SESSION_ATTRIBUTE_NAME_ROLE = "role";
+
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE = "flightsPage";
+
+	private static final String REQUEST_ATTRIBUTE_NAME_NO_MORE_FLIGHTS = "noMore";
+
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE = "isPreviousFlightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE = "isNextFlightsPage";
+
+	private static final String REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS = "userFlights";
+	private static final String REQUEST_ATTRIBUTE_NAME_COMPLETED_FLIGHTS = "completedFlights";
+	private static final String REQUEST_ATTRIBUTE_NAME_ERROR = "error";
 
 	@Override
 	public String execute(HttpServletRequest request) {
-
 		String page = null;
-		int currentFlightsPage = (Integer) request.getSession().getAttribute(
-				"flightsPage");
-		FlightDAO fd = new FlightDAOImpl();
-		Role role = (Role) request.getSession().getAttribute("role");
-		int previousPageFlights = currentFlightsPage - 2;
-		boolean isPreviousFlightsPage = false;
-		isPreviousFlightsPage = false;
-		int futurePreviousPageFlights = previousPageFlights - 2;
-
+		Role role = (Role) request.getSession().getAttribute(
+				SESSION_ATTRIBUTE_NAME_ROLE);
+		int flightsStatus = 0;
 		switch (role) {
 		case ADMIN:
+			flightsStatus = 1;
 			try {
-				if ((fd.findFlightsByStatus(1, previousPageFlights)).isEmpty()) {
-					request.setAttribute("noMore", "flight.nomore");
-					return ConfigurationManager.getProperty("path.page.admin");
-				}
-				List<Flight> formedFlights = fd.findFlightsByStatus(1,
-						previousPageFlights);
-				request.getSession().setAttribute("formedFlights",
-						formedFlights);
-				request.getSession().setAttribute("flightsPage",
-						previousPageFlights);
-				if (futurePreviousPageFlights >= 0) {
-					isPreviousFlightsPage = true;
-				}
+				FlightService flightService = new FlightService();
+				List<Flight> completedFlights = flightService
+						.findStatusFlights(2);
+				request.setAttribute(REQUEST_ATTRIBUTE_NAME_COMPLETED_FLIGHTS,
+						completedFlights);
 				page = ConfigurationManager.getProperty("path.page.admin");
-			} catch (DAOException e) {
-				logger.error("TechnicalException", e);
-				request.setAttribute("noMore", "flight.nomore");
-				return ConfigurationManager.getProperty("path.page.admin");
+			} catch (TechnicalException e) {
+				LOGGER.error("TechnicalException", e);
+				request.setAttribute(REQUEST_ATTRIBUTE_NAME_ERROR, "error");
+				page = ConfigurationManager.getProperty("path.page.login");
 			}
 			break;
 		case DISPATCHER:
-			try {
-				if ((fd.findFlightsByStatus(0, previousPageFlights)).isEmpty()) {
-					request.setAttribute("noMore", "flight.nomore");
-					return ConfigurationManager
-							.getProperty("path.page.dispatcher");
-				}
-				List<Flight> newFlights = fd.findFlightsByStatus(0,
-						previousPageFlights);
-				request.getSession().setAttribute("newFlights", newFlights);
-				request.getSession().setAttribute("flightsPage",
-						previousPageFlights);
-				if (futurePreviousPageFlights >= 0) {
-					isPreviousFlightsPage = true;
-				}
-				page = ConfigurationManager.getProperty("path.page.dispatcher");
-			} catch (DAOException e) {
-				logger.error("TechnicalException", e);
-				request.setAttribute("noMore", "flight.nomore");
-				return ConfigurationManager.getProperty("path.page.dispatcher");
-			}
+			page = ConfigurationManager.getProperty("path.page.dispatcher");
 			break;
 		}
-		boolean isNextFlightsPage = true;
-		request.getSession().setAttribute("isNextFlightsPage",
-				isNextFlightsPage);
-		request.getSession().setAttribute("isPreviousFlightsPage",
-				isPreviousFlightsPage);
+		goToPreviousPage(flightsStatus, request);
 		return page;
 	}
+
+	private void goToPreviousPage(int flightsStatus, HttpServletRequest request) {
+		int currentFlightsPage = (Integer) request.getSession().getAttribute(
+				REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE);
+		int newPageFlights = currentFlightsPage - 2;
+		boolean previousButton = false;
+		int previousPageFlights = newPageFlights - 2;
+		FlightService flightService = new FlightService();
+		try {
+			if (moreFlights(flightsStatus, newPageFlights)) {
+				List<Flight> newFlights = flightService.findFlightsByStatus(
+						flightsStatus, newPageFlights);
+				request.setAttribute(REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS,
+						newFlights);
+				previousButton = isPreviousButton(previousPageFlights);
+				request.getSession().setAttribute(
+						REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE,
+						previousButton);
+				request.getSession().setAttribute(
+						REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE, true);
+				request.getSession().setAttribute(
+						REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE, newPageFlights);
+			} else {
+				throw new TechnicalException();
+			}
+		} catch (TechnicalException e) {
+			LOGGER.error("TechnicalException", e);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_NO_MORE_FLIGHTS,
+					"flight.nomore");
+			request.getSession().setAttribute(
+					REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE, currentFlightsPage);
+		}
+	}
+
+	private boolean moreFlights(int status, int startElement)
+			throws TechnicalException {
+		FlightService flightService = new FlightService();
+		return !flightService.findFlightsByStatus(status, startElement)
+				.isEmpty();
+	}
+
+	private boolean isPreviousButton(int previousPageFlights) {
+		boolean previousButton = false;
+		if (previousPageFlights >= 0) {
+			previousButton = true;
+		}
+		return previousButton;
+	}
+
 }

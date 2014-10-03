@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import by.pvt.epam.dao.CrewDAO;
 import by.pvt.epam.dao.CrewDAOImpl;
 import by.pvt.epam.entity.Employee;
-import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.resource.ConfigurationManager;
 
 public class ModifyEmployeeCommand implements ActionCommand {
@@ -26,7 +26,7 @@ public class ModifyEmployeeCommand implements ActionCommand {
 			Employee employee = cdi.findEmployeeById(employeeId);
 			request.setAttribute("employeeToModify", employee);
 			request.getSession().setAttribute("employeeIdToModify", employeeId);
-		} catch (DAOException e) {
+		} catch (TechnicalException e) {
 			request.setAttribute("employeeWasntModified", "emloyee.notmodified");
 			logger.error("TechnicalException", e);
 			return ConfigurationManager.getProperty("path.page.staff");

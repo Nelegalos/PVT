@@ -2,22 +2,35 @@ package by.pvt.epam.command;
 
 import java.util.List;
 import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
+
 import by.pvt.epam.dao.CrewDAO;
 import by.pvt.epam.dao.CrewDAOImpl;
 import by.pvt.epam.dao.FlightDAO;
 import by.pvt.epam.dao.FlightDAOImpl;
 import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Flight;
-import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.resource.ConfigurationManager;
 
 public class CompleteFlightCommand implements ActionCommand {
 
-	private static Logger logger = Logger
+	private static final Logger LOGGER = Logger
 			.getLogger(CompleteFlightCommand.class);
 	private static final String PARAM_NAME_FLIGHT_ID = "flightId";
+	private static final String REQUEST_ATTRIBUTE_NAME_COMPLETED_FLIGHTS = "completedFlights";
+	private static final String REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS = "userFlights";
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHT_COMPLETED = "flightCompleted";
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHT_NOT_COMPLETED = "flightNotCompleted";
+
+	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE = "flightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE = "isPreviousFlightsPage";
+	private static final String REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE = "isNextFlightsPage";
+
+	private static final String REQUEST_ATTRIBUTE_NAME_NO_MORE_FLIGHTS = "noMore";
 
 	@Override
 	public String execute(HttpServletRequest request) {
@@ -27,18 +40,18 @@ public class CompleteFlightCommand implements ActionCommand {
 		FlightDAO fd = new FlightDAOImpl();
 		CrewDAO cd = new CrewDAOImpl();
 		FlightDAO flightDAO = new FlightDAOImpl();
-		List<Flight> flights = null;
+		List<Flight> completedFlights = null;
 		List<Flight> formedFlights = null;
 		Set<Employee> crew = null;
 		boolean flag = false;
 		flag = fd.setFlightCompleted(flightId);
 		try {
 			crew = cd.findCrewByFlightId(flightId);
-			flights = flightDAO.findAllFlights();
+			completedFlights = flightDAO.findStatusFlights(2);
 			formedFlights = fd.findFlightsByStatus(1, 0);
-		} catch (DAOException e) {
+		} catch (TechnicalException e) {
 			flag = false;
-			logger.error("TechnicalException", e);
+			LOGGER.error("TechnicalException", e);
 		}
 		for (Employee employee : crew) {
 			int employeeId = employee.getId();
@@ -48,32 +61,38 @@ public class CompleteFlightCommand implements ActionCommand {
 			}
 		}
 		if (flag) {
-			request.getSession().setAttribute("flights", flights);
-			request.setAttribute("flightCompleted", "flight.completed");
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_COMPLETED_FLIGHTS,
+					completedFlights);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_FLIGHT_COMPLETED,
+					"flight.completed");
 
-			request.getSession().setAttribute("formedFlights", formedFlights);
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS,
+					formedFlights);
 			boolean isPreviousFlightsPage = false;
-			request.getSession().setAttribute("isPreviousFlightsPage",
+			request.getSession().setAttribute(
+					REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE, 0);
+			request.getSession().setAttribute(
+					REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE,
 					isPreviousFlightsPage);
 			boolean isNextFlightsPage = true;
 			try {
 				if ((fd.findFlightsByStatus(1, 2)).isEmpty()) {
 					isNextFlightsPage = false;
 				}
-				request.getSession().setAttribute("isNextFlightsPage",
+				request.getSession().setAttribute(
+						REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE,
 						isNextFlightsPage);
-			} catch (DAOException e) {
-				request.setAttribute("noMore", "flight.nomore");
+			} catch (TechnicalException e) {
+				request.setAttribute(REQUEST_ATTRIBUTE_NAME_NO_MORE_FLIGHTS,
+						"flight.nomore");
 				return ConfigurationManager.getProperty("path.page.admin");
 			}
 
 		} else {
-			request.setAttribute("flightNotCompleted", "flight.notcompleted");
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_FLIGHT_NOT_COMPLETED,
+					"flight.notcompleted");
 		}
-		request.removeAttribute("flightAdded");
-		request.removeAttribute("flightNotAdded");
-		request.removeAttribute("flightDeleted");
-		request.removeAttribute("flightNotDeleted");
+
 		return ConfigurationManager.getProperty("path.page.admin");
 	}
 }

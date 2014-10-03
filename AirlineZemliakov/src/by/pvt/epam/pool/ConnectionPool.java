@@ -12,17 +12,17 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.log4j.Logger;
 
-import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.exception.TechnicalException;
 
 public class ConnectionPool {
-	private static Logger logger = Logger.getLogger(ConnectionPool.class);
-	public static final int DEFAULT_POOL_SIZE = 20;
-	private static ConnectionPool instance;
-	private ArrayBlockingQueue<Connection> pool;
-	private ArrayBlockingQueue<Connection> inUse;
+	private static final Logger LOGGER = Logger.getLogger(ConnectionPool.class);
+	private static final int DEFAULT_POOL_SIZE = 20;
 	private static final ResourceBundle CONFIG_BUNDLE = ResourceBundle
 			.getBundle("resources.database");
 	private static final Lock LOCK = new ReentrantLock();
+	private static ConnectionPool instance;
+	private ArrayBlockingQueue<Connection> pool;
+	private ArrayBlockingQueue<Connection> inUse;
 
 	private ConnectionPool() {
 		init();
@@ -34,14 +34,15 @@ public class ConnectionPool {
 		try {
 			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 		} catch (SQLException e) {
-			logger.fatal("Fatal Error", e);
+			LOGGER.fatal("Fatal Error", e);
 			throw new RuntimeException(e);
 		}
 		DBConnector dbConnector = new DBConnector();
 		Properties properties = new Properties();
 		properties.setProperty("user", CONFIG_BUNDLE.getString("user"));
 		properties.setProperty("password", CONFIG_BUNDLE.getString("pass"));
-		properties.setProperty("useUnicode", CONFIG_BUNDLE.getString("unicode"));
+		properties
+				.setProperty("useUnicode", CONFIG_BUNDLE.getString("unicode"));
 		properties.setProperty("characterEncoding",
 				CONFIG_BUNDLE.getString("encoding"));
 		for (int i = 0; i <= DEFAULT_POOL_SIZE; i++) {
@@ -61,13 +62,13 @@ public class ConnectionPool {
 		return instance;
 	}
 
-	public Connection getConnection() throws DAOException {
+	public Connection getConnection() throws TechnicalException {
 		Connection conn = null;
 		try {
 			conn = pool.take();
 			inUse.add(conn);
 		} catch (InterruptedException e) {
-			throw new DAOException(e);
+			throw new TechnicalException(e);
 		}
 		return conn;
 	}
@@ -84,7 +85,7 @@ public class ConnectionPool {
 			try {
 				c.close();
 			} catch (SQLException e) {
-				logger.error("TechnicalException", e);
+				LOGGER.error("TechnicalException", e);
 			}
 			iterator.remove();
 		}
@@ -94,7 +95,7 @@ public class ConnectionPool {
 			try {
 				c.close();
 			} catch (SQLException e) {
-				logger.error("TechnicalException", e);
+				LOGGER.error("TechnicalException", e);
 			}
 			iterator.remove();
 		}

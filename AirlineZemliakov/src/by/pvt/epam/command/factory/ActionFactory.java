@@ -8,7 +8,7 @@ import by.pvt.epam.command.client.CommandEnum;
 
 public class ActionFactory {
 
-	private static Logger logger = Logger.getLogger(ActionFactory.class);
+	private static final Logger LOGGER = Logger.getLogger(ActionFactory.class);
 
 	public ActionCommand defineCommand(HttpServletRequest request) {
 		ActionCommand current = new EmptyCommand();
@@ -20,7 +20,7 @@ public class ActionFactory {
 			CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase());
 			current = currentEnum.getCurrentCommand();
 		} catch (IllegalArgumentException e) {
-			logger.error("Technical Exception", e);
+			LOGGER.error("Technical Exception", e);
 			request.setAttribute("wrongAction", "message.wrongaction");
 		}
 		return current;

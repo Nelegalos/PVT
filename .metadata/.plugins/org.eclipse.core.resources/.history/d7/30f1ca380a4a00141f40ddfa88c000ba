@@ -1,0 +1,22 @@
+package by.pvt.epam.service;
+
+import java.util.List;
+
+import by.pvt.epam.dao.FlightDAO;
+import by.pvt.epam.dao.FlightDAOImpl;
+import by.pvt.epam.entity.Flight;
+import by.pvt.epam.exception.DAOException;
+
+public class CrewService {
+
+	private CrewDAO crewDAO;
+
+	public FlightService() {
+		crewDAO = new CrewDAOImpl();
+	}
+
+	public List<Flight> findAllFlights() throws DAOException {
+		return flightDAO.findAllFlights();
+	}
+
+}

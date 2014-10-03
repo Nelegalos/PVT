@@ -4,74 +4,88 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
-import by.pvt.epam.dao.CrewDAO;
-import by.pvt.epam.dao.CrewDAOImpl;
-import by.pvt.epam.dao.FlightDAO;
-import by.pvt.epam.dao.FlightDAOImpl;
 import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Flight;
 import by.pvt.epam.entity.Plane;
 import by.pvt.epam.entity.Position;
-import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.resource.ConfigurationManager;
+import by.pvt.epam.service.CrewService;
+import by.pvt.epam.service.FlightService;
 
 public class TeamCommand implements ActionCommand {
 
 	private static Logger logger = Logger.getLogger(TeamCommand.class);
 	private static final String PARAM_NAME_FLIGHT_ID = "flight";
+	private static final String SESSION_ATTRIBUTE_NAME_EMPLOYEES = "employees";
+	private static final String SESSION_ATTRIBUTE_NAME_CREW = "crew";
+	private static final String SESSION_ATTRIBUTE_NAME_FLIGHT_ID = "flightId";
+	private static final String SESSION_ATTRIBUTE_NAME_PILOT = "pilot";
+	private static final String SESSION_ATTRIBUTE_NAME_NAVIGATOR = "navigator";
+	private static final String SESSION_ATTRIBUTE_NAME_RADIOMAN = "radioman";
+	private static final String SESSION_ATTRIBUTE_NAME_STEWARD = "steward";
+	private static final String REQUEST_ATTRIBUTE_TEAM_NOT_FORMED = "teamNotFormed";
 
 	@Override
 	public String execute(HttpServletRequest request) {
-		String page = ConfigurationManager.getProperty("path.page.dispatcher");
+		String page = null;
+		try {
+			Flight flight = findFlight(request);
+			findEmployees(request);
+			createCrew(flight, request);
+			page = ConfigurationManager.getProperty("path.page.team");
+		} catch (TechnicalException e) {
+			logger.error("TechnicalException", e);
+			request.setAttribute(REQUEST_ATTRIBUTE_TEAM_NOT_FORMED,
+					"team.empty");
+			page = ConfigurationManager.getProperty("path.page.dispatcher");
+		}
+		return page;
+	}
+
+	private void findEmployees(HttpServletRequest request) throws TechnicalException {
+		CrewService crewService = new CrewService();
+		List<Employee> availableEmployees = crewService
+				.findAvailableEmployees();
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME_EMPLOYEES,
+				availableEmployees);
+		request.getSession()
+				.setAttribute(SESSION_ATTRIBUTE_NAME_PILOT, "PILOT");
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME_NAVIGATOR,
+				"NAVIGATOR");
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME_RADIOMAN,
+				"RADIOMAN");
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME_STEWARD,
+				"STEWARD");
+	}
+
+	private Flight findFlight(HttpServletRequest request) throws TechnicalException {
 		int flightId = Integer.valueOf(request
 				.getParameter(PARAM_NAME_FLIGHT_ID));
-		request.getSession().setAttribute("flightId", flightId);
-		FlightDAO fdi = new FlightDAOImpl();
-		CrewDAO cdi = new CrewDAOImpl();
-		List<Employee> employees = null;
-		Flight flight = null;
-		try {
-			flight = fdi.findFlightById(flightId);
-			employees = cdi.findAvailableEmployees();
-			request.getSession().setAttribute("employees", employees);
-			request.getSession().setAttribute("pilot", "PILOT");
-			request.getSession().setAttribute("navigator", "NAVIGATOR");
-			request.getSession().setAttribute("radioman", "RADIOMAN");
-			request.getSession().setAttribute("steward", "STEWARD");
-		} catch (DAOException e) {
-			logger.error("TechnicalException", e);
-			request.setAttribute("teamNotFormed", "team.empty");
-			return page;
-		}
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME_FLIGHT_ID,
+				flightId);
+		FlightService flightService = new FlightService();
+		return flightService.findFlightById(flightId);
+	}
+
+	private void createCrew(Flight flight, HttpServletRequest request) {
 		Plane plane = flight.getPlane();
 		List<Employee> flightCrew = new ArrayList<>();
-		int pilot = plane.getPilot();
-		for (int i = 0; i < pilot; i++) {
+		addToCrew(plane.getPilot(), flightCrew, Position.PILOT);
+		addToCrew(plane.getNavigator(), flightCrew, Position.NAVIGATOR);
+		addToCrew(plane.getRadioman(), flightCrew, Position.RADIOMAN);
+		addToCrew(plane.getSteward(), flightCrew, Position.STEWARD);
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME_CREW,
+				flightCrew);
+	}
+
+	private void addToCrew(int quantity, List<Employee> flightCrew,
+			Position position) {
+		for (int i = 0; i < quantity; i++) {
 			Employee employee = new Employee();
-			employee.setPosition(Position.PILOT);
+			employee.setPosition(position);
 			flightCrew.add(employee);
 		}
-		int navigator = plane.getNavigator();
-		for (int i = 0; i < navigator; i++) {
-			Employee employee = new Employee();
-			employee.setPosition(Position.NAVIGATOR);
-			flightCrew.add(employee);
-		}
-		int radioman = plane.getRadioman();
-		for (int i = 0; i < radioman; i++) {
-			Employee employee = new Employee();
-			employee.setPosition(Position.RADIOMAN);
-			flightCrew.add(employee);
-		}
-		int steward = plane.getSteward();
-		for (int i = 0; i < steward; i++) {
-			Employee employee = new Employee();
-			employee.setPosition(Position.STEWARD);
-			flightCrew.add(employee);
-		}
-		request.getSession().setAttribute("crew", flightCrew);
-		page = ConfigurationManager.getProperty("path.page.team");
-		return page;
 	}
 
 }

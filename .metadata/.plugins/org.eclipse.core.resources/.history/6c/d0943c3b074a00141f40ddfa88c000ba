@@ -1,0 +1,5 @@
+package by.pvt.epam.service;
+
+public class UserService {
+
+}

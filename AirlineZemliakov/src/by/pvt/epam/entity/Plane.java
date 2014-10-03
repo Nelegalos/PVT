@@ -1,6 +1,10 @@
 package by.pvt.epam.entity;
 
-public class Plane {
+public class Plane extends AbstractEntity{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private int pilot;
 	private int navigator;

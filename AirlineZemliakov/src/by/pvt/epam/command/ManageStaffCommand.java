@@ -11,7 +11,7 @@ import by.pvt.epam.dao.CrewDAO;
 import by.pvt.epam.dao.CrewDAOImpl;
 import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Position;
-import by.pvt.epam.exception.DAOException;
+import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.resource.ConfigurationManager;
 
 public class ManageStaffCommand implements ActionCommand {
@@ -34,7 +34,7 @@ public class ManageStaffCommand implements ActionCommand {
 			request.getSession().setAttribute("navigator", "NAVIGATOR");
 			request.getSession().setAttribute("radioman", "RADIOMAN");
 			request.getSession().setAttribute("steward", "STEWARD");
-		} catch (DAOException e) {
+		} catch (TechnicalException e) {
 			logger.error("TechnicalException", e);
 			request.setAttribute("employeesNull", "employees.null");
 			return ConfigurationManager.getProperty("path.page.admin");
