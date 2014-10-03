@@ -67,11 +67,14 @@ public class NextFlightCommand implements ActionCommand {
 		int nextPageFlights = newPageFlights + 2;
 		FlightService flightService = new FlightService();
 		try {
+			System.out.println(1);
 			if (moreFlights(flightsStatus, newPageFlights)) {
+				System.out.println(2);
 				List<Flight> statusFlights = flightService.findFlightsByStatus(
 						flightsStatus, newPageFlights);
 				request.setAttribute(REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS,
 						statusFlights);
+				System.out.println(3);
 				nextButton = isNextButton(flightsStatus, nextPageFlights);
 				request.getSession()
 						.setAttribute(
@@ -81,6 +84,7 @@ public class NextFlightCommand implements ActionCommand {
 						REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE, true);
 				request.getSession().setAttribute(
 						REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE, newPageFlights);
+				System.out.println(4);
 			} else {
 				throw new TechnicalException();
 			}
