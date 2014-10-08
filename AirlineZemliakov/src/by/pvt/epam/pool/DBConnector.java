@@ -13,6 +13,13 @@ public class DBConnector {
 	private static final ResourceBundle CONFIG_BUNDLE = ResourceBundle
 			.getBundle("resources.database");
 
+	/**
+	 * Gets the connection.
+	 * 
+	 * @param properties
+	 *            the properties
+	 * @return the connection
+	 */
 	public Connection getConnection(Properties properties) {
 		Connection connection = null;
 		try {

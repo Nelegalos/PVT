@@ -8,7 +8,7 @@
 <html>
 <head>
 <title><fmt:message key="lang.select" /></title>
-<%@ include file="/jsp/fragment/style.jspf"%>
+<%@ include file="/jsp/include/style.jspf"%>
 </head>
 <body id="page1">
 	<div class="main">

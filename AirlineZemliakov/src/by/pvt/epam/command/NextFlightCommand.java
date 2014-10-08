@@ -45,6 +45,14 @@ public class NextFlightCommand implements ActionCommand {
 		return page;
 	}
 
+	/**
+	 * Goes to the next page.
+	 * 
+	 * @param flightsStatus
+	 *            the flights status
+	 * @param request
+	 *            the request
+	 */
 	private void goToNextPage(int flightsStatus, HttpServletRequest request) {
 		int currentFlightsPage = (Integer) request.getSession().getAttribute(
 				SESSION_ATTRIBUTE_NAME_FLIGHTS_PAGE);
@@ -80,6 +88,18 @@ public class NextFlightCommand implements ActionCommand {
 
 	}
 
+	/**
+	 * 
+	 * Checks if there are more flights.
+	 * 
+	 * @param status
+	 *            the status
+	 * @param startElement
+	 *            the start element
+	 * @return true, if successful
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private boolean moreFlights(int status, int startElement)
 			throws TechnicalException {
 		FlightService flightService = new FlightService();
@@ -87,6 +107,17 @@ public class NextFlightCommand implements ActionCommand {
 				.isEmpty();
 	}
 
+	/**
+	 * Checks if there is next button.
+	 * 
+	 * @param status
+	 *            the status
+	 * @param startElement
+	 *            the start element
+	 * @return true, if is next button
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private boolean isNextButton(int status, int startElement)
 			throws TechnicalException {
 		boolean nextButton = false;

@@ -50,12 +50,34 @@ public class LoginCommand implements ActionCommand {
 		return page;
 	}
 
+	/**
+	 * Find user.
+	 * 
+	 * @param login
+	 *            the login
+	 * @param pass
+	 *            the password
+	 * @return the user
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private User findUser(String login, String pass) throws TechnicalException {
 		UserService userService = new UserService();
 		User user = userService.findUser(login, pass);
 		return user;
 	}
 
+	/**
+	 * Checks if there are more flights.
+	 * 
+	 * @param status
+	 *            the status
+	 * @param startElement
+	 *            the start element
+	 * @return true, if successful
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private boolean moreFlights(int status, int startElement)
 			throws TechnicalException {
 		FlightService flightService = new FlightService();
@@ -63,6 +85,16 @@ public class LoginCommand implements ActionCommand {
 				.isEmpty();
 	}
 
+	/**
+	 * Sets the common user attributes.
+	 * 
+	 * @param user
+	 *            the user
+	 * @param request
+	 *            the request
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private void setCommonUserAttributes(User user, HttpServletRequest request)
 			throws TechnicalException {
 
@@ -76,6 +108,14 @@ public class LoginCommand implements ActionCommand {
 
 	}
 
+	/**
+	 * Sets the dispatcher attributes.
+	 * 
+	 * @param request
+	 *            the new dispatcher attributes
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private void setDispatcherAttributes(HttpServletRequest request)
 			throws TechnicalException {
 		FlightService flightService = new FlightService();
@@ -85,6 +125,14 @@ public class LoginCommand implements ActionCommand {
 				SESSION_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE, moreFlights(0, 2));
 	}
 
+	/**
+	 * Sets the administrator attributes.
+	 * 
+	 * @param request
+	 *            the new administrator attributes
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private void setAdminAttributes(HttpServletRequest request)
 			throws TechnicalException {
 		FlightService flightService = new FlightService();

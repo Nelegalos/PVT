@@ -9,12 +9,11 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
 import org.apache.log4j.Logger;
-
 import by.pvt.epam.exception.TechnicalException;
 
 public class ConnectionPool {
+
 	private static final Logger LOGGER = Logger.getLogger(ConnectionPool.class);
 	private static final int DEFAULT_POOL_SIZE = 20;
 	private static final ResourceBundle CONFIG_BUNDLE = ResourceBundle
@@ -25,10 +24,16 @@ public class ConnectionPool {
 	private ArrayBlockingQueue<Connection> pool;
 	private ArrayBlockingQueue<Connection> inUse;
 
+	/**
+	 * Instantiates a new connection pool.
+	 */
 	private ConnectionPool() {
 		init();
 	}
 
+	/**
+	 * Initiates.
+	 */
 	private void init() {
 		pool = new ArrayBlockingQueue<Connection>(DEFAULT_POOL_SIZE);
 		inUse = new ArrayBlockingQueue<Connection>(DEFAULT_POOL_SIZE);
@@ -52,6 +57,11 @@ public class ConnectionPool {
 		}
 	}
 
+	/**
+	 * Gets the single instance of ConnectionPool.
+	 * 
+	 * @return single instance of ConnectionPool
+	 */
 	public static ConnectionPool getInstance() {
 		if (instance == null) {
 			LOCK.lock();
@@ -63,6 +73,13 @@ public class ConnectionPool {
 		return instance;
 	}
 
+	/**
+	 * Gets the connection.
+	 * 
+	 * @return the connection
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	public Connection getConnection() throws TechnicalException {
 		Connection conn = null;
 		if (giveConnection) {
@@ -76,11 +93,20 @@ public class ConnectionPool {
 		return conn;
 	}
 
+	/**
+	 * Closes connection.
+	 * 
+	 * @param conn
+	 *            the connection
+	 */
 	public void close(Connection conn) {
 		inUse.remove(conn);
 		pool.offer(conn);
 	}
 
+	/**
+	 * Clean up.
+	 */
 	public void cleanUp() {
 		giveConnection = false;
 		Iterator<Connection> iterator = pool.iterator();

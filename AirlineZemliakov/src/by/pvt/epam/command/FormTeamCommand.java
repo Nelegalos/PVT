@@ -52,6 +52,13 @@ public class FormTeamCommand implements ActionCommand {
 		return ConfigurationManager.getProperty("path.page.dispatcher");
 	}
 
+	/**
+	 * Checks if team is formed.
+	 * 
+	 * @param crew
+	 *            the crew
+	 * @return true, if is team formed
+	 */
 	private boolean isTeamFormed(List<Employee> crew) {
 		for (Employee employee : crew) {
 			int id = employee.getId();
@@ -62,11 +69,26 @@ public class FormTeamCommand implements ActionCommand {
 		return true;
 	}
 
+	/**
+	 * Checks if there is next flights page.
+	 * 
+	 * @return true, if is next flights page
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private boolean isNextFlightsPage() throws TechnicalException {
 		FlightService flightService = new FlightService();
 		return (flightService.findFlightsByStatus(0, 2)).size() > 0;
 	}
 
+	/**
+	 * Sets the crew on air.
+	 * 
+	 * @param crew
+	 *            the new crew on air
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private void setCrewOnAir(List<Employee> crew) throws TechnicalException {
 		CrewService crewService = new CrewService();
 		for (Employee employee : crew) {
@@ -78,6 +100,16 @@ public class FormTeamCommand implements ActionCommand {
 		}
 	}
 
+	/**
+	 * Forms crew.
+	 * 
+	 * @param crew
+	 *            the crew
+	 * @param flightId
+	 *            the flight id
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private void formCrew(List<Employee> crew, int flightId)
 			throws TechnicalException {
 		CrewService crewService = new CrewService();
@@ -87,6 +119,14 @@ public class FormTeamCommand implements ActionCommand {
 		}
 	}
 
+	/**
+	 * Sets the flight on air.
+	 * 
+	 * @param flightId
+	 *            the new flight on air
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private void setFlightOnAir(int flightId) throws TechnicalException {
 		FlightService flightService = new FlightService();
 		boolean flag = flightService.setFlightOnAir(flightId);

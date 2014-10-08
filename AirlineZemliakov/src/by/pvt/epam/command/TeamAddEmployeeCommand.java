@@ -34,6 +34,18 @@ public class TeamAddEmployeeCommand implements ActionCommand {
 		return ConfigurationManager.getProperty("path.page.team");
 	}
 
+	/**
+	 * Adds the employee to crew.
+	 * 
+	 * @param availableEmployees
+	 *            the available employees
+	 * @param crew
+	 *            the crew
+	 * @param request
+	 *            the request
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private void addEmployeeToCrew(List<Employee> availableEmployees,
 			List<Employee> crew, HttpServletRequest request)
 			throws TechnicalException {
@@ -65,6 +77,15 @@ public class TeamAddEmployeeCommand implements ActionCommand {
 				availableEmployees);
 	}
 
+	/**
+	 * Checks if employee is correct .
+	 * 
+	 * @param crewEmployee
+	 *            the crew employee
+	 * @param addedEmployeePosition
+	 *            the added employee position
+	 * @return true, if is correct employee
+	 */
 	private boolean isCorrectEmployee(Employee crewEmployee,
 			Position addedEmployeePosition) {
 		return (crewEmployee.getPosition().equals(addedEmployeePosition) && (crewEmployee

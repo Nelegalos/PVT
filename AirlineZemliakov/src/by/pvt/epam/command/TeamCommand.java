@@ -45,6 +45,13 @@ public class TeamCommand implements ActionCommand {
 		return page;
 	}
 
+	/**
+	 * Creates the crew.
+	 * 
+	 * @param flight
+	 *            the flight
+	 * @return the list
+	 */
 	private List<Employee> createCrew(Flight flight) {
 		Plane plane = flight.getPlane();
 		List<Employee> flightCrew = new ArrayList<>();
@@ -55,6 +62,16 @@ public class TeamCommand implements ActionCommand {
 		return flightCrew;
 	}
 
+	/**
+	 * Adds the to crew.
+	 * 
+	 * @param quantity
+	 *            the quantity
+	 * @param flightCrew
+	 *            the flight crew
+	 * @param position
+	 *            the position
+	 */
 	private void addToCrew(int quantity, List<Employee> flightCrew,
 			Position position) {
 		for (int i = 0; i < quantity; i++) {

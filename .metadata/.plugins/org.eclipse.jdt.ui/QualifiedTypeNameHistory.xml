@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="javax.naming.InitialContext"/>
-<fullyQualifiedTypeName name="javax.naming.Context"/>
-<fullyQualifiedTypeName name="com.mysql.jdbc.Connection"/>
 <fullyQualifiedTypeName name="javax.sql.DataSource"/>
 <fullyQualifiedTypeName name="jdk.internal.dynalink.beans.StaticClass"/>
 <fullyQualifiedTypeName name="java.sql.ResultSet"/>
@@ -11,7 +8,6 @@
 <fullyQualifiedTypeName name="org.apache.log4j.Logger"/>
 <fullyQualifiedTypeName name="by.pvt.epam.controller.Controller"/>
 <fullyQualifiedTypeName name="by.pvt.epam.dao.UserDAO"/>
-<fullyQualifiedTypeName name="by.pvt.epam.entity.User"/>
 <fullyQualifiedTypeName name="by.pvt.epam.logic.LoginLogic"/>
 <fullyQualifiedTypeName name="by.pvt.epam.LangCommand"/>
 <fullyQualifiedTypeName name="by.pvt.epam.entity.Crew"/>
@@ -27,7 +23,6 @@
 <fullyQualifiedTypeName name="java.util.Set"/>
 <fullyQualifiedTypeName name="by.pvt.epam.entity.Employee"/>
 <fullyQualifiedTypeName name="by.pvt.epam.logic.FlightLogic"/>
-<fullyQualifiedTypeName name="java.util.Date"/>
 <fullyQualifiedTypeName name="java.sql.Date"/>
 <fullyQualifiedTypeName name="by.pvt.epam.entity.Plane"/>
 <fullyQualifiedTypeName name="java.util.HashSet"/>
@@ -57,7 +52,12 @@
 <fullyQualifiedTypeName name="by.pvt.epam.logic.CrewLogic"/>
 <fullyQualifiedTypeName name="by.pvt.epam.entity.Position"/>
 <fullyQualifiedTypeName name="javax.servlet.jsp.tagext.TagSupport"/>
-<fullyQualifiedTypeName name="by.pvt.epam.exception.TechnicalException"/>
 <fullyQualifiedTypeName name="by.pvt.epam.service.CrewService"/>
+<fullyQualifiedTypeName name="by.pvt.epam.exception.TechnicalException"/>
+<fullyQualifiedTypeName name="org.junit.Test"/>
+<fullyQualifiedTypeName name="by.pvt.epam.entity.User"/>
+<fullyQualifiedTypeName name="org.junit.Before"/>
+<fullyQualifiedTypeName name="org.junit.After"/>
 <fullyQualifiedTypeName name="by.pvt.epam.service.FlightService"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
 </qualifiedTypeNameHistroy>

@@ -36,12 +36,34 @@ public class RegisterEmployeeCommand implements ActionCommand {
 		return ConfigurationManager.getProperty("path.page.staff");
 	}
 
+	/**
+	 * Checks if input is empty.
+	 * 
+	 * @param name
+	 *            the name
+	 * @param surname
+	 *            the surname
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private void isEmpty(String name, String surname) throws TechnicalException {
 		if (name.isEmpty() || surname.isEmpty()) {
 			throw new TechnicalException();
 		}
 	}
 
+	/**
+	 * Registers employee.
+	 * 
+	 * @param name
+	 *            the name
+	 * @param surname
+	 *            the surname
+	 * @param position
+	 *            the position
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private void registerEmployee(String name, String surname, int position)
 			throws TechnicalException {
 		CrewService crewService = new CrewService();

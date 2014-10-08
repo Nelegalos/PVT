@@ -45,6 +45,14 @@ public class DeleteFlightCommand implements ActionCommand {
 		return ConfigurationManager.getProperty("path.page.admin");
 	}
 
+	/**
+	 * Delete flight.
+	 * 
+	 * @param flightId
+	 *            the flight id
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private void deleteFlight(int flightId) throws TechnicalException {
 		FlightService flightService = new FlightService();
 		boolean flag = flightService.deleteFlight(flightId);
@@ -53,6 +61,17 @@ public class DeleteFlightCommand implements ActionCommand {
 		}
 	}
 
+	/**
+	 * Checks if there are more flights.
+	 * 
+	 * @param status
+	 *            the status
+	 * @param startElement
+	 *            the start element
+	 * @return true, if successful
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private boolean moreFlights(int status, int startElement)
 			throws TechnicalException {
 		FlightService flightService = new FlightService();

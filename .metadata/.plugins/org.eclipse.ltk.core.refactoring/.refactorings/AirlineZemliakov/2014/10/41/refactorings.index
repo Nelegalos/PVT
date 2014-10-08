@@ -54,3 +54,5 @@
 1412756255817	Rename resource 'modifyEmployee.jspf'
 1412759669294	Rename type 'FindUserTest'
 1412760180646	Delete element
+1412766605683	Rename resource 'fragment'
+1412766776267	Move 'modifyEmployee.jsp' to 'fragment'

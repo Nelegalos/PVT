@@ -45,6 +45,14 @@ public class PreviousFlightCommand implements ActionCommand {
 		return page;
 	}
 
+	/**
+	 * Goes to the previous page.
+	 * 
+	 * @param flightsStatus
+	 *            the flights status
+	 * @param request
+	 *            the request
+	 */
 	private void goToPreviousPage(int flightsStatus, HttpServletRequest request) {
 		int currentFlightsPage = (Integer) request.getSession().getAttribute(
 				SESSION_ATTRIBUTE_NAME_FLIGHTS_PAGE);
@@ -78,6 +86,17 @@ public class PreviousFlightCommand implements ActionCommand {
 		}
 	}
 
+	/**
+	 * Checks if there are more flights.
+	 * 
+	 * @param status
+	 *            the status
+	 * @param startElement
+	 *            the start element
+	 * @return true, if successful
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private boolean moreFlights(int status, int startElement)
 			throws TechnicalException {
 		FlightService flightService = new FlightService();
@@ -85,6 +104,13 @@ public class PreviousFlightCommand implements ActionCommand {
 				.isEmpty();
 	}
 
+	/**
+	 * Checks if there is previous button.
+	 * 
+	 * @param previousPageFlights
+	 *            the previous page flights
+	 * @return true, if is previous button
+	 */
 	private boolean isPreviousButton(int previousPageFlights) {
 		boolean previousButton = false;
 		if (previousPageFlights >= 0) {

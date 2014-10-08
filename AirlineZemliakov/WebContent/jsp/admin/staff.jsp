@@ -1,8 +1,8 @@
-<%@ include file="/jsp/fragment/head.jspf"%>
+<%@ include file="/jsp/include/head.jspf"%>
 <html>
 <head>
 <title><fmt:message key="label.admin" /></title>
-<%@ include file="/jsp/fragment/style.jspf"%>
+<%@ include file="/jsp/include/style.jspf"%>
 </head>
 <body id="page1">
 	<div class="main">
@@ -30,8 +30,13 @@
 			<div class="for_banners">
 				<article class="col1">
 					<div class="tabs">
-						<jsp:include page="/jsp/admin/newEmployee.jsp" flush="true" />
-						<%@ include file="/jsp/admin/modifyEmployee.jsp"%>
+						<div class="box1" style="margin-bottom: 20px;">
+							<jsp:include page="/jsp/admin/fragment/newEmployee.jsp"
+								flush="true" />
+						</div>
+						<div class="box1" style="margin-bottom: 20px;">
+							<jsp:include page="/jsp/admin/fragment/modifyEmployee.jsp" />
+						</div>
 					</div>
 				</article>
 			</div>

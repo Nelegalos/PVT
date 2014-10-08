@@ -1,8 +1,8 @@
-<%@ include file="/jsp/fragment/head.jspf"%>
+<%@ include file="/jsp/include/head.jspf"%>
 <html>
 <head>
 <title><fmt:message key="label.dispatcher" /></title>
-<%@ include file="/jsp/fragment/style.jspf"%>
+<%@ include file="/jsp/include/style.jspf"%>
 </head>
 <body id="page1">
 	<div class="main">

@@ -51,6 +51,13 @@ public class CompleteFlightCommand implements ActionCommand {
 		return ConfigurationManager.getProperty("path.page.admin");
 	}
 
+	/**
+	 * Checks if there is next button.
+	 * 
+	 * @return true, if there is next button
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private boolean isNextButton() throws TechnicalException {
 		FlightService flightService = new FlightService();
 		boolean nextButton = false;
@@ -60,6 +67,14 @@ public class CompleteFlightCommand implements ActionCommand {
 		return nextButton;
 	}
 
+	/**
+	 * Complete flight.
+	 * 
+	 * @param flightId
+	 *            the flight id
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private void completeFlight(int flightId) throws TechnicalException {
 		FlightService flightService = new FlightService();
 		boolean flag = flightService.setFlightCompleted(flightId);
@@ -68,6 +83,14 @@ public class CompleteFlightCommand implements ActionCommand {
 		}
 	}
 
+	/**
+	 * Release crew.
+	 * 
+	 * @param crew
+	 *            the crew
+	 * @throws TechnicalException
+	 *             the technical exception
+	 */
 	private void releaseCrew(Set<Employee> crew) throws TechnicalException {
 		CrewService crewService = new CrewService();
 		for (Employee employee : crew) {
