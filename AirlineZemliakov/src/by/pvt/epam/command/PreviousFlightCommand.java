@@ -1,33 +1,19 @@
 package by.pvt.epam.command;
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
-
 import by.pvt.epam.entity.Flight;
 import by.pvt.epam.entity.Role;
 import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.resource.ConfigurationManager;
 import by.pvt.epam.service.FlightService;
+import static by.pvt.epam.constants.Constants.*;
 
 public class PreviousFlightCommand implements ActionCommand {
 
 	private static final Logger LOGGER = Logger
 			.getLogger(PreviousFlightCommand.class);
-	private static final String SESSION_ATTRIBUTE_NAME_ROLE = "role";
-
-	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE = "flightsPage";
-
-	private static final String REQUEST_ATTRIBUTE_NAME_NO_MORE_FLIGHTS = "noMore";
-
-	private static final String REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE = "isPreviousFlightsPage";
-	private static final String REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE = "isNextFlightsPage";
-
-	private static final String REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS = "userFlights";
-	private static final String REQUEST_ATTRIBUTE_NAME_COMPLETED_FLIGHTS = "completedFlights";
-	private static final String REQUEST_ATTRIBUTE_NAME_ERROR = "error";
 
 	@Override
 	public String execute(HttpServletRequest request) {
@@ -61,7 +47,7 @@ public class PreviousFlightCommand implements ActionCommand {
 
 	private void goToPreviousPage(int flightsStatus, HttpServletRequest request) {
 		int currentFlightsPage = (Integer) request.getSession().getAttribute(
-				REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE);
+				SESSION_ATTRIBUTE_NAME_FLIGHTS_PAGE);
 		int newPageFlights = currentFlightsPage - 2;
 		boolean previousButton = false;
 		int previousPageFlights = newPageFlights - 2;
@@ -74,12 +60,12 @@ public class PreviousFlightCommand implements ActionCommand {
 						newFlights);
 				previousButton = isPreviousButton(previousPageFlights);
 				request.getSession().setAttribute(
-						REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE,
+						SESSION_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE,
 						previousButton);
 				request.getSession().setAttribute(
-						REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE, true);
+						SESSION_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE, true);
 				request.getSession().setAttribute(
-						REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE, newPageFlights);
+						SESSION_ATTRIBUTE_NAME_FLIGHTS_PAGE, newPageFlights);
 			} else {
 				throw new TechnicalException();
 			}
@@ -88,7 +74,7 @@ public class PreviousFlightCommand implements ActionCommand {
 			request.setAttribute(REQUEST_ATTRIBUTE_NAME_NO_MORE_FLIGHTS,
 					"flight.nomore");
 			request.getSession().setAttribute(
-					REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE, currentFlightsPage);
+					SESSION_ATTRIBUTE_NAME_FLIGHTS_PAGE, currentFlightsPage);
 		}
 	}
 

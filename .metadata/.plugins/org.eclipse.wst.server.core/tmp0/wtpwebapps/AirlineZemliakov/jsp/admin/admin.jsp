@@ -1,37 +1,21 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<fmt:setLocale value="${lang}" scope="session" />
-<fmt:setBundle basename="resources.pagecontent" />
+<%@ include file="/jsp/fragment/head.jspf"%>
 <html>
 <head>
 <title><fmt:message key="label.admin" /></title>
-<link rel="stylesheet" href="css/layout.css" type="text/css" media="all" />
-<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
-<link rel="stylesheet" href="css/style.css" type="text/css" media="all">
+<%@ include file="/jsp/fragment/style.jspf"%>
 </head>
 <body id="page1">
 	<div class="main">
 		<!--header -->
 		<header>
 			<div class="wrapper">
-				<h1>
-					<a href="index.jsp" id="logo"></a>
-				</h1>
-				<span id="slogan"><fmt:message key="header.zemliakov" /></span>
+				<ctg:header />
 				<table class="top_bottons">
 					<tr>
 						<td style="width: 300px;"><p
 								style="line-height: 20px; padding: 0; margin-bottom: 20px;">
 								${user}</p></td>
-						<td>
-							<form action="controller" method="post">
-								<input type="hidden" name="command" value="logout" /><input
-									class="button1" type="submit"
-									value=<fmt:message key="option.logout" /> />
-							</form>
-						</td>
+						<td><ctg:logout /></td>
 						<td>
 							<form action="controller" method="post">
 								<input type="hidden" name="command" value="manageStaff" /><input
@@ -113,9 +97,9 @@
 											<span class="left"><fmt:message key="flight.flight" />
 												: </span> <select required="required" class="input"
 												name="delFlightId">
-												<c:forEach var="flight" items="${completedFlights}">													
-														<option value="${flight.id}">${flight.id}-${flight.to}-${flight.from}
-															${flight.date}</option>													
+												<c:forEach var="flight" items="${completedFlights}">
+													<option value="${flight.id}">${flight.id}-${flight.to}-${flight.from}
+														${flight.date}</option>
 												</c:forEach>
 											</select>
 										</div>
@@ -152,36 +136,33 @@
 									<td><fmt:message key="flight.action" /></td>
 								</tr>
 								<c:forEach var="flight" items="${userFlights}">
-									<c:set var="status" value="${flight.status}" />
-									<c:if test="${status == 1}">
-										<tr>
-											<td><c:out value="${flight.id}" /></td>
-											<td><c:out value="${flight.to}" /></td>
-											<td><c:out value="${flight.from}" /></td>
-											<td><c:out value="${flight.date}" /></td>
-											<td>
-												<form style="margin-bottom: 0;" name="teamForm"
-													method="POST" action="controller">
-													<input type="hidden" name="command" value="completeFlight" />
-													<input type="hidden" name="flightId" value="${flight.id}" />
-													<input class="button1" type="submit"
-														value=<fmt:message key="flight.complete" /> />
-												</form>
-											</td>
-										</tr>
-									</c:if>
+									<tr>
+										<td><c:out value="${flight.id}" /></td>
+										<td><c:out value="${flight.to}" /></td>
+										<td><c:out value="${flight.from}" /></td>
+										<td><c:out value="${flight.date}" /></td>
+										<td>
+											<form style="margin-bottom: 0;" name="teamForm" method="POST"
+												action="controller">
+												<input type="hidden" name="command" value="completeFlight" />
+												<input type="hidden" name="flightId" value="${flight.id}" />
+												<input class="button1" type="submit"
+													value=<fmt:message key="flight.complete" /> />
+											</form>
+										</td>
+									</tr>
 								</c:forEach>
 							</table>
 							<table>
 								<tr>
-									<c:if test="${isPreviousFlightsPage == true}">
+									<c:if test="${isPreviousFlightsPage}">
 										<td><form method="POST" action="controller">
 												<input type="hidden" name="command" value="previousFlight" />
 												<input class="button1" type="submit"
 													value="<fmt:message key="flight.previous" />" />
 											</form></td>
 									</c:if>
-									<c:if test="${isNextFlightsPage == true}">
+									<c:if test="${isNextFlightsPage}">
 										<td><form method="POST" action="controller">
 												<input type="hidden" name="command" value="nextFlight" /> <input
 													class="button1" type="submit"
@@ -193,7 +174,7 @@
 							<span> <c:if test="${not empty flightCompleted}">
 									<fmt:message key="${flightCompleted}" />
 								</c:if> <c:if test="${not empty flightNotCompleted}">
-									<fmt:message key="${ flightNotCompleted }" />
+									<fmt:message key="${flightNotCompleted}" />
 								</c:if> <c:if test="${not empty noMore}">
 									<fmt:message key="${noMore}" />
 								</c:if>
@@ -203,13 +184,7 @@
 				</article>
 			</div>
 		</section>
-		<footer>
-			<div class="wrapper">
-				<div class="links">
-					<fmt:message key="contact.email" />
-				</div>
-			</div>
-		</footer>
+		<ctg:footer />
 	</div>
 </body>
 </html>

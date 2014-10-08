@@ -1,29 +1,18 @@
 package by.pvt.epam.command;
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
-
 import by.pvt.epam.entity.Flight;
 import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.resource.ConfigurationManager;
 import by.pvt.epam.service.FlightService;
+import static by.pvt.epam.constants.Constants.*;
 
 public class DeleteFlightCommand implements ActionCommand {
 
 	private static final Logger LOGGER = Logger
 			.getLogger(DeleteFlightCommand.class);
-	private static final String PARAM_NAME_DELETED_FLIGHT_ID = "delFlightId";
-	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHT_DELETED = "flightDeleted";
-	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHT_NOT_DELETED = "flightNotDeleted";
-	private static final String REQUEST_ATTRIBUTE_NAME_COMPLETED_FLIGHTS = "completedFlights";
-	private static final String REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS = "userFlights";
-
-	private static final String REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE = "flightsPage";
-	private static final String REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE = "isPreviousFlightsPage";
-	private static final String REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE = "isNextFlightsPage";
 
 	@Override
 	public String execute(HttpServletRequest request) {
@@ -42,11 +31,11 @@ public class DeleteFlightCommand implements ActionCommand {
 			request.setAttribute(REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS,
 					formedFlights);
 			request.getSession().setAttribute(
-					REQUEST_ATTRIBUTE_NAME_FLIGHTS_PAGE, 0);
+					SESSION_ATTRIBUTE_NAME_FLIGHTS_PAGE, 0);
 			request.getSession().setAttribute(
-					REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE, false);
+					SESSION_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE, false);
 			request.getSession().setAttribute(
-					REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE,
+					SESSION_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE,
 					moreFlights(1, 2));
 		} catch (TechnicalException e) {
 			LOGGER.error("TechnicalException", e);

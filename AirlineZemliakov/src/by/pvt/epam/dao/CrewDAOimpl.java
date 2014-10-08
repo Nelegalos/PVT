@@ -46,7 +46,7 @@ public class CrewDAOImpl extends CrewDAO {
 			LOGGER.error("DAOException", e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return flag;
 	}
@@ -71,7 +71,7 @@ public class CrewDAOImpl extends CrewDAO {
 			throw new TechnicalException(e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return employee;
 	}
@@ -107,7 +107,7 @@ public class CrewDAOImpl extends CrewDAO {
 			throw new TechnicalException(e);
 		} finally {
 			AbstractDAO.close(statement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return employees;
 	}
@@ -130,7 +130,7 @@ public class CrewDAOImpl extends CrewDAO {
 			LOGGER.error("DAOException", e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return flag;
 	}
@@ -157,7 +157,7 @@ public class CrewDAOImpl extends CrewDAO {
 			throw new TechnicalException(e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return employees;
 	}
@@ -180,7 +180,7 @@ public class CrewDAOImpl extends CrewDAO {
 			LOGGER.error("DAOException", e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return flag;
 
@@ -207,7 +207,7 @@ public class CrewDAOImpl extends CrewDAO {
 			LOGGER.error("DAOException", e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return flag;
 	}
@@ -234,7 +234,7 @@ public class CrewDAOImpl extends CrewDAO {
 			LOGGER.error("DAOException", e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return flag;
 	}

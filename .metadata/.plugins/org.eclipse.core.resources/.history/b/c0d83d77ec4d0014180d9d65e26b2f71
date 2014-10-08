@@ -1,0 +1,20 @@
+package by.pvt.epam.command;
+
+import javax.servlet.http.HttpServletRequest;
+import by.pvt.epam.resource.ConfigurationManager;
+
+/**
+ * The Class BackToStaffCommand.
+ */
+public class BackToStaffCommand implements ActionCommand {
+
+	/* (non-Javadoc)
+	 * @see by.pvt.epam.command.ActionCommand#execute(javax.servlet.http.HttpServletRequest)
+	 */
+	@Override
+	public String execute(HttpServletRequest request) {
+
+		return ConfigurationManager.getProperty("path.page.staff");
+	}
+
+}

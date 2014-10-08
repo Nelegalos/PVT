@@ -1,38 +1,28 @@
 package by.pvt.epam.command;
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
-
 import by.pvt.epam.entity.Employee;
 import by.pvt.epam.entity.Flight;
 import by.pvt.epam.exception.TechnicalException;
 import by.pvt.epam.resource.ConfigurationManager;
 import by.pvt.epam.service.CrewService;
 import by.pvt.epam.service.FlightService;
+import static by.pvt.epam.constants.Constants.*;
 
 public class FormTeamCommand implements ActionCommand {
 
 	private static final Logger LOGGER = Logger
 			.getLogger(FormTeamCommand.class);
-	private static final String SESSION_ATTRIBUTE_NAME_FLIGHT_ID = "flightId";
-	private static final String SESSION_ATTRIBUTE_CREW = "crew";
-	private static final String SESSION_ATTRIBUTE_NAME_FLIGHTS_PAGE = "flightsPage";
-	private static final String REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE = "isPreviousFlightsPage";
-	private static final String REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE = "isNextFlightsPage";
-	private static final String REQUEST_ATTRIBUTE_NAME_USER_FLIGHTS = "userFlights";
-	private static final String REQUEST_ATTRIBUTE_TEAM_EMPTY = "teamEmpty";
-	private static final String REQUEST_ATTRIBUTE_TEAM_NOT_FORMED = "teamNotFormed";
-	private static final String REQUEST_ATTRIBUTE_TEAM_FORMED = "teamFormed";
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public String execute(HttpServletRequest request) {
 
 		List<Employee> crew = (List<Employee>) request.getSession()
-				.getAttribute(SESSION_ATTRIBUTE_CREW);
+				.getAttribute(SESSION_ATTRIBUTE_NAME_CREW);
+
 		if (!isTeamFormed(crew)) {
 			request.setAttribute(REQUEST_ATTRIBUTE_TEAM_EMPTY, "team.empty");
 			return ConfigurationManager.getProperty("path.page.team");
@@ -51,8 +41,8 @@ public class FormTeamCommand implements ActionCommand {
 			request.getSession().setAttribute(
 					SESSION_ATTRIBUTE_NAME_FLIGHTS_PAGE, 0);
 			request.setAttribute(
-					REQUEST_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE, false);
-			request.setAttribute(REQUEST_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE,
+					SESSION_ATTRIBUTE_NAME_IS_PREVIOUS_FLIGHTS_PAGE, false);
+			request.setAttribute(SESSION_ATTRIBUTE_NAME_IS_NEXT_FLIGHTS_PAGE,
 					isNextFlightsPage());
 		} catch (TechnicalException e) {
 			request.setAttribute(REQUEST_ATTRIBUTE_TEAM_NOT_FORMED,

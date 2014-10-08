@@ -6,10 +6,21 @@ import by.pvt.epam.command.ActionCommand;
 import by.pvt.epam.command.EmptyCommand;
 import by.pvt.epam.command.client.CommandEnum;
 
+/**
+ * A factory for creating Action objects.
+ */
 public class ActionFactory {
 
+	/** The Constant LOGGER. */
 	private static final Logger LOGGER = Logger.getLogger(ActionFactory.class);
 
+	/**
+	 * Define command.
+	 * 
+	 * @param request
+	 *            the request
+	 * @return the action command
+	 */
 	public ActionCommand defineCommand(HttpServletRequest request) {
 		ActionCommand current = new EmptyCommand();
 		String action = request.getParameter("command");

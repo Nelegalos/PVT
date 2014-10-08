@@ -6,26 +6,18 @@
 	<short-name>ctg</short-name>
 	<uri>customtags</uri>
 	<tag>
-		<name>table-flights</name>
-		<tag-class>by.pvt.epam.custom.tag.TableFlightTag</tag-class>
-		<body-content>scriptless</body-content>
-		<attribute>
-			<name>flights</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-			<type>java.util.List</type>
-		</attribute>
-		<attribute>
-			<name>buttonPart1</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-			<type>java.util.String</type>
-		</attribute>
-		<attribute>
-			<name>buttonPart2</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-			<type>java.util.String</type>
-		</attribute>
+		<name>logout</name>
+		<tag-class>by.pvt.epam.custom.tag.LogOutTag</tag-class>
+		<body-content>empty</body-content>
+	</tag>
+	<tag>
+		<name>header</name>
+		<tag-class>by.pvt.epam.custom.tag.HeaderTag</tag-class>
+		<body-content>empty</body-content>
+	</tag>
+	<tag>
+		<name>footer</name>
+		<tag-class>by.pvt.epam.custom.tag.FooterTag</tag-class>
+		<body-content>empty</body-content>
 	</tag>
 </taglib>

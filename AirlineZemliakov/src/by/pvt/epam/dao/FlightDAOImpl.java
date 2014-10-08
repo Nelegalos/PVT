@@ -49,7 +49,7 @@ public class FlightDAOImpl extends FlightDAO {
 			throw new TechnicalException(e);
 		} finally {
 			AbstractDAO.close(statement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return flights;
 	}
@@ -87,7 +87,7 @@ public class FlightDAOImpl extends FlightDAO {
 			throw new TechnicalException(e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return flight;
 	}
@@ -112,7 +112,7 @@ public class FlightDAOImpl extends FlightDAO {
 			throw new TechnicalException(e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return plane;
 	}
@@ -145,7 +145,7 @@ public class FlightDAOImpl extends FlightDAO {
 			LOGGER.error("TechnicalException", e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return flag;
 	}
@@ -170,7 +170,7 @@ public class FlightDAOImpl extends FlightDAO {
 			throw new TechnicalException(e);
 		} finally {
 			AbstractDAO.close(statement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return flights;
 	}
@@ -193,7 +193,7 @@ public class FlightDAOImpl extends FlightDAO {
 			LOGGER.error("TechnicalException", e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return flag;
 	}
@@ -221,7 +221,7 @@ public class FlightDAOImpl extends FlightDAO {
 			LOGGER.error("TechnicalException", e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return flag;
 	}
@@ -246,7 +246,7 @@ public class FlightDAOImpl extends FlightDAO {
 			throw new TechnicalException(e);
 		} finally {
 			AbstractDAO.close(statement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return planes;
 	}
@@ -276,7 +276,7 @@ public class FlightDAOImpl extends FlightDAO {
 		} finally {
 			AbstractDAO.close(preparedStatementFlight);
 			AbstractDAO.close(preparedStatementCrew);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return flag;
 	}
@@ -305,7 +305,7 @@ public class FlightDAOImpl extends FlightDAO {
 			throw new TechnicalException(e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return flights;
 	}
@@ -332,7 +332,7 @@ public class FlightDAOImpl extends FlightDAO {
 			throw new TechnicalException(e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return flights;
 	}

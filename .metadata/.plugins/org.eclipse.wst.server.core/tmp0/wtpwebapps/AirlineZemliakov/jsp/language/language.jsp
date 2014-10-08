@@ -2,14 +2,13 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="ctg" uri="customtags"%>
 <fmt:setLocale value="en" />
 <fmt:setBundle basename="resources.pagecontent" />
 <html>
 <head>
 <title><fmt:message key="lang.select" /></title>
-<link rel="stylesheet" href="css/reset.css" type="text/css" media="all" />
-<link rel="stylesheet" href="css/layout.css" type="text/css" media="all" />
-<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
+<%@ include file="/jsp/fragment/style.jspf"%>
 </head>
 <body id="page1">
 	<div class="main">

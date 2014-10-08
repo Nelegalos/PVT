@@ -39,7 +39,7 @@ public class UserDAOImpl extends UserDAO {
 			throw new TechnicalException(e);
 		} finally {
 			AbstractDAO.close(preparedStatement);
-			pool.backConnection(connection);
+			pool.close(connection);
 		}
 		return user;
 	}

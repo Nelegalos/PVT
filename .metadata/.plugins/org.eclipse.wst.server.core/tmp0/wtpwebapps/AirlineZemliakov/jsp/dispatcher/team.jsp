@@ -1,36 +1,20 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<fmt:setLocale value="${ lang }" scope="session" />
-<fmt:setBundle basename="resources.pagecontent" />
+<%@ include file="/jsp/fragment/head.jspf"%>
 <html>
 <head>
 <title><fmt:message key="label.dispatcher" /></title>
-<link rel="stylesheet" href="css/layout.css" type="text/css" media="all" />
-<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
-<link rel="stylesheet" href="css/style.css" type="text/css" media="all">
+<%@ include file="/jsp/fragment/style.jspf"%>
 </head>
 <body id="page1">
 	<div class="main">
 		<header>
 			<div class="wrapper">
-				<h1>
-					<a href="index.jsp" id="logo"></a>
-				</h1>
-				<span id="slogan"><fmt:message key="header.zemliakov" /></span>
+				<ctg:header />
 				<table class="top_bottons">
 					<tr>
 						<td style="width: 300px;"><p
 								style="line-height: 20px; padding: 0; margin-bottom: 20px;">
 								${user}</p></td>
-						<td>
-							<form action="controller" method="post">
-								<input type="hidden" name="command" value="logout" /><input
-									class="button1" type="submit"
-									value=<fmt:message key="option.logout" /> />
-							</form>
-						</td>
+						<td><ctg:logout /></td>
 						<td>
 							<form action="controller" method="post">
 								<input type="hidden" name="command" value="backToDispatcher" /><input
@@ -42,8 +26,6 @@
 				</table>
 			</div>
 		</header>
-		<!-- / header -->
-		<!--content -->
 		<section id="content">
 			<div class="for_banners">
 				<article class="col1">
@@ -53,31 +35,29 @@
 								<fmt:message key="crew.new" />
 							</div>
 							<div class="tab-content" id="Flight">
-								<!--форма с кнопкой  -->
 								<form id="form_4" action="controller" method="post">
-									<input type="hidden" name="command" value="addEmployee" />
+									<input type="hidden" name="command" value="teamAddEmployee" />
 									<div>
 										<div class="row" style="margin-top: 20px;">
-
 											<select style="width: 85%; margin-left: 5px;" size="1"
 												name="employeeId">
-												<option disabled><fmt:message key="position.select" /></option>
-												<c:forEach var="pos" items="${employees}">
-													<option value="${ pos.id }">
+												<c:forEach var="modifiedEmployee" items="${employees}">
+													<option value="${modifiedEmployee.id}">
 														<c:choose>
-															<c:when test="${ pos.position == pilot }">
-																<fmt:message key="${ pilot }" />
+															<c:when test="${modifiedEmployee.position eq 'PILOT' }">
+																<fmt:message key="PILOT" />
 															</c:when>
-															<c:when test="${ pos.position == navigator }">
-																<fmt:message key="${ navigator }" />
+															<c:when
+																test="${modifiedEmployee.position eq 'NAVIGATOR'}">
+																<fmt:message key="NAVIGATOR" />
 															</c:when>
-															<c:when test="${ pos.position == radioman }">
-																<fmt:message key="${ radioman }" />
+															<c:when test="${modifiedEmployee.position eq 'RADIOMAN'}">
+																<fmt:message key="RADIOMAN" />
 															</c:when>
-															<c:when test="${ pos.position == steward }">
-																<fmt:message key="${ steward }" />
+															<c:when test="${modifiedEmployee.position eq 'STEWARD'}">
+																<fmt:message key="STEWARD" />
 															</c:when>
-														</c:choose> :${ pos.name } ${ pos.surname }
+														</c:choose> : ${modifiedEmployee.name} ${modifiedEmployee.surname}
 													</option>
 												</c:forEach>
 											</select>
@@ -90,10 +70,10 @@
 											</span>
 										</div>
 										<span class="right relative"> <c:if
-												test="${ employeeAdded != null }">
-												<fmt:message key="${ employeeAdded }" />
-											</c:if> <c:if test="${ employeeNotAdded != null }">
-												<fmt:message key="${ employeeNotAdded }" />
+												test="${not empty employeeAdded}">
+												<fmt:message key="${employeeAdded}" />
+											</c:if> <c:if test="${not empty  employeeNotAdded}">
+												<fmt:message key="${employeeNotAdded}" />
 											</c:if>
 										</span>
 									</div>
@@ -117,21 +97,21 @@
 								<c:forEach var="employee" items="${crew}">
 									<tr>
 										<td><c:choose>
-												<c:when test="${ employee.position == pilot }">
-													<fmt:message key="${ pilot }" />
+												<c:when test="${employee.position eq 'PILOT'}">
+													<fmt:message key="PILOT" />
 												</c:when>
-												<c:when test="${ employee.position == navigator }">
-													<fmt:message key="${ navigator }" />
+												<c:when test="${employee.position eq 'NAVIGATOR'}">
+													<fmt:message key="NAVIGATOR" />
 												</c:when>
-												<c:when test="${ employee.position == radioman }">
-													<fmt:message key="${ radioman }" />
+												<c:when test="${employee.position eq 'RADIOMAN'}">
+													<fmt:message key="RADIOMAN" />
 												</c:when>
-												<c:when test="${ employee.position == steward }">
-													<fmt:message key="${ steward }" />
+												<c:when test="${employee.position eq 'STEWARD'}">
+													<fmt:message key="STEWARD" />
 												</c:when>
 											</c:choose></td>
-										<td><c:out value="${ employee.name }" /></td>
-										<td><c:out value="${ employee.surname }" /></td>
+										<td><c:out value="${employee.name}" /></td>
+										<td><c:out value="${employee.surname}" /></td>
 									</tr>
 								</c:forEach>
 							</table>
@@ -142,21 +122,15 @@
 										value=<fmt:message key="option.team" /> />
 								</form>
 							</div>
-							<span><c:if test="${ teamEmpty != null }">
-									<fmt:message key="${ teamEmpty }" />
+							<span><c:if test="${not empty  teamEmpty}">
+									<fmt:message key="${teamEmpty}" />
 								</c:if></span>
 						</div>
 					</div>
 				</article>
 			</div>
 		</section>
-		<footer>
-			<div class="wrapper">
-				<div class="links">
-					<fmt:message key="contact.email" />
-				</div>
-			</div>
-		</footer>
+		<ctg:footer />
 	</div>
 </body>
 </html>

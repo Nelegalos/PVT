@@ -1,40 +1,20 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<fmt:setLocale value="${ lang }" scope="session" />
-<fmt:setBundle basename="resources.pagecontent" />
-
+<%@ include file="/jsp/fragment/head.jspf"%>
 <html>
-
 <head>
 <title><fmt:message key="label.admin" /></title>
-<link rel="stylesheet" href="css/layout.css" type="text/css" media="all" />
-<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
-<link rel="stylesheet" href="css/style.css" type="text/css" media="all">
+<%@ include file="/jsp/fragment/style.jspf"%>
 </head>
-
 <body id="page1">
 	<div class="main">
-		<!--header -->
 		<header>
 			<div class="wrapper">
-				<h1>
-					<a href="index.jsp" id="logo"></a>
-				</h1>
-				<span id="slogan"><fmt:message key="header.zemliakov" /></span>
+				<ctg:header />
 				<table class="top_bottons">
 					<tr>
 						<td style="width: 300px;"><p
 								style="line-height: 20px; padding: 0; margin-bottom: 20px;">
 								${user}</p></td>
-						<td>
-							<form action="controller" method="post">
-								<input type="hidden" name="command" value="logout" /><input
-									class="button1" type="submit"
-									value=<fmt:message key="option.logout" /> />
-							</form>
-						</td>
+						<td><ctg:logout /></td>
 						<td>
 							<form action="controller" method="post">
 								<input type="hidden" name="command" value="backToAdmin" /><input
@@ -46,8 +26,6 @@
 				</table>
 			</div>
 		</header>
-		<!-- / header -->
-		<!--content -->
 		<section id="content">
 			<div class="for_banners">
 				<article class="col1">
@@ -63,97 +41,55 @@
 										<div class="row" style="margin-top: 20px;">
 											<span class="left"><fmt:message key="position.name" />
 												: </span> <select class="input" name="modifiedPosition">
-												<c:forEach var="pos" items="${positions}">
-													<option value="${ pos }">
-														<c:choose>
-															<c:when test="${ pos == pilot }">
-																<fmt:message key="${ pilot }" />
-															</c:when>
-															<c:when test="${ pos == navigator }">
-																<fmt:message key="${ navigator }" />
-															</c:when>
-															<c:when test="${ pos == radioman }">
-																<fmt:message key="${ radioman }" />
-															</c:when>
-															<c:when test="${ pos == steward }">
-																<fmt:message key="${ steward }" />
-															</c:when>
-														</c:choose>
-
-													</option>
-												</c:forEach>
+												<option disabled><fmt:message key="position.select" /></option>
+												<option value="1"><fmt:message key="PILOT" /></option>
+												<option value="2"><fmt:message key="NAVIGATOR" /></option>
+												<option value="3"><fmt:message key="RADIOMAN" /></option>
+												<option value="4"><fmt:message key="STEWARD" /></option>
 											</select>
-
 										</div>
 										<div class="row">
-											<span class="left"><fmt:message key="employee.name" />
-												: </span> <input required="required" type="text"
-												name="modifiedName" value="${ employeeToModify.name }"
-												class="input" />
+											<input type="hidden" name="employeeIdToModify"
+												value="${employeeToModify.id}" /> <span class="left"><fmt:message
+													key="employee.name" /> : </span> <input required="required"
+												type="text" name="modifiedName"
+												value="${employeeToModify.name}" class="input" />
 										</div>
 										<div class="row">
 											<span class="left"><fmt:message key="employee.surname" />
 												: </span> <input required="required" type="text"
-												name="modifiedSurname" value="${ employeeToModify.surname }"
+												name="modifiedSurname" value="${employeeToModify.surname}"
 												class="input" />
 										</div>
-
-
 										<div class="wrapper">
 											<span class="right relative"> <input type="submit"
 												value=<fmt:message key="employee.modify" /> class="button1" />
 											</span>
 										</div>
-
 										<span class="right relative"> <c:if
-												test="${ employeeWasntModified != null }">
-												<fmt:message key="${ employeeWasntModified }" />
+												test="${not empty employeeWasntModified}">
+												<fmt:message key="${employeeWasntModified}" />
 											</c:if>
 										</span>
 									</div>
 								</form>
-
-
-
 								<div class="wrapper">
-
 									<form action="controller" method="post">
-										<input type="hidden" name="command" value="backToStaff" /> <span
+										<input type="hidden" name="command" value="manageStaff" /> <span
 											class="right relative"
 											style="margin-bottom: 20px; margin-right: 30px;"> <input
 											type="submit" value=<fmt:message key="back.staff" />
 											class="button1" />
 										</span>
 									</form>
-
 								</div>
-
-
-
-
-
 							</div>
-
 						</div>
 					</div>
-
 				</article>
-
-
-
-
 			</div>
 		</section>
-		<!--content end-->
-		<!--footer -->
-		<footer>
-			<div class="wrapper">
-				<div class="links">
-					<fmt:message key="contact.email" />
-				</div>
-			</div>
-		</footer>
-		<!--footer end-->
+		<ctg:footer />
 	</div>
 </body>
 </html>

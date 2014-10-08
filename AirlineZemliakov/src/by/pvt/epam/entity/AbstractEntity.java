@@ -4,9 +4,6 @@ import java.io.Serializable;
 
 public class AbstractEntity implements Cloneable, Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -690490076007399246L;
 
 }

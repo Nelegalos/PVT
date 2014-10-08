@@ -1,0 +1,49 @@
+package by.pvt.epam.command;
+
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.log4j.Logger;
+import by.pvt.epam.entity.Employee;
+import by.pvt.epam.entity.Position;
+import by.pvt.epam.exception.TechnicalException;
+import by.pvt.epam.resource.ConfigurationManager;
+import by.pvt.epam.service.CrewService;
+import static by.pvt.epam.constant.Constant.*;
+
+public class ChangeEmployeeCommand implements ActionCommand {
+
+	private static final Logger LOGGER = Logger
+			.getLogger(ChangeEmployeeCommand.class);
+
+	@Override
+	public String execute(HttpServletRequest request) {
+		int employeeId = (Integer) request.getSession().getAttribute(
+				PARAM_NAME_EMPLOYEE_ID_TO_MODIFY);
+		String name = request.getParameter(PARAM_NAME_MODIFIED_NAME);
+		String surname = request.getParameter(PARAM_NAME_MODIFIED_SURNAME);
+		Position position = Position.valueOf(request
+				.getParameter(PARAM_NAME_MODIFIED_POSITION));
+		int pos = position.ordinal() + 1;
+		boolean flag = false;
+		CrewService crewService = new CrewService();
+		flag = crewService.modifyEmployee(employeeId, name, surname, pos);
+		if (flag) {
+			List<Employee> employees = null;
+			try {
+				employees = crewService.findAvailableEmployees();
+				request.getSession().setAttribute("employees", employees);
+			} catch (TechnicalException e) {
+				LOGGER.error("TechnicalException", e);
+				request.setAttribute("employeesNull", "employees.null");
+				return ConfigurationManager.getProperty("path.page.admin");
+			}
+			request.removeAttribute("employeeWasntModified");
+			request.setAttribute("employeeWasModified", "employee.modified");
+		} else {
+			request.setAttribute("employeeWasntModified",
+					"employee.notmodified");
+			return ConfigurationManager.getProperty("path.page.employee");
+		}
+		return ConfigurationManager.getProperty("path.page.staff");
+	}
+}

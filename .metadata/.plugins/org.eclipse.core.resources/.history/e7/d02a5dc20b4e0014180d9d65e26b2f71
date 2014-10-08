@@ -1,0 +1,29 @@
+package by.pvt.epam.logic;
+
+import by.pvt.epam.entity.Employee;
+import by.pvt.epam.entity.Position;
+
+public class CrewLogic {
+	
+	public static final String PARAM_NAME_EMPLOYEE_ID = "employeeId";
+	public static final String SESSION_ATTRIBUTE_NAME_CREW = "crew";
+	public static final String SESSION_ATTRIBUTE_NAME_EMPLOYEES = "employees";
+	public static final String REQUEST_ATTRIBUTE_NAME_EMPLOYEE_ADDED = "employeeAdded";
+	public static final String REQUEST_ATTRIBUTE_NAME_EMPLOYEE_NOT_ADDED = "employeeNotAdded";
+	
+	/**
+	 * Checks if employee is correct .
+	 * 
+	 * @param crewEmployee
+	 *            the crew employee
+	 * @param addedEmployeePosition
+	 *            the added employee position
+	 * @return true, if employee is correct
+	 */
+	public static boolean isCorrectEmployee(Employee crewEmployee,
+			Position addedEmployeePosition) {
+		return (crewEmployee.getPosition().equals(addedEmployeePosition) && (crewEmployee
+				.getId() == 0));
+	}
+
+}

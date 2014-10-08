@@ -1,0 +1,58 @@
+package by.pvt.epam.command;
+
+import static by.pvt.epam.constant.Constant.*;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.log4j.Logger;
+import by.pvt.epam.entity.Employee;
+import by.pvt.epam.exception.TechnicalException;
+import by.pvt.epam.resource.ConfigurationManager;
+import by.pvt.epam.service.CrewService;
+
+public class RegisterEmployeeCommand implements ActionCommand {
+
+	private static final Logger LOGGER = Logger
+			.getLogger(RegisterEmployeeCommand.class);
+
+	@Override
+	public String execute(HttpServletRequest request) {
+
+		String name = request.getParameter(PARAM_NAME_EMPLOYEE_NAME);
+		String surname = request.getParameter(PARAM_NAME_EMPLOYEE_SURNAME);
+		int position = Integer.parseInt(request
+				.getParameter(PARAM_NAME_EMPLOYEE_POSITION));
+
+		
+		CrewService crewService = new CrewService();
+		boolean flag = crewService.addEmployee(name, surname, position);
+		if (flag) {
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_EMPLOYEE_ADDED,
+					"employee.registered");		
+			try {
+				
+				List<Employee> employees = crewService.findAvailableEmployees();
+				request.getSession().setAttribute(
+						REQUEST_ATTRIBUTE_NAME_EMPLOYEES, employees);
+			} catch (TechnicalException e) {
+				LOGGER.error("TechnicalException", e);
+				request.setAttribute(REQUEST_ATTRIBUTE_NAME_EMPLOYEES_NULL,
+						"employees.null");
+				return ConfigurationManager.getProperty("path.page.admin");
+			}
+		} else {
+			request.setAttribute(REQUEST_ATTRIBUTE_NAME_EMPLOYEE_NOT_ADDED,
+					"employee.notregistered");
+		}
+		return ConfigurationManager.getProperty("path.page.staff");
+	}
+	
+	
+	private void registerEmployee(String name, String surname, int position)
+			throws TechnicalException {
+		CrewService crewService = new CrewService();
+		boolean flag = crewService.addEmployee(name, surname, position);
+		if (!flag){
+			throw new TechnicalException();
+		}
+	}
+}

@@ -1,16 +1,13 @@
 package by.pvt.epam.command;
 
 import javax.servlet.http.HttpServletRequest;
-
 import by.pvt.epam.resource.ConfigurationManager;
+import static by.pvt.epam.constants.Constants.*;
 
 public class LangCommand implements ActionCommand {
 
-	private static final String PARAM_NAME_LANGUAGE = "language";
-
 	@Override
 	public String execute(HttpServletRequest request) {
-		String page = ConfigurationManager.getProperty("path.page.login");
 		String language = request.getParameter(PARAM_NAME_LANGUAGE);
 		switch (language) {
 		case "en":
@@ -20,7 +17,7 @@ public class LangCommand implements ActionCommand {
 			request.getSession().setAttribute("lang", "ru");
 			break;
 		}
-		return page;
+		return ConfigurationManager.getProperty("path.page.login");
 	}
 
 }

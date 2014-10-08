@@ -20,6 +20,7 @@ public class ConnectionPool {
 	private static final ResourceBundle CONFIG_BUNDLE = ResourceBundle
 			.getBundle("resources.database");
 	private static final Lock LOCK = new ReentrantLock();
+	private static boolean giveConnection = true;
 	private static ConnectionPool instance;
 	private ArrayBlockingQueue<Connection> pool;
 	private ArrayBlockingQueue<Connection> inUse;
@@ -64,21 +65,24 @@ public class ConnectionPool {
 
 	public Connection getConnection() throws TechnicalException {
 		Connection conn = null;
-		try {
-			conn = pool.take();
-			inUse.add(conn);
-		} catch (InterruptedException e) {
-			throw new TechnicalException(e);
+		if (giveConnection) {
+			try {
+				conn = pool.take();
+				inUse.add(conn);
+			} catch (InterruptedException e) {
+				throw new TechnicalException(e);
+			}
 		}
 		return conn;
 	}
 
-	public void backConnection(Connection conn) {
+	public void close(Connection conn) {
 		inUse.remove(conn);
 		pool.offer(conn);
 	}
 
 	public void cleanUp() {
+		giveConnection = false;
 		Iterator<Connection> iterator = pool.iterator();
 		while (iterator.hasNext()) {
 			Connection c = (Connection) iterator.next();

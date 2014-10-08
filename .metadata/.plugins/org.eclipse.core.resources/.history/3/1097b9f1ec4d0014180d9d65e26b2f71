@@ -1,0 +1,33 @@
+package by.pvt.epam.command;
+
+import javax.servlet.http.HttpServletRequest;
+
+import by.pvt.epam.resource.ConfigurationManager;
+
+/**
+ * The Class LangCommand.
+ */
+public class LangCommand implements ActionCommand {
+
+	/** The Constant PARAM_NAME_LANGUAGE. */
+	private static final String PARAM_NAME_LANGUAGE = "language";
+
+	/* (non-Javadoc)
+	 * @see by.pvt.epam.command.ActionCommand#execute(javax.servlet.http.HttpServletRequest)
+	 */
+	@Override
+	public String execute(HttpServletRequest request) {
+		String page = ConfigurationManager.getProperty("path.page.login");
+		String language = request.getParameter(PARAM_NAME_LANGUAGE);
+		switch (language) {
+		case "en":
+			request.getSession().setAttribute("lang", "en");
+			break;
+		case "ru":
+			request.getSession().setAttribute("lang", "ru");
+			break;
+		}
+		return page;
+	}
+
+}
