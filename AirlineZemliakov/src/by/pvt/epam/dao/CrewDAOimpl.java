@@ -18,7 +18,7 @@ import by.pvt.epam.pool.ConnectionPool;
 public class CrewDAOImpl extends CrewDAO {
 	private static final Logger LOGGER = Logger.getLogger(CrewDAOImpl.class);
 	private static final String SQL_QUERY_FIND_EMPLOYEE_BY_ID = "SELECT employee.id, employee.name, employee.surname, position.position FROM employee LEFT JOIN position on employee.position_id = position.id  WHERE employee.id=?";
-	private static final String SQL_QUERY_FIND_AVAILABLE_EMPLOYEES = "SELECT employee.id, employee.name, employee.surname, position.position FROM employee LEFT JOIN position on employee.position_id = position.id WHERE employee.status=0";
+	private static final String SQL_QUERY_FIND_AVAILABLE_EMPLOYEES = "SELECT employee.id, employee.name, employee.surname, position.position FROM employee LEFT JOIN position on employee.position_id = position.id WHERE employee.status=0 ORDER BY position.id";
 	private static final String SQL_QUERY_FIND_CREW_BY_FLIGHT_ID = "SELECT employee.id, employee.name, employee.surname, position.position FROM crew LEFT JOIN employee on crew.employee_id=employee.id LEFT JOIN position on employee.position_id = position.id WHERE flight_id=?";
 	private static final String SQL_QUERY_ADD_EMPLOYEE = "INSERT INTO employee (name, surname, position_id) VALUES (?,?,?)";
 	private static final String SQL_QUERY_MODIFY_EMPLOYEE = "UPDATE employee SET name=?, surname=?, position_id=? WHERE id=?";

@@ -15,7 +15,7 @@ import by.pvt.epam.exception.TechnicalException;
 public class ConnectionPool {
 
 	private static final Logger LOGGER = Logger.getLogger(ConnectionPool.class);
-	private static final int DEFAULT_POOL_SIZE = 20;
+	private static final int DEFAULT_POOL_SIZE = 10000;
 	private static final ResourceBundle CONFIG_BUNDLE = ResourceBundle
 			.getBundle("resources.database");
 	private static final Lock LOCK = new ReentrantLock();
