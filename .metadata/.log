@@ -13046,3 +13046,6 @@ Binding(F3,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
+
+!ENTRY org.apache.ivyde.eclipse 2 0 2015-03-18 10:37:54.213
+!MESSAGE IvyDE container states of the project Ant-Ivy-SpringMVC doesn't exist.
