@@ -1,7 +1,8 @@
 eclipse.preferences.version=1
 org.eclipse.jdt.core.classpathVariable.ECLIPSE_HOME=C\:/env/eclipse
-org.eclipse.jdt.core.classpathVariable.JRE_LIB=C\:/Program Files (x86)/Java/jre8/lib/rt.jar
-org.eclipse.jdt.core.classpathVariable.JRE_SRC=
+org.eclipse.jdt.core.classpathVariable.IVY_HOME=C\:/Users/Nelegalos/.ivy2
+org.eclipse.jdt.core.classpathVariable.JRE_LIB=C\:/env/Java/jdk1.7.0_60/jre/lib/rt.jar
+org.eclipse.jdt.core.classpathVariable.JRE_SRC=C\:/env/Java/jdk1.7.0_60/src.zip
 org.eclipse.jdt.core.classpathVariable.JRE_SRCROOT=
 org.eclipse.jdt.core.classpathVariable.JUNIT_HOME=C\:/env/eclipse/plugins/org.junit_4.11.0.v201303080030/
 org.eclipse.jdt.core.classpathVariable.M2_REPO=C\:/Users/Nelegalos/.m2/repository

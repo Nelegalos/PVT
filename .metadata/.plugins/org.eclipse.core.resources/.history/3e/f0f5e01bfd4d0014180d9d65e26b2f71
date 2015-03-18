@@ -1,7 +1,0 @@
-package by.pvt.epam.custom.tag;
-
-import javax.servlet.jsp.tagext.BodyTagSupport;
-
-public class FooterTag extends BodyTagSupport {
-
-}

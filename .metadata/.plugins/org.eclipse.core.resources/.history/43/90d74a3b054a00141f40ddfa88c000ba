@@ -1,7 +1,0 @@
-package by.pvt.epam.entity;
-
-import java.io.Serializable;
-
-public class AbstractEntity implements Cloneable, Serializable{
-
-}

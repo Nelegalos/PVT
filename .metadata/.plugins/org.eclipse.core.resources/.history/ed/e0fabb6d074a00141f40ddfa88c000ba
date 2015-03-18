@@ -1,9 +1,0 @@
-package by.pvt.epam.service;
-
-import by.pvt.epam.dao.UserDAO;
-
-public class UserService {
-
-	private UserDAO userDAO;
-
-}
